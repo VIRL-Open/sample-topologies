@@ -1,0 +1,459 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<topology xmlns="http://www.cisco.com/VIRL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" schemaVersion="0.8" xsi:schemaLocation="http://www.cisco.com/VIRL https://raw.github.com/CiscoVIRL/schema/v0.8/virl.xsd">
+    <node ipv4="192.168.0.1" location="375,248" subtype="IOS XRv" type="SIMPLE" name="iosxrv-1">
+        <extensions>
+            <entry type="string" key="config">!  IOS-XR Config generated on 2014-08-20 13:00
+! by VIRL Configuration Engine 0.9.5
+!
+hostname iosxrv-1
+service timestamps log datetime msec
+service timestamps debug datetime msec
+telnet vrf default ipv4 server max-servers 10
+domain lookup disable
+line template vty
+timestamp
+exec-timeout 720 0
+!
+line console
+exec-timeout 0 0
+!
+line default
+exec-timeout 720 0
+!
+vty-pool default 0 50
+control-plane
+ management-plane
+  inband
+   interface all
+    allow all
+   !
+  !
+ !
+!
+!
+interface Loopback0
+  description Loopback
+  ipv4 address 192.168.0.1 255.255.255.255
+!
+interface GigabitEthernet0/0/0/0
+  description to iosxrv-4
+  ipv4 address 10.0.0.5 255.255.255.252
+  no shutdown
+!
+interface GigabitEthernet0/0/0/1
+  description to iosxrv-2
+  ipv4 address 10.0.0.1 255.255.255.252
+  no shutdown
+!
+interface mgmteth0/0/CPU0/0
+  description OOB Management
+  ! Configured on launch
+  no ipv4 address
+  no shutdown
+!
+!
+router ospf 1
+  log adjacency changes
+  area 0
+    interface GigabitEthernet0/0/0/0
+      cost 1
+    !
+    interface GigabitEthernet0/0/0/1
+      cost 1
+    !
+    interface Loopback0
+      passive enable
+    !
+  !
+!
+route-policy bgp_in
+  pass
+end-policy
+!
+route-policy bgp_out
+  pass
+end-policy
+!
+router bgp 1
+  bgp router-id 192.168.0.1
+  address-family ipv4 unicast
+    network 192.168.0.1/32
+  !
+! iBGP
+!
+! iBGP peers
+  !
+  neighbor 192.168.0.2
+    description iBGP peer iosxrv-2
+    remote-as 1
+    update-source Loopback0
+    address-family ipv4 unicast
+    !
+    !
+  !
+  neighbor 192.168.0.3
+    description iBGP peer iosxrv-3
+    remote-as 1
+    update-source Loopback0
+    address-family ipv4 unicast
+    !
+    !
+  !
+  neighbor 192.168.0.4
+    description iBGP peer iosxrv-4
+    remote-as 1
+    update-source Loopback0
+    address-family ipv4 unicast
+    !
+    !
+!
+</entry>
+            <entry type="string" key="AutoNetkit.mgmt_ip"></entry>
+        </extensions>
+        <interface netPrefixLenV4="30" ipv4="10.0.0.5" name="GigabitEthernet0/0/0/0" id="0"/>
+        <interface netPrefixLenV4="30" ipv4="10.0.0.1" name="GigabitEthernet0/0/0/1" id="1"/>
+    </node>
+    <node ipv4="192.168.0.2" location="273,130" subtype="IOS XRv" type="SIMPLE" name="iosxrv-2">
+        <extensions>
+            <entry type="string" key="config">!  IOS-XR Config generated on 2014-08-20 13:00
+! by VIRL Configuration Engine 0.9.5
+!
+hostname iosxrv-2
+service timestamps log datetime msec
+service timestamps debug datetime msec
+telnet vrf default ipv4 server max-servers 10
+domain lookup disable
+line template vty
+timestamp
+exec-timeout 720 0
+!
+line console
+exec-timeout 0 0
+!
+line default
+exec-timeout 720 0
+!
+vty-pool default 0 50
+control-plane
+ management-plane
+  inband
+   interface all
+    allow all
+   !
+  !
+ !
+!
+!
+interface Loopback0
+  description Loopback
+  ipv4 address 192.168.0.2 255.255.255.255
+!
+interface GigabitEthernet0/0/0/0
+  description to iosxrv-3
+  ipv4 address 10.0.128.1 255.255.255.252
+  no shutdown
+!
+interface GigabitEthernet0/0/0/1
+  description to iosxrv-1
+  ipv4 address 10.0.0.2 255.255.255.252
+  no shutdown
+!
+interface mgmteth0/0/CPU0/0
+  description OOB Management
+  ! Configured on launch
+  no ipv4 address
+  no shutdown
+!
+!
+router ospf 1
+  log adjacency changes
+  area 0
+    interface GigabitEthernet0/0/0/0
+      cost 1
+    !
+    interface GigabitEthernet0/0/0/1
+      cost 1
+    !
+    interface Loopback0
+      passive enable
+    !
+  !
+!
+route-policy bgp_in
+  pass
+end-policy
+!
+route-policy bgp_out
+  pass
+end-policy
+!
+router bgp 1
+  bgp router-id 192.168.0.2
+  address-family ipv4 unicast
+    network 192.168.0.2/32
+  !
+! iBGP
+!
+! iBGP peers
+  !
+  neighbor 192.168.0.1
+    description iBGP peer iosxrv-1
+    remote-as 1
+    update-source Loopback0
+    address-family ipv4 unicast
+    !
+    !
+  !
+  neighbor 192.168.0.3
+    description iBGP peer iosxrv-3
+    remote-as 1
+    update-source Loopback0
+    address-family ipv4 unicast
+    !
+    !
+  !
+  neighbor 192.168.0.4
+    description iBGP peer iosxrv-4
+    remote-as 1
+    update-source Loopback0
+    address-family ipv4 unicast
+    !
+    !
+!
+</entry>
+            <entry type="string" key="AutoNetkit.mgmt_ip"></entry>
+        </extensions>
+        <interface netPrefixLenV4="30" ipv4="10.0.128.1" name="GigabitEthernet0/0/0/0" id="0"/>
+        <interface netPrefixLenV4="30" ipv4="10.0.0.2" name="GigabitEthernet0/0/0/1" id="1"/>
+    </node>
+    <node ipv4="192.168.0.3" location="458,90" subtype="IOS XRv" type="SIMPLE" name="iosxrv-3">
+        <extensions>
+            <entry type="string" key="config">!  IOS-XR Config generated on 2014-08-20 13:00
+! by VIRL Configuration Engine 0.9.5
+!
+hostname iosxrv-3
+service timestamps log datetime msec
+service timestamps debug datetime msec
+telnet vrf default ipv4 server max-servers 10
+domain lookup disable
+line template vty
+timestamp
+exec-timeout 720 0
+!
+line console
+exec-timeout 0 0
+!
+line default
+exec-timeout 720 0
+!
+vty-pool default 0 50
+control-plane
+ management-plane
+  inband
+   interface all
+    allow all
+   !
+  !
+ !
+!
+!
+interface Loopback0
+  description Loopback
+  ipv4 address 192.168.0.3 255.255.255.255
+!
+interface GigabitEthernet0/0/0/0
+  description to iosxrv-2
+  ipv4 address 10.0.128.2 255.255.255.252
+  no shutdown
+!
+interface GigabitEthernet0/0/0/1
+  description to iosxrv-4
+  ipv4 address 10.0.128.6 255.255.255.252
+  no shutdown
+!
+interface mgmteth0/0/CPU0/0
+  description OOB Management
+  ! Configured on launch
+  no ipv4 address
+  no shutdown
+!
+!
+router ospf 1
+  log adjacency changes
+  area 0
+    interface GigabitEthernet0/0/0/0
+      cost 1
+    !
+    interface GigabitEthernet0/0/0/1
+      cost 1
+    !
+    interface Loopback0
+      passive enable
+    !
+  !
+!
+route-policy bgp_in
+  pass
+end-policy
+!
+route-policy bgp_out
+  pass
+end-policy
+!
+router bgp 1
+  bgp router-id 192.168.0.3
+  address-family ipv4 unicast
+    network 192.168.0.3/32
+  !
+! iBGP
+!
+! iBGP peers
+  !
+  neighbor 192.168.0.1
+    description iBGP peer iosxrv-1
+    remote-as 1
+    update-source Loopback0
+    address-family ipv4 unicast
+    !
+    !
+  !
+  neighbor 192.168.0.2
+    description iBGP peer iosxrv-2
+    remote-as 1
+    update-source Loopback0
+    address-family ipv4 unicast
+    !
+    !
+  !
+  neighbor 192.168.0.4
+    description iBGP peer iosxrv-4
+    remote-as 1
+    update-source Loopback0
+    address-family ipv4 unicast
+    !
+    !
+!
+</entry>
+            <entry type="string" key="AutoNetkit.mgmt_ip"></entry>
+        </extensions>
+        <interface netPrefixLenV4="30" ipv4="10.0.128.2" name="GigabitEthernet0/0/0/0" id="0"/>
+        <interface netPrefixLenV4="30" ipv4="10.0.128.6" name="GigabitEthernet0/0/0/1" id="1"/>
+    </node>
+    <node ipv4="192.168.0.4" location="528,196" subtype="IOS XRv" type="SIMPLE" name="iosxrv-4">
+        <extensions>
+            <entry type="string" key="config">!  IOS-XR Config generated on 2014-08-20 13:00
+! by VIRL Configuration Engine 0.9.5
+!
+hostname iosxrv-4
+service timestamps log datetime msec
+service timestamps debug datetime msec
+telnet vrf default ipv4 server max-servers 10
+domain lookup disable
+line template vty
+timestamp
+exec-timeout 720 0
+!
+line console
+exec-timeout 0 0
+!
+line default
+exec-timeout 720 0
+!
+vty-pool default 0 50
+control-plane
+ management-plane
+  inband
+   interface all
+    allow all
+   !
+  !
+ !
+!
+!
+interface Loopback0
+  description Loopback
+  ipv4 address 192.168.0.4 255.255.255.255
+!
+interface GigabitEthernet0/0/0/0
+  description to iosxrv-3
+  ipv4 address 10.0.128.5 255.255.255.252
+  no shutdown
+!
+interface GigabitEthernet0/0/0/1
+  description to iosxrv-1
+  ipv4 address 10.0.0.6 255.255.255.252
+  no shutdown
+!
+interface mgmteth0/0/CPU0/0
+  description OOB Management
+  ! Configured on launch
+  no ipv4 address
+  no shutdown
+!
+!
+router ospf 1
+  log adjacency changes
+  area 0
+    interface GigabitEthernet0/0/0/0
+      cost 1
+    !
+    interface GigabitEthernet0/0/0/1
+      cost 1
+    !
+    interface Loopback0
+      passive enable
+    !
+  !
+!
+route-policy bgp_in
+  pass
+end-policy
+!
+route-policy bgp_out
+  pass
+end-policy
+!
+router bgp 1
+  bgp router-id 192.168.0.4
+  address-family ipv4 unicast
+    network 192.168.0.4/32
+  !
+! iBGP
+!
+! iBGP peers
+  !
+  neighbor 192.168.0.1
+    description iBGP peer iosxrv-1
+    remote-as 1
+    update-source Loopback0
+    address-family ipv4 unicast
+    !
+    !
+  !
+  neighbor 192.168.0.2
+    description iBGP peer iosxrv-2
+    remote-as 1
+    update-source Loopback0
+    address-family ipv4 unicast
+    !
+    !
+  !
+  neighbor 192.168.0.3
+    description iBGP peer iosxrv-3
+    remote-as 1
+    update-source Loopback0
+    address-family ipv4 unicast
+    !
+    !
+!
+</entry>
+            <entry type="string" key="AutoNetkit.mgmt_ip"></entry>
+        </extensions>
+        <interface netPrefixLenV4="30" ipv4="10.0.128.5" name="GigabitEthernet0/0/0/0" id="0"/>
+        <interface netPrefixLenV4="30" ipv4="10.0.0.6" name="GigabitEthernet0/0/0/1" id="1"/>
+    </node>
+    <connection src="/virl:topology/virl:node[2]/virl:interface[1]" dst="/virl:topology/virl:node[3]/virl:interface[1]"/>
+    <connection src="/virl:topology/virl:node[3]/virl:interface[2]" dst="/virl:topology/virl:node[4]/virl:interface[1]"/>
+    <connection src="/virl:topology/virl:node[1]/virl:interface[1]" dst="/virl:topology/virl:node[4]/virl:interface[2]"/>
+    <connection src="/virl:topology/virl:node[2]/virl:interface[2]" dst="/virl:topology/virl:node[1]/virl:interface[2]"/>
+</topology>

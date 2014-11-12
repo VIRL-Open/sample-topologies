@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<topology xmlns="http://www.cisco.com/VIRL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" schemaVersion="0.8" xsi:schemaLocation="http://www.cisco.com/VIRL https://raw.github.com/CiscoVIRL/schema/v0.8/virl.xsd">
+    <extensions>
+        <entry type="String" key="management_network">user</entry>
+    </extensions>
+    <node ipv4="192.168.0.1" location="230,197" subtype="IOSv" type="SIMPLE" name="iosv-1">
+        <extensions>
+            <entry type="string" key="config">! IOS Config generated on 2014-11-12 10:55
+! by VIRL Configuration Engine 0.10.7
+!
+hostname iosv-1
+boot-start-marker
+boot-end-marker
+!
+no aaa new-model
+!
+!
+ip cef
+ipv6 unicast-routing
+ipv6 cef
+!
+!
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+no service config
+enable password cisco
+ip classless
+ip subnet-zero
+no ip domain lookup
+line vty 0 4
+ transport input ssh telnet
+ exec-timeout 720 0
+ password cisco
+ login
+line con 0
+ password cisco
+!
+!
+interface Loopback0
+  description Loopback
+  ip address 192.168.0.1 255.255.255.255
+!
+interface GigabitEthernet0/0
+  description OOB Management
+  ! Configured on launch
+  no ip address
+  duplex auto
+  speed auto
+  no shutdown
+!
+interface GigabitEthernet0/1
+  description to iosv-2
+  ip address 10.0.0.1 255.255.255.252
+  ip ospf cost 1
+  duplex auto
+  speed auto
+  no shutdown
+!
+interface GigabitEthernet0/2
+  description to iosv-3
+  ip address 10.0.0.5 255.255.255.252
+  ip ospf cost 1
+  duplex auto
+  speed auto
+  no shutdown
+!
+!
+!
+router ospf 1
+  network 192.168.0.1 0.0.0.0 area 0
+  log-adjacency-changes
+  passive-interface Loopback0
+  network 10.0.0.0 0.0.0.3 area 0
+  network 10.0.0.4 0.0.0.3 area 0
+!
+!
+router bgp 1
+  bgp router-id 192.168.0.1
+  no synchronization
+! ibgp
+  ! ibgp peers
+  !
+  neighbor 192.168.0.2 remote-as 1
+  neighbor 192.168.0.2 description iBGP peer iosv-2
+  neighbor 192.168.0.2 update-source Loopback0
+  !
+  neighbor 192.168.0.3 remote-as 1
+  neighbor 192.168.0.3 description iBGP peer iosv-3
+  neighbor 192.168.0.3 update-source Loopback0
+!
+!
+ !
+ address-family ipv4
+  network 192.168.0.1 mask 255.255.255.255
+  neighbor 192.168.0.2 activate
+  neighbor 192.168.0.3 activate
+ exit-address-family
+!
+!
+!
+end
+</entry>
+            <entry type="string" key="AutoNetkit.mgmt_ip"></entry>
+        </extensions>
+        <interface netPrefixLenV4="30" ipv4="10.0.0.1" name="GigabitEthernet0/1" id="0"/>
+        <interface netPrefixLenV4="30" ipv4="10.0.0.5" name="GigabitEthernet0/2" id="1"/>
+    </node>
+    <node ipv4="192.168.0.2" location="395,134" subtype="IOSv" type="SIMPLE" name="iosv-2">
+        <extensions>
+            <entry type="string" key="config">! IOS Config generated on 2014-11-12 10:55
+! by VIRL Configuration Engine 0.10.7
+!
+hostname iosv-2
+boot-start-marker
+boot-end-marker
+!
+no aaa new-model
+!
+!
+ip cef
+ipv6 unicast-routing
+ipv6 cef
+!
+!
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+no service config
+enable password cisco
+ip classless
+ip subnet-zero
+no ip domain lookup
+line vty 0 4
+ transport input ssh telnet
+ exec-timeout 720 0
+ password cisco
+ login
+line con 0
+ password cisco
+!
+!
+interface Loopback0
+  description Loopback
+  ip address 192.168.0.2 255.255.255.255
+!
+interface GigabitEthernet0/0
+  description OOB Management
+  ! Configured on launch
+  no ip address
+  duplex auto
+  speed auto
+  no shutdown
+!
+interface GigabitEthernet0/1
+  description to iosv-1
+  ip address 10.0.0.2 255.255.255.252
+  ip ospf cost 1
+  duplex auto
+  speed auto
+  no shutdown
+!
+interface GigabitEthernet0/2
+  description to iosv-3
+  ip address 10.0.128.1 255.255.255.252
+  ip ospf cost 1
+  duplex auto
+  speed auto
+  no shutdown
+!
+!
+!
+router ospf 1
+  network 192.168.0.2 0.0.0.0 area 0
+  log-adjacency-changes
+  passive-interface Loopback0
+  network 10.0.0.0 0.0.0.3 area 0
+  network 10.0.128.0 0.0.0.3 area 0
+!
+!
+router bgp 1
+  bgp router-id 192.168.0.2
+  no synchronization
+! ibgp
+  ! ibgp peers
+  !
+  neighbor 192.168.0.1 remote-as 1
+  neighbor 192.168.0.1 description iBGP peer iosv-1
+  neighbor 192.168.0.1 update-source Loopback0
+  !
+  neighbor 192.168.0.3 remote-as 1
+  neighbor 192.168.0.3 description iBGP peer iosv-3
+  neighbor 192.168.0.3 update-source Loopback0
+!
+!
+ !
+ address-family ipv4
+  network 192.168.0.2 mask 255.255.255.255
+  neighbor 192.168.0.1 activate
+  neighbor 192.168.0.3 activate
+ exit-address-family
+!
+!
+!
+end
+</entry>
+            <entry type="string" key="AutoNetkit.mgmt_ip"></entry>
+        </extensions>
+        <interface netPrefixLenV4="30" ipv4="10.0.0.2" name="GigabitEthernet0/1" id="0"/>
+        <interface netPrefixLenV4="30" ipv4="10.0.128.1" name="GigabitEthernet0/2" id="1"/>
+    </node>
+    <node ipv4="192.168.0.3" location="437,292" subtype="IOSv" type="SIMPLE" name="iosv-3">
+        <extensions>
+            <entry type="string" key="config">! IOS Config generated on 2014-11-12 10:55
+! by VIRL Configuration Engine 0.10.7
+!
+hostname iosv-3
+boot-start-marker
+boot-end-marker
+!
+no aaa new-model
+!
+!
+ip cef
+ipv6 unicast-routing
+ipv6 cef
+!
+!
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+no service config
+enable password cisco
+ip classless
+ip subnet-zero
+no ip domain lookup
+line vty 0 4
+ transport input ssh telnet
+ exec-timeout 720 0
+ password cisco
+ login
+line con 0
+ password cisco
+!
+!
+interface Loopback0
+  description Loopback
+  ip address 192.168.0.3 255.255.255.255
+!
+interface GigabitEthernet0/0
+  description OOB Management
+  ! Configured on launch
+  no ip address
+  duplex auto
+  speed auto
+  no shutdown
+!
+interface GigabitEthernet0/1
+  description to iosv-2
+  ip address 10.0.128.2 255.255.255.252
+  ip ospf cost 1
+  duplex auto
+  speed auto
+  no shutdown
+!
+interface GigabitEthernet0/2
+  description to iosv-1
+  ip address 10.0.0.6 255.255.255.252
+  ip ospf cost 1
+  duplex auto
+  speed auto
+  no shutdown
+!
+!
+!
+router ospf 1
+  network 192.168.0.3 0.0.0.0 area 0
+  log-adjacency-changes
+  passive-interface Loopback0
+  network 10.0.128.0 0.0.0.3 area 0
+  network 10.0.0.4 0.0.0.3 area 0
+!
+!
+router bgp 1
+  bgp router-id 192.168.0.3
+  no synchronization
+! ibgp
+  ! ibgp peers
+  !
+  neighbor 192.168.0.1 remote-as 1
+  neighbor 192.168.0.1 description iBGP peer iosv-1
+  neighbor 192.168.0.1 update-source Loopback0
+  !
+  neighbor 192.168.0.2 remote-as 1
+  neighbor 192.168.0.2 description iBGP peer iosv-2
+  neighbor 192.168.0.2 update-source Loopback0
+!
+!
+ !
+ address-family ipv4
+  network 192.168.0.3 mask 255.255.255.255
+  neighbor 192.168.0.1 activate
+  neighbor 192.168.0.2 activate
+ exit-address-family
+!
+!
+!
+end
+</entry>
+            <entry type="string" key="AutoNetkit.mgmt_ip"></entry>
+        </extensions>
+        <interface netPrefixLenV4="30" ipv4="10.0.128.2" name="GigabitEthernet0/1" id="0"/>
+        <interface netPrefixLenV4="30" ipv4="10.0.0.6" name="GigabitEthernet0/2" id="1"/>
+    </node>
+    <connection src="/virl:topology/virl:node[1]/virl:interface[1]" dst="/virl:topology/virl:node[2]/virl:interface[1]"/>
+    <connection src="/virl:topology/virl:node[2]/virl:interface[2]" dst="/virl:topology/virl:node[3]/virl:interface[1]"/>
+    <connection src="/virl:topology/virl:node[1]/virl:interface[2]" dst="/virl:topology/virl:node[3]/virl:interface[2]"/>
+</topology>

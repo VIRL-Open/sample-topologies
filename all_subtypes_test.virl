@@ -1,0 +1,671 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<topology xmlns="http://www.cisco.com/VIRL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" schemaVersion="0.8" xsi:schemaLocation="http://www.cisco.com/VIRL https://raw.github.com/CiscoVIRL/schema/v0.8/virl.xsd">
+    <extensions>
+        <entry type="String" key="AutoNetkit.address_family">dual_stack</entry>
+        <entry type="String" key="AutoNetkit.IGP">isis</entry>
+    </extensions>
+    <node ipv6="::b:2:0:0:2" ipv4="192.168.0.1" location="304,286" subtype="IOSv" type="SIMPLE" name="iosv-1">
+        <extensions>
+            <entry type="string" key="config">! IOS Config generated on 2014-11-12 10:58
+! by VIRL Configuration Engine 0.10.7
+!
+hostname iosv-1
+boot-start-marker
+boot-end-marker
+!
+no aaa new-model
+!
+!
+ip cef
+ipv6 unicast-routing
+ipv6 cef
+!
+!
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+no service config
+enable password cisco
+ip classless
+ip subnet-zero
+no ip domain lookup
+line vty 0 4
+ transport input ssh telnet
+ exec-timeout 720 0
+ password cisco
+ login
+line con 0
+ password cisco
+!
+!
+interface Loopback0
+  description Loopback
+  ip address 192.168.0.1 255.255.255.255
+  ipv6 address ::b:2:0:0:2/128
+  ip router isis 1
+  ipv6 router isis 1
+!
+interface GigabitEthernet0/0
+  description OOB Management
+  ! Configured on launch
+  no ip address
+  duplex auto
+  speed auto
+  no shutdown
+!
+interface GigabitEthernet0/1
+  description to iosxrv-1
+  ip address 10.0.0.9 255.255.255.252
+  ipv6 address ::a:2:1:0:5/126
+  ip router isis 1
+  isis circuit-type level-2-only
+  isis network point-to-point
+  isis metric 1
+  ipv6 router isis 1
+  isis ipv6 metric 1
+  clns mtu 1430
+  duplex auto
+  speed auto
+  no shutdown
+!
+interface GigabitEthernet0/2
+  description to nx-osv-1
+  ip address 10.0.0.13 255.255.255.252
+  ipv6 address ::a:2:1:0:9/126
+  ip router isis 1
+  isis circuit-type level-2-only
+  isis network point-to-point
+  isis metric 1
+  ipv6 router isis 1
+  isis ipv6 metric 1
+  duplex auto
+  speed auto
+  no shutdown
+!
+!
+!
+router isis 1
+  net 49.1921.6800.0001.00
+  metric-style wide
+  !
+  address-family ipv6
+    multi-topology
+  exit-address-family
+!
+!
+router bgp 1
+  bgp router-id 192.168.0.1
+  no synchronization
+! ibgp
+  ! ibgp peers
+  !
+  neighbor 192.168.0.5 remote-as 1
+  neighbor 192.168.0.5 description iBGP peer csr1000v-1
+  neighbor 192.168.0.5 update-source Loopback0
+  !
+  neighbor 192.168.0.3 remote-as 1
+  neighbor 192.168.0.3 description iBGP peer iosxrv-1
+  neighbor 192.168.0.3 update-source Loopback0
+  !
+  neighbor 192.168.0.4 remote-as 1
+  neighbor 192.168.0.4 description iBGP peer nx-osv-1
+  neighbor 192.168.0.4 update-source Loopback0
+  !
+  neighbor ::b:2:0:0:1 remote-as 1
+  neighbor ::b:2:0:0:1 description iBGP peer csr1000v-1
+  neighbor ::b:2:0:0:1 update-source Loopback0
+  !
+  neighbor ::b:2:0:0:3 remote-as 1
+  neighbor ::b:2:0:0:3 description iBGP peer iosxrv-1
+  neighbor ::b:2:0:0:3 update-source Loopback0
+  !
+  neighbor ::b:2:0:0:4 remote-as 1
+  neighbor ::b:2:0:0:4 description iBGP peer nx-osv-1
+  neighbor ::b:2:0:0:4 update-source Loopback0
+!
+!
+ !
+ address-family ipv4
+  network 192.168.0.1 mask 255.255.255.255
+  neighbor 192.168.0.5 activate
+  neighbor 192.168.0.3 activate
+  neighbor 192.168.0.4 activate
+ exit-address-family
+ !
+ address-family ipv6
+  network ::b:2:0:0:2/128
+  neighbor ::b:2:0:0:1 activate
+  neighbor ::b:2:0:0:3 activate
+  neighbor ::b:2:0:0:4 activate
+ exit-address-family
+!
+!
+!
+end
+</entry>
+            <entry type="string" key="AutoNetkit.mgmt_ip"></entry>
+        </extensions>
+        <interface netPrefixLenV6="126" netPrefixLenV4="30" ipv6="::a:2:1:0:5" ipv4="10.0.0.9" name="GigabitEthernet0/1" id="0"/>
+        <interface netPrefixLenV6="126" netPrefixLenV4="30" ipv6="::a:2:1:0:9" ipv4="10.0.0.13" name="GigabitEthernet0/2" id="1"/>
+    </node>
+    <node location="492,41" subtype="server" type="SIMPLE" name="server-1">
+        <extensions>
+            <entry type="string" key="config">#cloud-config
+hostname: server-1
+runcmd:
+- start ttyS0
+- systemctl start getty@ttyS0.service
+- ifconfig eth1 up 10.0.0.1 netmask 255.255.255.248
+- route add -host 192.168.0.1 gw 10.0.0.2 dev eth1
+- route add -host 192.168.0.1 gw 10.0.0.3 dev eth1
+- route add -host 192.168.0.3 gw 10.0.0.2 dev eth1
+- route add -host 192.168.0.3 gw 10.0.0.3 dev eth1
+- route add -net 10.0.0.0/29 gw 10.0.0.2 dev eth1
+- route add -net 10.0.0.0/29 gw 10.0.0.3 dev eth1
+- route add -net 10.0.0.8/29 gw 10.0.0.2 dev eth1
+- route add -net 10.0.0.8/29 gw 10.0.0.3 dev eth1
+- route add -net 10.0.128.0/30 gw 10.0.0.2 dev eth1
+- route add -net 10.0.128.0/30 gw 10.0.0.3 dev eth1
+- route add -net 192.168.0.4/31 gw 10.0.0.2 dev eth1
+- route add -net 192.168.0.4/31 gw 10.0.0.3 dev eth1
+- sed -i '1 i 127.0.0.1 server-1' /etc/hosts
+- sed -i '/^\s*PasswordAuthentication\s\+no/d' /etc/ssh/sshd_config
+- service ssh restart
+- service sshd restart
+users:
+- default
+- gecos: User configured by VIRL Configuration Engine 0.10.7
+  lock-passwd: false
+  name: cisco
+  plain-text-passwd: cisco
+  shell: /bin/bash
+  ssh-authorized-keys:
+  - VIRL-USER-SSH-PUBLIC-KEY
+  sudo: ALL=(ALL) ALL
+write_files:
+- path: /etc/init/ttyS0.conf
+  owner: root:root
+  content: |
+    # ttyS0 - getty
+    # This service maintains a getty on ttyS0 from the point the system is
+    # started until it is shut down again.
+    start on stopped rc or RUNLEVEL=[12345]
+    stop on runlevel [!12345]
+    respawn
+    exec /sbin/getty -L 115200 ttyS0 vt102
+  permissions: '0644'
+- path: /etc/systemd/system/dhclient@.service
+  content: |
+    [Unit]
+    Description=Run dhclient on %i interface
+    After=network.target
+    [Service]
+    Type=oneshot
+    ExecStart=/sbin/dhclient %i -pf /var/run/dhclient.%i.pid -lf /var/lib/dhclient/dhclient.%i.lease
+    RemainAfterExit=yes
+  owner: root:root
+  permissions: '0644'
+</entry>
+        </extensions>
+        <interface netPrefixLenV6="96" netPrefixLenV4="29" ipv6="::a:1:2:0:3" ipv4="10.0.0.1" name="eth1" id="0"/>
+    </node>
+    <node ipv6="::b:2:0:0:3" ipv4="192.168.0.3" location="615,287" subtype="IOS XRv" type="SIMPLE" name="iosxrv-1">
+        <extensions>
+            <entry type="string" key="config">!  IOS-XR Config generated on 2014-11-12 10:58
+! by VIRL Configuration Engine 0.10.7
+!
+hostname iosxrv-1
+service timestamps log datetime msec
+service timestamps debug datetime msec
+telnet vrf default ipv4 server max-servers 10
+domain lookup disable
+line template vty
+timestamp
+exec-timeout 720 0
+!
+line console
+exec-timeout 0 0
+!
+line default
+exec-timeout 720 0
+!
+vty-pool default 0 50
+control-plane
+ management-plane
+  inband
+   interface all
+    allow all
+   !
+  !
+ !
+!
+!
+interface Loopback0
+  description Loopback
+  ipv4 address 192.168.0.3 255.255.255.255
+  ipv6 address ::b:2:0:0:3/128
+!
+interface GigabitEthernet0/0/0/0
+  description to iosv-1
+  ipv4 address 10.0.0.10 255.255.255.252
+  ipv6 address ::a:2:1:0:6/126
+  no shutdown
+!
+interface GigabitEthernet0/0/0/1
+  description to csr1000v-1
+  ipv4 address 10.0.128.1 255.255.255.252
+  ipv6 address ::a:2:1:0:e/126
+  no shutdown
+!
+interface mgmteth0/0/CPU0/0
+  description OOB Management
+  ! Configured on launch
+  no ipv4 address
+  no shutdown
+!
+!
+!
+router isis 1
+  net 49.1921.6800.0003.00
+  address-family ipv4 unicast
+    metric-style wide
+  address-family ipv6 unicast
+    metric-style wide
+  !
+  interface Loopback0
+    passive
+    circuit-type level-2-only
+    address-family ipv4 unicast
+    address-family ipv6 unicast
+  !
+  interface GigabitEthernet0/0/0/0
+    circuit-type level-2-only
+    point-to-point
+    hello-padding disable
+    address-family ipv4 unicast
+        metric 1
+    !
+    address-family ipv6 unicast
+        metric 1
+    !
+  !
+  interface GigabitEthernet0/0/0/1
+    circuit-type level-2-only
+    point-to-point
+    hello-padding disable
+    address-family ipv4 unicast
+        metric 1
+    !
+    address-family ipv6 unicast
+        metric 1
+    !
+  !
+!
+route-policy bgp_in
+  pass
+end-policy
+!
+route-policy bgp_out
+  pass
+end-policy
+!
+router bgp 1
+  bgp router-id 192.168.0.3
+  address-family ipv4 unicast
+    network 192.168.0.3/32
+  !
+  address-family ipv6 unicast
+    network ::b:2:0:0:3/128
+  !
+! iBGP
+!
+! iBGP peers
+  !
+  neighbor 192.168.0.5
+    description iBGP peer csr1000v-1
+    remote-as 1
+    update-source Loopback0
+    address-family ipv4 unicast
+    !
+    !
+  !
+  neighbor 192.168.0.1
+    description iBGP peer iosv-1
+    remote-as 1
+    update-source Loopback0
+    address-family ipv4 unicast
+    !
+    !
+  !
+  neighbor 192.168.0.4
+    description iBGP peer nx-osv-1
+    remote-as 1
+    update-source Loopback0
+    address-family ipv4 unicast
+    !
+    !
+  !
+  neighbor ::b:2:0:0:1
+    description iBGP peer csr1000v-1
+    remote-as 1
+    update-source Loopback0
+    address-family ipv6 unicast
+  !
+  neighbor ::b:2:0:0:2
+    description iBGP peer iosv-1
+    remote-as 1
+    update-source Loopback0
+    address-family ipv6 unicast
+  !
+  neighbor ::b:2:0:0:4
+    description iBGP peer nx-osv-1
+    remote-as 1
+    update-source Loopback0
+    address-family ipv6 unicast
+!
+</entry>
+            <entry type="string" key="AutoNetkit.mgmt_ip"></entry>
+        </extensions>
+        <interface netPrefixLenV6="126" netPrefixLenV4="30" ipv6="::a:2:1:0:6" ipv4="10.0.0.10" name="GigabitEthernet0/0/0/0" id="0"/>
+        <interface netPrefixLenV6="126" netPrefixLenV4="30" ipv6="::a:2:1:0:e" ipv4="10.0.128.1" name="GigabitEthernet0/0/0/1" id="1"/>
+    </node>
+    <node ipv6="::b:2:0:0:4" ipv4="192.168.0.4" location="288,175" subtype="NX-OSv" type="SIMPLE" name="nx-osv-1">
+        <extensions>
+            <entry type="string" key="config">! NX-OSv Config generated on 2014-11-12 10:58
+! by VIRL Configuration Engine 0.10.7
+!
+version 6.2(1)
+license grace-period
+!
+hostname nx-osv-1
+vdc nx-osv-1 id 1
+  limit-resource module-type m1 f1 m1xl m2xl f2e
+  allocate interface Ethernet2/1-48
+  allocate interface Ethernet3/1-48
+  limit-resource vlan minimum 16 maximum 4094
+  limit-resource vrf minimum 2 maximum 4096
+  limit-resource port-channel minimum 0 maximum 768
+  limit-resource u4route-mem minimum 96 maximum 96
+  limit-resource u6route-mem minimum 24 maximum 24
+  limit-resource m4route-mem minimum 58 maximum 58
+  limit-resource m6route-mem minimum 8 maximum 8
+
+feature telnet
+
+feature isis
+feature bgp
+
+username adminbackup password 5 ! role network-operator
+username admin password 5 $1$KuOSBsvW$Cy0TSD..gEBGBPjzpDgf51 role network-admin
+username cisco password 5 $1$Nk7ZkwH0$fyiRmMMfIheqE3BqvcL0C1 role network-operator
+username cisco role network-admin
+username lab password 5 $1$buoy/oqy$.EXQz8rCn72ii8qtdldj00 role network-admin
+no password strength-check
+ip domain-lookup
+copp profile strict
+snmp-server user lab network-admin auth md5 0x5ceb414591539ee35159fca86fdfa101 priv 0x5ceb414591539ee35159fca86fdfa101 localizedkey
+snmp-server user admin network-admin auth md5 0x328945d53e05e8e7207f8c20b142f0b7 priv 0x328945d53e05e8e7207f8c20b142f0b7 localizedkey
+snmp-server user cisco network-operator auth md5 0x55b3c64a53fb95518e75358ee75e82e9 priv 0x55b3c64a53fb95518e75358ee75e82e9 localizedkey
+snmp-server user cisco network-admin
+rmon event 1 log trap public description FATAL(1) owner PMON@FATAL
+rmon event 2 log trap public description CRITICAL(2) owner PMON@CRITICAL
+rmon event 3 log trap public description ERROR(3) owner PMON@ERROR
+rmon event 4 log trap public description WARNING(4) owner PMON@WARNING
+rmon event 5 log trap public description INFORMATION(5) owner PMON@INFO
+
+
+vlan 1
+
+vrf context management
+hardware forwarding unicast trace
+
+interface Loopback0
+  description Loopback
+  ip router isis 1
+  ipv6 router isis 1
+  ip address 192.168.0.4/32
+  ipv6 address ::b:2:0:0:4/128
+
+interface Ethernet2/1
+  description to iosv-1
+  ip router isis 1
+  ipv6 router isis 1
+  isis metric 1 level-2
+  isis network point-to-point
+  isis circuit-type level-2
+  no isis hello-padding
+  ip address 10.0.0.14/30
+  ipv6 address ::a:2:1:0:a/126
+  no mac-address
+  no shutdown
+
+interface Ethernet2/2
+  description to Multipoint_Connection-1
+  ip router isis 1
+  ipv6 router isis 1
+  isis metric 1 level-2
+  isis network point-to-point
+  isis circuit-type level-2
+  no isis hello-padding
+  ip address 10.0.0.2/29
+  ipv6 address ::a:1:2:0:2/96
+  no mac-address
+  no shutdown
+
+interface mgmt0
+  description OOB Management
+  ! Configured on launch
+  no ip address
+  no mac-address
+  no shutdown
+  vrf member management
+
+
+line console
+line vty
+router isis 1
+net 49.1921.6800.0004.00
+address-family ipv4 unicast
+address-family ipv6 unicast
+router bgp 1
+  router-id 192.168.0.4
+  address-family ipv4 unicast
+    network 192.168.0.4/32
+  !
+  address-family ipv6 unicast
+    network ::b:2:0:0:4/128
+  !
+! iBGP
+!
+! iBGP peers
+  !
+  neighbor 192.168.0.5 remote-as 1
+    description iBGP peer csr1000v-1
+    update-source Loopback0
+    address-family ipv4 unicast
+    !
+    !
+  !
+  neighbor 192.168.0.1 remote-as 1
+    description iBGP peer iosv-1
+    update-source Loopback0
+    address-family ipv4 unicast
+    !
+    !
+  !
+  neighbor 192.168.0.3 remote-as 1
+    description iBGP peer iosxrv-1
+    update-source Loopback0
+    address-family ipv4 unicast
+    !
+    !
+  !
+  neighbor ::b:2:0:0:1 remote-as 1
+    description iBGP peer csr1000v-1
+    update-source Loopback0
+    address-family ipv6 unicast
+  !
+  neighbor ::b:2:0:0:2 remote-as 1
+    description iBGP peer iosv-1
+    update-source Loopback0
+    address-family ipv6 unicast
+  !
+  neighbor ::b:2:0:0:3 remote-as 1
+    description iBGP peer iosxrv-1
+    update-source Loopback0
+    address-family ipv6 unicast
+</entry>
+            <entry type="string" key="AutoNetkit.mgmt_ip"></entry>
+        </extensions>
+        <interface netPrefixLenV6="126" netPrefixLenV4="30" ipv6="::a:2:1:0:a" ipv4="10.0.0.14" name="Ethernet2/1" id="0"/>
+        <interface netPrefixLenV6="96" netPrefixLenV4="29" ipv6="::a:1:2:0:2" ipv4="10.0.0.2" name="Ethernet2/2" id="1"/>
+    </node>
+    <node ipv6="::b:2:0:0:1" ipv4="192.168.0.5" location="625,166" subtype="CSR1000v" type="SIMPLE" name="csr1000v-1">
+        <extensions>
+            <entry type="string" key="config">! IOS Config generated on 2014-11-12 10:58
+! by VIRL Configuration Engine 0.10.7
+!
+hostname csr1000v-1
+boot-start-marker
+boot-end-marker
+!
+license accept end user agreement
+license boot level premium
+!
+!
+no aaa new-model
+!
+!
+ipv6 unicast-routing
+!
+!
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+no service config
+enable password cisco
+enable secret 4 tnhtc92DXBhelxjYk8LWJrPV36S2i4ntXrpb4RFmfqY
+ip classless
+ip subnet-zero
+no ip domain lookup
+line vty 0 4
+ transport input ssh telnet
+ exec-timeout 720 0
+ password cisco
+ login
+line con 0
+ password cisco
+!
+!
+interface Loopback0
+  description Loopback
+  ip address 192.168.0.5 255.255.255.255
+  ipv6 address ::b:2:0:0:1/128
+  ip router isis 1
+  ipv6 router isis 1
+!
+interface GigabitEthernet1
+  description OOB Management
+  ! Configured on launch
+  no ip address
+  no shutdown
+!
+interface GigabitEthernet2
+  description to iosxrv-1
+  ip address 10.0.128.2 255.255.255.252
+  ipv6 address ::a:2:1:0:d/126
+  ip router isis 1
+  isis circuit-type level-2-only
+  isis network point-to-point
+  isis metric 1
+  ipv6 router isis 1
+  isis ipv6 metric 1
+  clns mtu 1430
+  no shutdown
+!
+interface GigabitEthernet3
+  description to Multipoint_Connection-1
+  ip address 10.0.0.3 255.255.255.248
+  ipv6 address ::a:1:2:0:1/96
+  ip router isis 1
+  isis circuit-type level-2-only
+  isis network point-to-point
+  isis metric 1
+  ipv6 router isis 1
+  isis ipv6 metric 1
+  no shutdown
+!
+!
+!
+router isis 1
+  net 49.1921.6800.0005.00
+  metric-style wide
+  !
+  address-family ipv6
+    multi-topology
+  exit-address-family
+!
+!
+router bgp 1
+  bgp router-id 192.168.0.5
+  no synchronization
+! ibgp
+  ! ibgp peers
+  !
+  neighbor 192.168.0.1 remote-as 1
+  neighbor 192.168.0.1 description iBGP peer iosv-1
+  neighbor 192.168.0.1 update-source Loopback0
+  !
+  neighbor 192.168.0.3 remote-as 1
+  neighbor 192.168.0.3 description iBGP peer iosxrv-1
+  neighbor 192.168.0.3 update-source Loopback0
+  !
+  neighbor 192.168.0.4 remote-as 1
+  neighbor 192.168.0.4 description iBGP peer nx-osv-1
+  neighbor 192.168.0.4 update-source Loopback0
+  !
+  neighbor ::b:2:0:0:2 remote-as 1
+  neighbor ::b:2:0:0:2 description iBGP peer iosv-1
+  neighbor ::b:2:0:0:2 update-source Loopback0
+  !
+  neighbor ::b:2:0:0:3 remote-as 1
+  neighbor ::b:2:0:0:3 description iBGP peer iosxrv-1
+  neighbor ::b:2:0:0:3 update-source Loopback0
+  !
+  neighbor ::b:2:0:0:4 remote-as 1
+  neighbor ::b:2:0:0:4 description iBGP peer nx-osv-1
+  neighbor ::b:2:0:0:4 update-source Loopback0
+!
+!
+ !
+ address-family ipv4
+  network 192.168.0.5 mask 255.255.255.255
+  neighbor 192.168.0.1 activate
+  neighbor 192.168.0.3 activate
+  neighbor 192.168.0.4 activate
+ exit-address-family
+ !
+ address-family ipv6
+  network ::b:2:0:0:1/128
+  neighbor ::b:2:0:0:2 activate
+  neighbor ::b:2:0:0:3 activate
+  neighbor ::b:2:0:0:4 activate
+ exit-address-family
+!
+!
+!
+end
+</entry>
+            <entry type="string" key="AutoNetkit.mgmt_ip"></entry>
+        </extensions>
+        <interface netPrefixLenV6="126" netPrefixLenV4="30" ipv6="::a:2:1:0:d" ipv4="10.0.128.2" name="GigabitEthernet2" id="0"/>
+        <interface netPrefixLenV6="96" netPrefixLenV4="29" ipv6="::a:1:2:0:1" ipv4="10.0.0.3" name="GigabitEthernet3" id="1"/>
+    </node>
+    <node location="365,113" type="SEGMENT" name="Multipoint Connection-1"/>
+    <connection src="/virl:topology/virl:node[1]/virl:interface[1]" dst="/virl:topology/virl:node[3]/virl:interface[1]"/>
+    <connection src="/virl:topology/virl:node[1]/virl:interface[2]" dst="/virl:topology/virl:node[4]/virl:interface[1]"/>
+    <connection src="/virl:topology/virl:node[5]/virl:interface[1]" dst="/virl:topology/virl:node[3]/virl:interface[2]"/>
+    <connection src="/virl:topology/virl:node[2]/virl:interface[1]" dst="/virl:topology/virl:node[6]"/>
+    <connection src="/virl:topology/virl:node[4]/virl:interface[2]" dst="/virl:topology/virl:node[6]"/>
+    <connection src="/virl:topology/virl:node[5]/virl:interface[2]" dst="/virl:topology/virl:node[6]"/>
+</topology>
