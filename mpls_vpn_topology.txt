@@ -1,0 +1,13 @@
+Topology description
+--------------------
+1 CSR1000v, 4 IOS XRv, 8 IOSv routers
+
+This is a 13-node topology that demonstrates MPLS VPN configuration aspects. 
+
+The topology contains a set of IOS XRv instances which are set up as MPLS P-nodes, running MPLS LDP and OSPF. The CSR1000v acts as a Multi-protocol BGP route-reflector with iBGP sessions to the IOSv instances which are set up as MPLS PE nodes.
+
+The ‘ce’ nodes are IOSv instances. They each have a unique private AS number (6500x) and are tagged with a VRF name (red or green). 
+
+When the topology is passed to AutoNetkit (‘build initial configurations), the resulting configuration creates eBGP sessions between the CE nodes and the PE nodes, creates the VRFs red and green on the PE nodes and established MP-BGP sessions up to the CSR1000v. 
+
+When the simulation runs, a loopback interface is created on the PE-nodes into each of the active VRFs (red and green).

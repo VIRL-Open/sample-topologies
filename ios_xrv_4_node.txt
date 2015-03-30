@@ -1,0 +1,9 @@
+Topology description
+--------------------
+4 IOS XRv routers 
+
+Routers are connected in a full mesh configuration.
+
+This topology serves as a basic test topology. If you’re able to start this topology, then all of the primary services in VIRL are up and running. In VM Maestro, press the ‘build initial configurations’ button to send the topology to AutoNetkit for processing. Press the ‘launch simulation’ button to start the simulation up.
+
+Routers are not set with any configuration attributes, so the default configuration attributes will be applied (OSPF, BGP full-mesh, IPv4 address family).

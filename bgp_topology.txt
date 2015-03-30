@@ -1,0 +1,11 @@
+Topology description
+--------------------
+2 CSR1000v, 2 NXOSv, 4 IOS XRv, 3 IOSv routers
+
+This is a 12-node topology that demonstrates a number of configuration aspects. 
+
+The topology contains parallel links between many nodes but is focused on BGP configuration with Route-reflection and Hierarchical route-reflection being used. 
+
+The CSR1000v’s are set as Route-reflectors with CSR1000v-1 serving the RR cluster one, CSR1000v-2 serving RR cluster four.  The NXOSv instances are also set as Route-reflectors, NXOSv-1 serving RR cluster one, NXOSv-2 serving RR cluster 4. 
+
+IOS XRv nodes are set as route-reflector clients but are also route-reflectors themselves, serving the down-steam IOSv routers. 
