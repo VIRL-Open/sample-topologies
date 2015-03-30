@@ -1,0 +1,13 @@
+Topology description
+--------------------
+Four IOSvL2 switches, 2 IOSv routers, 6 Linux servers.
+
+Servers are set up such that Servers 1 & 4’s Eth1 interfaces are placed into Vlan 20. Servers 2 & 5’s Eth1 interfaces placed into Vlan 30. Servers 3 & 6’s Eth1 interfaces are placed into Vlan 40.
+
+The IOSv routers have two interfaces, one connected into Vlan 20, one into Vlan 40.
+
+Switches are set up for 802.1q trunking operation. 
+
+By default, Vlans need to be specifically enabled. The configuration will enable the Vlans on the switches for the interfaces that are directly connected. What this means is that on IOSvL2-1 an IOSvL2-2, since there is no directly connected interface for Vlans 40, the Vlan is not enabled. As a result, traffic from Server-3 can’t reach Server 6, since the path will go either via IOSvL2-1 or IOSvL2-2. Since neither switch has Vlan 40 enabled, packets with the Vlan 40 header will be dropped.
+
+To enable Vlan 40, you need to the command ‘vlan 40’ on IOSvL2-1 and IOSvL2-2.

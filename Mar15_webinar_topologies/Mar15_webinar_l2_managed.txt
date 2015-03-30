@@ -1,0 +1,11 @@
+Topology description
+--------------------
+2 IOSvL2 switches, 6 IOSv routers
+
+In this topology, the switches are provided by two IOSvL2 virtual machines with multiple connections. IOSv-3 and IOSv-4 have interfaces into each of the switch instances.
+
+When using the ‘build initial configurations’ function (aka AutoNetkit), interfaces on the IOSvL2 instance, connecting a router or host to a switch are placed in ‘switchport access’ mode, with the port placed into Vlan 2. 
+
+OSPF is enabled, so Designated Router and Backup Designated Router election will take place in each of the two subnets.
+
+To place the router interfaces into a specific Vlan, in VM Maestro’s Design mode, make sure that the ‘Node Editor’ panel is open (or right-click on the Design mode button (top right corner) and press ‘reset’ to expose the panel), select the router, select the router’s interface towards the switch and then in the Properties Panel, under AutoNetkit, put a value between 2-4094 in the field.

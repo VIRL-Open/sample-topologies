@@ -1,0 +1,9 @@
+Topology description
+--------------------
+2 unmanaged switches, 6 IOSv routers
+
+Unmanaged switches are operated as LinuxBridge instances with multiple connections. In this example, each Unmanaged switch has four interfaces. IOSv-3 and IOSv-4 have interfaces into each of the switch instances.
+
+OSPF is enabled, so Designated Router and Backup Designated Router election will take place in each of the two subnets.
+
+If you review the configuration for each node, you will see configuration being created for the Unmanaged Switches. This is not used by the LinuxBridge instance and can be ignored.
