@@ -1,0 +1,943 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<topology xmlns="http://www.cisco.com/VIRL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" schemaVersion="0.9" xsi:schemaLocation="http://www.cisco.com/VIRL https://raw.github.com/CiscoVIRL/schema/v0.9/virl.xsd">
+    <extensions>
+        <entry key="AutoNetkit.IGP" type="String">isis</entry>
+        <entry key="AutoNetkit.enable_mpls_oam" type="Boolean">true</entry>
+        <entry key="management_network" type="String">exclusive</entry>
+    </extensions>
+    <node name="iosxrv-1" type="SIMPLE" subtype="IOS XRv" location="473,145" ipv4="192.168.0.1">
+        <extensions>
+            <entry key="AutoNetkit.ibgp_role" type="String">RR</entry>
+            <entry key="AutoNetkit.RR_cluster" type="String">odl</entry>
+            <entry key="config" type="string">!  IOS-XR Config generated on 2015-04-21 11:09
+! by autonetkit_0.15.1
+!
+hostname iosxrv-1
+service timestamps log datetime msec
+service timestamps debug datetime msec
+telnet vrf default ipv4 server max-servers 10
+domain lookup disable
+line template vty
+timestamp
+exec-timeout 720 0
+!
+line console
+exec-timeout 0 0
+!
+line default
+exec-timeout 720 0
+!
+vty-pool default 0 50
+control-plane
+ management-plane
+  inband
+   interface all
+    allow all
+   !
+  !
+ !
+!
+! ODL SNMP
+snmp-server community cisco RO
+snmp-server community public RO SystemOwner
+snmp-server community private RW SystemOwner
+snmp-server traps rf
+snmp-server traps bfd
+snmp-server traps ethernet cfm
+snmp-server traps ntp
+snmp-server traps ethernet oam events
+snmp-server traps copy-complete
+snmp-server traps snmp linkup
+snmp-server traps snmp linkdown
+snmp-server traps snmp coldstart
+snmp-server traps snmp warmstart
+snmp-server traps snmp authentication
+snmp-server traps flash removal
+snmp-server traps flash insertion
+snmp-server traps config
+snmp-server traps entity
+snmp-server traps selective-vrf-download role-change
+snmp-server traps syslog
+snmp-server traps system
+snmp-server traps ospf lsa lsa-maxage
+snmp-server traps ospf lsa lsa-originate
+snmp-server traps ospf errors bad-packet
+snmp-server traps ospf errors authentication-failure
+snmp-server traps ospf errors config-error
+snmp-server traps ospf errors virt-bad-packet
+snmp-server traps ospf errors virt-authentication-failure
+snmp-server traps ospf errors virt-config-error
+snmp-server traps ospf retransmit packets
+snmp-server traps ospf retransmit virt-packets
+snmp-server traps ospf state-change if-state-change
+snmp-server traps ospf state-change neighbor-state-change
+snmp-server traps ospf state-change virtif-state-change
+snmp-server traps ospf state-change virtneighbor-state-change
+snmp-server traps bridgemib
+snmp-server traps entity-state switchover
+snmp-server traps entity-redundancy all
+snmp-server traps entity-redundancy status
+nmp-server traps entity-redundancy switchover
+snmp-server trap-source MgmtEth0/0/CPU0/0
+snmp-server host 172.16.2.201 traps version 2c public
+!
+ssh server v2
+ssh server netconf port 830
+ssh timeout 120
+netconf-yang agent ssh
+mpls oam
+  echo revision 4
+!
+!
+interface Loopback0
+  description Loopback
+  ipv4 address 192.168.0.1 255.255.255.255
+!
+interface GigabitEthernet0/0/0/0
+  description to iosxrv-3
+  ipv4 address 10.0.0.5 255.255.255.252
+  no shutdown
+!
+interface GigabitEthernet0/0/0/1
+  description to iosxrv-2
+  ipv4 address 10.0.0.1 255.255.255.252
+  no shutdown
+!
+interface GigabitEthernet0/0/0/2
+  description to iosxrv-4
+  ipv4 address 10.0.128.1 255.255.255.252
+  no shutdown
+!
+interface GigabitEthernet0/0/0/3
+  description to flat-1
+  no ipv4 address
+  no shutdown
+!
+interface mgmteth0/0/CPU0/0
+  description OOB Management
+  ! Configured on launch
+  no ipv4 address
+  no shutdown
+!
+!
+rsvp
+  interface GigabitEthernet0/0/0/0
+    bandwidth percent 100
+  !
+  interface GigabitEthernet0/0/0/1
+    bandwidth percent 100
+  !
+  interface GigabitEthernet0/0/0/2
+    bandwidth percent 100
+  !
+  interface GigabitEthernet0/0/0/3
+    bandwidth percent 100
+  !
+!
+!
+router isis 1
+  net 49.1921.6800.0001.00
+  distribute bgp-ls level 2
+  address-family ipv4 unicast
+    metric-style wide
+    mpls traffic-eng level-2-only
+    mpls traffic-eng router-id Loopback0
+  !
+  interface Loopback0
+    passive
+    circuit-type level-2-only
+    address-family ipv4 unicast
+  !
+  interface GigabitEthernet0/0/0/0
+    circuit-type level-2-only
+    point-to-point
+    address-family ipv4 unicast
+        metric 1
+    !
+  !
+  interface GigabitEthernet0/0/0/1
+    circuit-type level-2-only
+    point-to-point
+    address-family ipv4 unicast
+        metric 1
+    !
+  !
+  interface GigabitEthernet0/0/0/2
+    circuit-type level-2-only
+    point-to-point
+    address-family ipv4 unicast
+        metric 1
+    !
+  !
+  interface GigabitEthernet0/0/0/3
+    circuit-type level-2-only
+    point-to-point
+    address-family ipv4 unicast
+        metric 1
+    !
+  !
+!
+ipv4 unnumbered mpls traffic-eng Loopback0
+!
+mpls traffic-eng
+  interface GigabitEthernet0/0/0/0
+  !
+  interface GigabitEthernet0/0/0/1
+  !
+  interface GigabitEthernet0/0/0/2
+  !
+  interface GigabitEthernet0/0/0/3
+  !
+  pce
+   peer ipv4 172.16.2.201
+   stateful-client
+    instantiation
+   !
+  !
+  auto-tunnel pcc
+   tunnel-id min 1 max 99
+  !
+  reoptimize timers delay installation 0
+ !
+!
+!
+route-policy bgp_in
+  pass
+end-policy
+!
+route-policy bgp_out
+  pass
+end-policy
+!
+router bgp 1
+  bgp router-id 192.168.0.1
+  bgp update-delay 0
+  address-family ipv4 unicast
+    network 192.168.0.1/32
+  !
+  address-family link-state link-state
+  !
+! iBGP
+! iBGP clients
+  !
+  neighbor 192.168.0.2
+    description RR client iosxrv-2
+    remote-as 1
+    update-source Loopback0
+    address-family ipv4 unicast
+      route-reflector-client
+    !
+    !
+  !
+  !
+  neighbor 192.168.0.3
+    description RR client iosxrv-3
+    remote-as 1
+    update-source Loopback0
+    address-family ipv4 unicast
+      route-reflector-client
+    !
+    !
+  !
+  !
+  neighbor 192.168.0.4
+    description RR client iosxrv-4
+    remote-as 1
+    update-source Loopback0
+    address-family ipv4 unicast
+      route-reflector-client
+    !
+    !
+  !
+!
+! lsd route reflector clients
+  !
+  neighbor 172.16.2.201
+    description lsd rr client ext-router-1
+    remote-as 1
+    update-source Loopback0
+    address-family ipv4 unicast
+      route-reflector-client
+    !
+    address-family link-state link-state
+      route-reflector-client
+    !
+  !
+  neighbor 172.16.2.201
+    description lsd rr client ext-router-1
+    remote-as 1
+    update-source Loopback0
+    address-family ipv4 unicast
+      route-reflector-client
+    !
+    address-family link-state link-state
+      route-reflector-client
+    !
+!
+        </entry>
+            <entry key="AutoNetkit.mgmt_ip" type="string"></entry>
+            <entry key="AutoNetkit.MPLS TE enabled" type="Boolean">true</entry>
+            <entry key="AutoNetkit.odl_mgmt_group" type="String">odl_1</entry>
+        </extensions>
+        <interface id="0" name="GigabitEthernet0/0/0/0" ipv4="10.0.0.5" netPrefixLenV4="30"/>
+        <interface id="1" name="GigabitEthernet0/0/0/1" ipv4="10.0.0.1" netPrefixLenV4="30"/>
+        <interface id="2" name="GigabitEthernet0/0/0/2" ipv4="10.0.128.1" netPrefixLenV4="30"/>
+        <interface id="3" name="GigabitEthernet0/0/0/3"/>
+    </node>
+    <node name="iosxrv-2" type="SIMPLE" subtype="IOS XRv" location="733,154" ipv4="192.168.0.2">
+        <extensions>
+            <entry key="AutoNetkit.ibgp_role" type="String">RRC</entry>
+            <entry key="AutoNetkit.RR_cluster" type="String">odl</entry>
+            <entry key="config" type="string">!  IOS-XR Config generated on 2015-04-21 11:09
+! by autonetkit_0.15.1
+!
+hostname iosxrv-2
+service timestamps log datetime msec
+service timestamps debug datetime msec
+telnet vrf default ipv4 server max-servers 10
+domain lookup disable
+line template vty
+timestamp
+exec-timeout 720 0
+!
+line console
+exec-timeout 0 0
+!
+line default
+exec-timeout 720 0
+!
+vty-pool default 0 50
+control-plane
+ management-plane
+  inband
+   interface all
+    allow all
+   !
+  !
+ !
+!
+! ODL SNMP
+snmp-server community cisco RO
+snmp-server community public RO SystemOwner
+snmp-server community private RW SystemOwner
+snmp-server traps rf
+snmp-server traps bfd
+snmp-server traps ethernet cfm
+snmp-server traps ntp
+snmp-server traps ethernet oam events
+snmp-server traps copy-complete
+snmp-server traps snmp linkup
+snmp-server traps snmp linkdown
+snmp-server traps snmp coldstart
+snmp-server traps snmp warmstart
+snmp-server traps snmp authentication
+snmp-server traps flash removal
+snmp-server traps flash insertion
+snmp-server traps config
+snmp-server traps entity
+snmp-server traps selective-vrf-download role-change
+snmp-server traps syslog
+snmp-server traps system
+snmp-server traps ospf lsa lsa-maxage
+snmp-server traps ospf lsa lsa-originate
+snmp-server traps ospf errors bad-packet
+snmp-server traps ospf errors authentication-failure
+snmp-server traps ospf errors config-error
+snmp-server traps ospf errors virt-bad-packet
+snmp-server traps ospf errors virt-authentication-failure
+snmp-server traps ospf errors virt-config-error
+snmp-server traps ospf retransmit packets
+snmp-server traps ospf retransmit virt-packets
+snmp-server traps ospf state-change if-state-change
+snmp-server traps ospf state-change neighbor-state-change
+snmp-server traps ospf state-change virtif-state-change
+snmp-server traps ospf state-change virtneighbor-state-change
+snmp-server traps bridgemib
+snmp-server traps entity-state switchover
+snmp-server traps entity-redundancy all
+snmp-server traps entity-redundancy status
+nmp-server traps entity-redundancy switchover
+snmp-server trap-source MgmtEth0/0/CPU0/0
+snmp-server host 172.16.2.201 traps version 2c public
+!
+ssh server v2
+ssh server netconf port 830
+ssh timeout 120
+netconf-yang agent ssh
+mpls oam
+  echo revision 4
+!
+!
+interface Loopback0
+  description Loopback
+  ipv4 address 192.168.0.2 255.255.255.255
+!
+interface GigabitEthernet0/0/0/0
+  description to iosxrv-1
+  ipv4 address 10.0.0.2 255.255.255.252
+  no shutdown
+!
+interface GigabitEthernet0/0/0/1
+  description to iosxrv-4
+  ipv4 address 10.0.0.9 255.255.255.252
+  no shutdown
+!
+interface GigabitEthernet0/0/0/2
+  description to iosxrv-3
+  ipv4 address 10.0.128.5 255.255.255.252
+  no shutdown
+!
+interface mgmteth0/0/CPU0/0
+  description OOB Management
+  ! Configured on launch
+  no ipv4 address
+  no shutdown
+!
+!
+rsvp
+  interface GigabitEthernet0/0/0/0
+    bandwidth percent 100
+  !
+  interface GigabitEthernet0/0/0/1
+    bandwidth percent 100
+  !
+  interface GigabitEthernet0/0/0/2
+    bandwidth percent 100
+  !
+!
+!
+router isis 1
+  net 49.1921.6800.0002.00
+  address-family ipv4 unicast
+    metric-style wide
+    mpls traffic-eng level-2-only
+    mpls traffic-eng router-id Loopback0
+  !
+  interface Loopback0
+    passive
+    circuit-type level-2-only
+    address-family ipv4 unicast
+  !
+  interface GigabitEthernet0/0/0/0
+    circuit-type level-2-only
+    point-to-point
+    address-family ipv4 unicast
+        metric 1
+    !
+  !
+  interface GigabitEthernet0/0/0/1
+    circuit-type level-2-only
+    point-to-point
+    address-family ipv4 unicast
+        metric 1
+    !
+  !
+  interface GigabitEthernet0/0/0/2
+    circuit-type level-2-only
+    point-to-point
+    address-family ipv4 unicast
+        metric 1
+    !
+  !
+!
+ipv4 unnumbered mpls traffic-eng Loopback0
+!
+mpls traffic-eng
+  interface GigabitEthernet0/0/0/0
+  !
+  interface GigabitEthernet0/0/0/1
+  !
+  interface GigabitEthernet0/0/0/2
+  !
+  pce
+   peer ipv4 172.16.2.201
+   stateful-client
+    instantiation
+   !
+  !
+  auto-tunnel pcc
+   tunnel-id min 1 max 99
+  !
+  reoptimize timers delay installation 0
+ !
+!
+!
+route-policy bgp_in
+  pass
+end-policy
+!
+route-policy bgp_out
+  pass
+end-policy
+!
+router bgp 1
+  bgp router-id 192.168.0.2
+  address-family ipv4 unicast
+    network 192.168.0.2/32
+  !
+! iBGP
+!
+! iBGP route reflector servers
+  !
+  neighbor 192.168.0.1
+    description RR parent iosxrv-1
+    remote-as 1
+    update-source Loopback0
+    address-family ipv4 unicast
+    !
+!
+        </entry>
+            <entry key="AutoNetkit.mgmt_ip" type="string"></entry>
+            <entry key="AutoNetkit.MPLS TE enabled" type="Boolean">true</entry>
+            <entry key="AutoNetkit.odl_mgmt_group" type="String">odl_1</entry>
+        </extensions>
+        <interface id="0" name="GigabitEthernet0/0/0/0" ipv4="10.0.0.2" netPrefixLenV4="30"/>
+        <interface id="1" name="GigabitEthernet0/0/0/1" ipv4="10.0.0.9" netPrefixLenV4="30"/>
+        <interface id="2" name="GigabitEthernet0/0/0/2" ipv4="10.0.128.5" netPrefixLenV4="30"/>
+    </node>
+    <node name="iosxrv-3" type="SIMPLE" subtype="IOS XRv" location="489,357" ipv4="192.168.0.3">
+        <extensions>
+            <entry key="AutoNetkit.ibgp_role" type="String">RRC</entry>
+            <entry key="AutoNetkit.RR_cluster" type="String">odl</entry>
+            <entry key="config" type="string">!  IOS-XR Config generated on 2015-04-21 11:09
+! by autonetkit_0.15.1
+!
+hostname iosxrv-3
+service timestamps log datetime msec
+service timestamps debug datetime msec
+telnet vrf default ipv4 server max-servers 10
+domain lookup disable
+line template vty
+timestamp
+exec-timeout 720 0
+!
+line console
+exec-timeout 0 0
+!
+line default
+exec-timeout 720 0
+!
+vty-pool default 0 50
+control-plane
+ management-plane
+  inband
+   interface all
+    allow all
+   !
+  !
+ !
+!
+! ODL SNMP
+snmp-server community cisco RO
+snmp-server community public RO SystemOwner
+snmp-server community private RW SystemOwner
+snmp-server traps rf
+snmp-server traps bfd
+snmp-server traps ethernet cfm
+snmp-server traps ntp
+snmp-server traps ethernet oam events
+snmp-server traps copy-complete
+snmp-server traps snmp linkup
+snmp-server traps snmp linkdown
+snmp-server traps snmp coldstart
+snmp-server traps snmp warmstart
+snmp-server traps snmp authentication
+snmp-server traps flash removal
+snmp-server traps flash insertion
+snmp-server traps config
+snmp-server traps entity
+snmp-server traps selective-vrf-download role-change
+snmp-server traps syslog
+snmp-server traps system
+snmp-server traps ospf lsa lsa-maxage
+snmp-server traps ospf lsa lsa-originate
+snmp-server traps ospf errors bad-packet
+snmp-server traps ospf errors authentication-failure
+snmp-server traps ospf errors config-error
+snmp-server traps ospf errors virt-bad-packet
+snmp-server traps ospf errors virt-authentication-failure
+snmp-server traps ospf errors virt-config-error
+snmp-server traps ospf retransmit packets
+snmp-server traps ospf retransmit virt-packets
+snmp-server traps ospf state-change if-state-change
+snmp-server traps ospf state-change neighbor-state-change
+snmp-server traps ospf state-change virtif-state-change
+snmp-server traps ospf state-change virtneighbor-state-change
+snmp-server traps bridgemib
+snmp-server traps entity-state switchover
+snmp-server traps entity-redundancy all
+snmp-server traps entity-redundancy status
+nmp-server traps entity-redundancy switchover
+snmp-server trap-source MgmtEth0/0/CPU0/0
+snmp-server host 172.16.2.201 traps version 2c public
+!
+ssh server v2
+ssh server netconf port 830
+ssh timeout 120
+netconf-yang agent ssh
+mpls oam
+  echo revision 4
+!
+!
+interface Loopback0
+  description Loopback
+  ipv4 address 192.168.0.3 255.255.255.255
+!
+interface GigabitEthernet0/0/0/0
+  description to iosxrv-1
+  ipv4 address 10.0.0.6 255.255.255.252
+  no shutdown
+!
+interface GigabitEthernet0/0/0/1
+  description to iosxrv-4
+  ipv4 address 10.0.0.13 255.255.255.252
+  no shutdown
+!
+interface GigabitEthernet0/0/0/2
+  description to iosxrv-2
+  ipv4 address 10.0.128.6 255.255.255.252
+  no shutdown
+!
+interface mgmteth0/0/CPU0/0
+  description OOB Management
+  ! Configured on launch
+  no ipv4 address
+  no shutdown
+!
+!
+rsvp
+  interface GigabitEthernet0/0/0/0
+    bandwidth percent 100
+  !
+  interface GigabitEthernet0/0/0/1
+    bandwidth percent 100
+  !
+  interface GigabitEthernet0/0/0/2
+    bandwidth percent 100
+  !
+!
+!
+router isis 1
+  net 49.1921.6800.0003.00
+  address-family ipv4 unicast
+    metric-style wide
+    mpls traffic-eng level-2-only
+    mpls traffic-eng router-id Loopback0
+  !
+  interface Loopback0
+    passive
+    circuit-type level-2-only
+    address-family ipv4 unicast
+  !
+  interface GigabitEthernet0/0/0/0
+    circuit-type level-2-only
+    point-to-point
+    address-family ipv4 unicast
+        metric 1
+    !
+  !
+  interface GigabitEthernet0/0/0/1
+    circuit-type level-2-only
+    point-to-point
+    address-family ipv4 unicast
+        metric 1
+    !
+  !
+  interface GigabitEthernet0/0/0/2
+    circuit-type level-2-only
+    point-to-point
+    address-family ipv4 unicast
+        metric 1
+    !
+  !
+!
+ipv4 unnumbered mpls traffic-eng Loopback0
+!
+mpls traffic-eng
+  interface GigabitEthernet0/0/0/0
+  !
+  interface GigabitEthernet0/0/0/1
+  !
+  interface GigabitEthernet0/0/0/2
+  !
+  pce
+   peer ipv4 172.16.2.201
+   stateful-client
+    instantiation
+   !
+  !
+  auto-tunnel pcc
+   tunnel-id min 1 max 99
+  !
+  reoptimize timers delay installation 0
+ !
+!
+!
+route-policy bgp_in
+  pass
+end-policy
+!
+route-policy bgp_out
+  pass
+end-policy
+!
+router bgp 1
+  bgp router-id 192.168.0.3
+  address-family ipv4 unicast
+    network 192.168.0.3/32
+  !
+! iBGP
+!
+! iBGP route reflector servers
+  !
+  neighbor 192.168.0.1
+    description RR parent iosxrv-1
+    remote-as 1
+    update-source Loopback0
+    address-family ipv4 unicast
+    !
+!
+        </entry>
+            <entry key="AutoNetkit.mgmt_ip" type="string"></entry>
+            <entry key="AutoNetkit.MPLS TE enabled" type="Boolean">true</entry>
+            <entry key="AutoNetkit.odl_mgmt_group" type="String">odl_1</entry>
+        </extensions>
+        <interface id="0" name="GigabitEthernet0/0/0/0" ipv4="10.0.0.6" netPrefixLenV4="30"/>
+        <interface id="1" name="GigabitEthernet0/0/0/1" ipv4="10.0.0.13" netPrefixLenV4="30"/>
+        <interface id="2" name="GigabitEthernet0/0/0/2" ipv4="10.0.128.6" netPrefixLenV4="30"/>
+    </node>
+    <node name="iosxrv-4" type="SIMPLE" subtype="IOS XRv" location="738,355" ipv4="192.168.0.4">
+        <extensions>
+            <entry key="AutoNetkit.ibgp_role" type="String">RRC</entry>
+            <entry key="AutoNetkit.RR_cluster" type="String">odl</entry>
+            <entry key="config" type="string">!  IOS-XR Config generated on 2015-04-21 11:09
+! by autonetkit_0.15.1
+!
+hostname iosxrv-4
+service timestamps log datetime msec
+service timestamps debug datetime msec
+telnet vrf default ipv4 server max-servers 10
+domain lookup disable
+line template vty
+timestamp
+exec-timeout 720 0
+!
+line console
+exec-timeout 0 0
+!
+line default
+exec-timeout 720 0
+!
+vty-pool default 0 50
+control-plane
+ management-plane
+  inband
+   interface all
+    allow all
+   !
+  !
+ !
+!
+! ODL SNMP
+snmp-server community cisco RO
+snmp-server community public RO SystemOwner
+snmp-server community private RW SystemOwner
+snmp-server traps rf
+snmp-server traps bfd
+snmp-server traps ethernet cfm
+snmp-server traps ntp
+snmp-server traps ethernet oam events
+snmp-server traps copy-complete
+snmp-server traps snmp linkup
+snmp-server traps snmp linkdown
+snmp-server traps snmp coldstart
+snmp-server traps snmp warmstart
+snmp-server traps snmp authentication
+snmp-server traps flash removal
+snmp-server traps flash insertion
+snmp-server traps config
+snmp-server traps entity
+snmp-server traps selective-vrf-download role-change
+snmp-server traps syslog
+snmp-server traps system
+snmp-server traps ospf lsa lsa-maxage
+snmp-server traps ospf lsa lsa-originate
+snmp-server traps ospf errors bad-packet
+snmp-server traps ospf errors authentication-failure
+snmp-server traps ospf errors config-error
+snmp-server traps ospf errors virt-bad-packet
+snmp-server traps ospf errors virt-authentication-failure
+snmp-server traps ospf errors virt-config-error
+snmp-server traps ospf retransmit packets
+snmp-server traps ospf retransmit virt-packets
+snmp-server traps ospf state-change if-state-change
+snmp-server traps ospf state-change neighbor-state-change
+snmp-server traps ospf state-change virtif-state-change
+snmp-server traps ospf state-change virtneighbor-state-change
+snmp-server traps bridgemib
+snmp-server traps entity-state switchover
+snmp-server traps entity-redundancy all
+snmp-server traps entity-redundancy status
+nmp-server traps entity-redundancy switchover
+snmp-server trap-source MgmtEth0/0/CPU0/0
+snmp-server host 172.16.2.201 traps version 2c public
+!
+ssh server v2
+ssh server netconf port 830
+ssh timeout 120
+netconf-yang agent ssh
+mpls oam
+  echo revision 4
+!
+!
+interface Loopback0
+  description Loopback
+  ipv4 address 192.168.0.4 255.255.255.255
+!
+interface GigabitEthernet0/0/0/0
+  description to iosxrv-2
+  ipv4 address 10.0.0.10 255.255.255.252
+  no shutdown
+!
+interface GigabitEthernet0/0/0/1
+  description to iosxrv-3
+  ipv4 address 10.0.0.14 255.255.255.252
+  no shutdown
+!
+interface GigabitEthernet0/0/0/2
+  description to iosxrv-1
+  ipv4 address 10.0.128.2 255.255.255.252
+  no shutdown
+!
+interface mgmteth0/0/CPU0/0
+  description OOB Management
+  ! Configured on launch
+  no ipv4 address
+  no shutdown
+!
+!
+rsvp
+  interface GigabitEthernet0/0/0/0
+    bandwidth percent 100
+  !
+  interface GigabitEthernet0/0/0/1
+    bandwidth percent 100
+  !
+  interface GigabitEthernet0/0/0/2
+    bandwidth percent 100
+  !
+!
+!
+router isis 1
+  net 49.1921.6800.0004.00
+  address-family ipv4 unicast
+    metric-style wide
+    mpls traffic-eng level-2-only
+    mpls traffic-eng router-id Loopback0
+  !
+  interface Loopback0
+    passive
+    circuit-type level-2-only
+    address-family ipv4 unicast
+  !
+  interface GigabitEthernet0/0/0/0
+    circuit-type level-2-only
+    point-to-point
+    address-family ipv4 unicast
+        metric 1
+    !
+  !
+  interface GigabitEthernet0/0/0/1
+    circuit-type level-2-only
+    point-to-point
+    address-family ipv4 unicast
+        metric 1
+    !
+  !
+  interface GigabitEthernet0/0/0/2
+    circuit-type level-2-only
+    point-to-point
+    address-family ipv4 unicast
+        metric 1
+    !
+  !
+!
+ipv4 unnumbered mpls traffic-eng Loopback0
+!
+mpls traffic-eng
+  interface GigabitEthernet0/0/0/0
+  !
+  interface GigabitEthernet0/0/0/1
+  !
+  interface GigabitEthernet0/0/0/2
+  !
+  pce
+   peer ipv4 172.16.2.201
+   stateful-client
+    instantiation
+   !
+  !
+  auto-tunnel pcc
+   tunnel-id min 1 max 99
+  !
+  reoptimize timers delay installation 0
+ !
+!
+!
+route-policy bgp_in
+  pass
+end-policy
+!
+route-policy bgp_out
+  pass
+end-policy
+!
+router bgp 1
+  bgp router-id 192.168.0.4
+  address-family ipv4 unicast
+    network 192.168.0.4/32
+  !
+! iBGP
+!
+! iBGP route reflector servers
+  !
+  neighbor 192.168.0.1
+    description RR parent iosxrv-1
+    remote-as 1
+    update-source Loopback0
+    address-family ipv4 unicast
+    !
+!
+        </entry>
+            <entry key="AutoNetkit.mgmt_ip" type="string"></entry>
+            <entry key="AutoNetkit.MPLS TE enabled" type="Boolean">true</entry>
+            <entry key="AutoNetkit.odl_mgmt_group" type="String">odl_1</entry>
+        </extensions>
+        <interface id="0" name="GigabitEthernet0/0/0/0" ipv4="10.0.0.10" netPrefixLenV4="30"/>
+        <interface id="1" name="GigabitEthernet0/0/0/1" ipv4="10.0.0.14" netPrefixLenV4="30"/>
+        <interface id="2" name="GigabitEthernet0/0/0/2" ipv4="10.0.128.2" netPrefixLenV4="30"/>
+    </node>
+    <node name="ext-router-1" type="ASSET" subtype="EXT-ROUTER" location="196,244">
+        <extensions>
+            <entry key="AutoNetkit.remote_asn" type="Integer">1</entry>
+            <entry key="AutoNetkit.odl_external_server_ip" type="String">172.16.2.201</entry>
+            <entry key="AutoNetkit.odl_mgmt_group" type="String">odl_1</entry>
+        </extensions>
+        <interface id="0" name="link0"/>
+    </node>
+    <node name="flat-1" type="ASSET" subtype="FLAT" location="293,133">
+        <extensions>
+            <entry key="host_network" type="String">flat1</entry>
+        </extensions>
+        <interface id="0" name="link0"/>
+        <interface id="1" name="link1"/>
+    </node>
+    <connection dst="/virl:topology/virl:node[3]/virl:interface[1]" src="/virl:topology/virl:node[1]/virl:interface[1]"/>
+    <connection dst="/virl:topology/virl:node[2]/virl:interface[1]" src="/virl:topology/virl:node[1]/virl:interface[2]"/>
+    <connection dst="/virl:topology/virl:node[4]/virl:interface[1]" src="/virl:topology/virl:node[2]/virl:interface[2]"/>
+    <connection dst="/virl:topology/virl:node[4]/virl:interface[2]" src="/virl:topology/virl:node[3]/virl:interface[2]"/>
+    <connection dst="/virl:topology/virl:node[2]/virl:interface[3]" src="/virl:topology/virl:node[3]/virl:interface[3]"/>
+    <connection dst="/virl:topology/virl:node[4]/virl:interface[3]" src="/virl:topology/virl:node[1]/virl:interface[3]"/>
+    <connection dst="/virl:topology/virl:node[6]/virl:interface[1]" src="/virl:topology/virl:node[5]/virl:interface[1]"/>
+    <connection dst="/virl:topology/virl:node[1]/virl:interface[4]" src="/virl:topology/virl:node[6]/virl:interface[2]"/>
+</topology>

@@ -1,0 +1,15 @@
+Topology description
+--------------------
+4 IOS XRv routers
+
+This is a 4-node topology that demonstrates OpenDayLight automated configuration aspects. 
+
+The topology contains a set of IOS XRv instances which are set up as MPLS TE-nodes, running ISIS. The ‘external router’ element represents a remote ODL server. The iosxrv-1 instance is also configured to be a Multi-protocol BGP route-reflector with iBGP sessions to the other iosxrv instances.
+
+All of the IOS XRv instances are set with ODL Management Group attribute ‘odl_1’. The external router is set with the ODL Management Group attribute set to ‘odl_1’ and the External IP address value. The IP address is used when creating the necessary configuration on the IOS XRv instances. The ASN value is also set on the external router and must be the same ASN value as on the IOS XRv routers.
+
+When the topology is passed to AutoNetkit (‘build initial configurations), the resulting configuration creates an iBGP sessions between the iosxrv nodes and PCE session between the iosxrv nodes and the ODL controller. 
+
+Note, the ODL controller needs to be manually configured with the IP address information of the IOS XRv instance that it needs to communicate with. 
+
+Note, there is no ODL controller instantiated when using this topology. The ODL instance is outside of VIRL control.
