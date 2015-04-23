@@ -1,0 +1,11 @@
+Topology description
+--------------------
+2 IOSv routers, 2 IOSvL2 switches
+
+This is a 4-node topology that demonstrates LACP Port-channel operation and can be used to verify the application of the Linuxbridge patches required to forward LACP packets.
+
+The topology consists of two IOSvL2 switches with a pair of links between them. Each of the links has been placed into the Port-channel 2 ’bundle’ and configured to acts as an 802.1q trunk link. The interfaces on IOSvl2-1 are placed in ‘channel-group mode active’ where as the interfaces on IOSvl2-2 are placed in ‘channel-group mode passive’.
+
+The IOSv instances are configured so that they are direct neighbors at Layer-3 with OSPF and BGP configured between them.
+
+When the topology starts up and all of the virtual machines have booted, if the Linuxbridge patches has been applied correctly and successfully, OSPF and BGP sessions will be established between IOSv-1 and IOSv-2.
