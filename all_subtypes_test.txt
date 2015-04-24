@@ -1,7 +1,7 @@
 Topology description
 --------------------
-1 IOSv router, 1 CSR1000v, 1 IOS XRv, 1 NXOSv and one Linux server
+1 IOSv router, 1 CSR1000v, 1 IOS XRv, 1 NXOSv, 1 ASAv, 1 IOSvL2 and one Linux server
 
-This is a test topology with 5 nodes, connected in a ring. An unmanaged switch instance provides multi-point connectivity between the NXOSv, CSR1000v and Linux Server.
+This is a test topology with 6 nodes, connected in a ring. An IOSvL2 switch instance provides multi-point connectivity between the NXOSv, CSR1000v and Linux Server.
 
 Nodes are not set with any configuration attributes, so nodes will be configured for IPv4, OSPF and BGP full-mesh.
