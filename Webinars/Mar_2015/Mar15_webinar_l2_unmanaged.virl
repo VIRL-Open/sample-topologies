@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <topology xmlns="http://www.cisco.com/VIRL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" schemaVersion="0.9" xsi:schemaLocation="http://www.cisco.com/VIRL https://raw.github.com/CiscoVIRL/schema/v0.9/virl.xsd">
-    <node name="unmanagedswitch-1" type="SIMPLE" subtype="Unmanaged Switch" location="366,369">
+    <node name="unmanagedswitch-1" type="SIMPLE" subtype="Unmanaged Switch" location="172,185">
         <extensions>
             <entry key="config" type="string">! IOSvL2 Config generated on 2015-03-24 03:32
 ! by autonetkit_0.13.3
@@ -119,7 +119,7 @@ end
         <interface id="2" name="link3"/>
         <interface id="3" name="link4"/>
     </node>
-    <node name="unmanagedswitch-2" type="SIMPLE" subtype="Unmanaged Switch" location="704,369">
+    <node name="unmanagedswitch-2" type="SIMPLE" subtype="Unmanaged Switch" location="510,185">
         <extensions>
             <entry key="config" type="string">! IOSvL2 Config generated on 2015-03-24 03:32
 ! by autonetkit_0.13.3
@@ -238,7 +238,7 @@ end
         <interface id="2" name="link3"/>
         <interface id="3" name="link4"/>
     </node>
-    <node name="iosv-1" type="SIMPLE" subtype="IOSv" location="272,268" ipv4="192.168.0.1">
+    <node name="iosv-1" type="SIMPLE" subtype="IOSv" location="78,84" ipv4="192.168.0.1">
         <extensions>
             <entry key="config" type="string">! IOS Config generated on 2015-03-24 03:34
 ! by autonetkit_0.13.3
@@ -346,7 +346,7 @@ end
         </extensions>
         <interface id="0" name="GigabitEthernet0/1" ipv4="10.0.0.1" netPrefixLenV4="17"/>
     </node>
-    <node name="iosv-2" type="SIMPLE" subtype="IOSv" location="270,457" ipv4="192.168.0.2">
+    <node name="iosv-2" type="SIMPLE" subtype="IOSv" location="76,273" ipv4="192.168.0.2">
         <extensions>
             <entry key="config" type="string">! IOS Config generated on 2015-03-24 03:34
 ! by autonetkit_0.13.3
@@ -454,7 +454,7 @@ end
         </extensions>
         <interface id="0" name="GigabitEthernet0/1" ipv4="10.0.0.2" netPrefixLenV4="17"/>
     </node>
-    <node name="iosv-3" type="SIMPLE" subtype="IOSv" location="578,283" ipv4="192.168.0.3">
+    <node name="iosv-3" type="SIMPLE" subtype="IOSv" location="384,99" ipv4="192.168.0.3">
         <extensions>
             <entry key="config" type="string">! IOS Config generated on 2015-03-24 03:34
 ! by autonetkit_0.13.3
@@ -572,7 +572,7 @@ end
         <interface id="0" name="GigabitEthernet0/1" ipv4="10.0.0.3" netPrefixLenV4="17"/>
         <interface id="1" name="GigabitEthernet0/2" ipv4="10.0.128.1" netPrefixLenV4="17"/>
     </node>
-    <node name="iosv-4" type="SIMPLE" subtype="IOSv" location="575,463" ipv4="192.168.0.4">
+    <node name="iosv-4" type="SIMPLE" subtype="IOSv" location="381,279" ipv4="192.168.0.4">
         <extensions>
             <entry key="config" type="string">! IOS Config generated on 2015-03-24 03:34
 ! by autonetkit_0.13.3
@@ -690,7 +690,7 @@ end
         <interface id="0" name="GigabitEthernet0/1" ipv4="10.0.0.4" netPrefixLenV4="17"/>
         <interface id="1" name="GigabitEthernet0/2" ipv4="10.0.128.2" netPrefixLenV4="17"/>
     </node>
-    <node name="iosv-5" type="SIMPLE" subtype="IOSv" location="916,270" ipv4="192.168.0.5">
+    <node name="iosv-5" type="SIMPLE" subtype="IOSv" location="722,86" ipv4="192.168.0.5">
         <extensions>
             <entry key="config" type="string">! IOS Config generated on 2015-03-24 03:34
 ! by autonetkit_0.13.3
@@ -798,7 +798,7 @@ end
         </extensions>
         <interface id="0" name="GigabitEthernet0/1" ipv4="10.0.128.3" netPrefixLenV4="17"/>
     </node>
-    <node name="iosv-6" type="SIMPLE" subtype="IOSv" location="922,473" ipv4="192.168.0.6">
+    <node name="iosv-6" type="SIMPLE" subtype="IOSv" location="728,289" ipv4="192.168.0.6">
         <extensions>
             <entry key="config" type="string">! IOS Config generated on 2015-03-24 03:34
 ! by autonetkit_0.13.3
