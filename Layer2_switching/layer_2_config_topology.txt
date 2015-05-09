@@ -1,0 +1,11 @@
+Topology description
+--------------------
+5 IOSv routers, 3 IOSvL2 switches, 2 Linux servers
+
+This is a topology that demonstrates both the use of managed and unmanaged switches. 
+
+The topology consists of three IOSvL2 switches with dot1q trunking running between them. Interfaces on the attached IOSv routers are set up such that vlans 10 and 20 are operational, with vlan tags assigned to the interfaces on the IOSv routers, so that Autonetkit then creates the required configuration. Note that IOSv-1 has two interfaces attached to the switch iosvl2-1, one in Vlan 10, one in Vlan 20.
+
+When the topology is started up, OSPF and BGP sessions are established between the routers. Static routes are injected into the Linux servers.
+
+The associated video recording shows reconfiguring the interfaces on IOSv-1 so that Gi 0/3 is operating as a trunk with two subinterfaces (one for vlan 10, one for vlan 20) operational. The interface will not operate until the interface on the switch iosvl2-1 (gi 1/0) is reconfigured from switchport mode access to switch trunk.
