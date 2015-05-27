@@ -1,0 +1,16 @@
+Topology description
+--------------------
+1 unmanaged switches, 2 IOSv routers, 4 IOSvL2 switches, 1 ASAv firewall, 2 IOS XRv routers, 2 linux servers
+
+In the webinar in which this topology was used, we walked through building up the topology and setting various properties such as the OSPF area and Vlan as well as adding in static routes.
+
+The May-webinar-step0.virl file has the starting topology. The May-webinar-switchlab.virl file has the final topology which is ready for launch.
+
+
+The Server-1 instance is placed into vlan 10, Server-2 into vlan 20. The IOSv routers have interfaces in both vlans 10 and 20, with the switches configured with access-ports and trunk-ports automatically.
+
+The server and IOSv routers are placed in area 3.0.0.3, IOS XRv routers are in area 0.
+
+The ASAv firewall is will come up with default security settings and will not translate inside traffic to outside until additional commands are added.
+
+This topology makes use of the Flat network, and the target IP address (172.16.1.254) is present on your VIRL host - so you will be able to ping once the commands in the ‘walkthrough’ are entered.

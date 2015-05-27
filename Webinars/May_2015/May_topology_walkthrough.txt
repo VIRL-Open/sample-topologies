@@ -1,0 +1,105 @@
+May Webinar
+
+SERVER-1 IP ADDRESS 10.0.0.2
+
+SERVER-2 IP ADDRESS 10.0.0.19
+
+THIS STEP THROUGH ASSUMES THAT YOU ARE RUNNING THE FILE ‘May-webinar-switchlab.virl’.
+
+STEP 1
+
+Log in to the ASAv - enter commands:
+
+en
+cisco
+show ip address
+
+Highlight inside and outside address including address in FLAT-1 subnet:
+GigabitEthernet0/0       outside                172.16.1.53     255.255.255.0   CONFIG
+
+STEP 2
+
+log in to the iosv-1  - enter commands:
+
+ping asav at 10.0.0.9 - won’t work
+
+STEP 3
+
+go back to asav - enter commands:
+
+conf t
+nat (inside,outside) after-auto source dynamic any interface
+route inside 10.0.0.0 255.0.0.0 10.0.0.10
+route inside 10.0.0.0 255.0.0.0 10.0.0.11
+
+STEP 4
+
+go back to iosv-1 - enter commands: 
+ping 10.0.0.9 - you’re now pinging the ASAv an it works!
+
+STEP 5
+
+go to iosxrv-1  - enter commands: 
+
+conf t
+router ospf 1
+redistribute static
+commit
+exit
+
+STEP 6
+
+go to iosxrv-2  - enter commands: 
+
+
+conf t
+router ospf 1
+redistribute static
+commit
+exit
+
+STEP 8 
+
+go to iosv-1  - enter commands: 
+
+show ip route 172.16.1.0 - shows redistributed static route
+
+ping 172.16.1.254 -works SHOWS translated ICMP packet going outside the network
+
+STEP 9 
+
+go to ASAV - enter commands: 
+
+show xlate
+
+
+ICMP PAT from inside:10.0.128.1/4 to outside:172.16.1.53/4 flags ri idle 0:00:30 timeout 0:00:30
+
+STEP 10 - 
+
+go to Server-1  - enter commands: 
+
+sudo route delete default gw 10.255.0.1
+sudo route add default gw 10.0.0.1
+
+ping 172.16.1.254 -works SHOWS translated ICMP packet going outside the network
+
+STEP 11 - 
+
+go to ASAV   - enter commands: 
+
+show xlate
+
+ICMP PAT from inside:10.0.0.10/1429 to outside:172.16.1.53/1429 flags ri idle 0:00:06 timeout 0:00:30
+
+STEP 12 - 
+
+extract configuration
+
+STEP 14 - 
+
+terminate simulation
+
+STEP 15 - 
+
+Start simulation again - just press the ‘play’ / ‘launch simulation’ button
