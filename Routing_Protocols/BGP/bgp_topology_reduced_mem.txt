@@ -1,0 +1,11 @@
+Topology description
+--------------------
+4 IOS XRv, 8 IOSv routers
+
+This is a 12-node topology that demonstrates a number of configuration aspects. 
+
+The topology contains parallel links between many nodes but is focused on BGP configuration with Route-reflection and Hierarchical route-reflection being used. 
+
+The IOSv-1 and IOSv-2s are set as Route-reflectors with IOSv-1 serving the RR cluster one, IOSv-2 serving RR cluster four.  The IOSv-3 and IOSv-4 instances are also set as Route-reflectors, IOSv-3 serving RR cluster one, IOSv-4 serving RR cluster 4. 
+
+IOS XRv nodes are set as route-reflector clients but are also route-reflectors themselves, serving the down-steam IOSv routers. 
