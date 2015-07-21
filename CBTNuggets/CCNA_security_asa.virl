@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<topology xmlns="http://www.cisco.com/VIRL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" schemaVersion="0.9" xsi:schemaLocation="http://www.cisco.com/VIRL https://raw.github.com/CiscoVIRL/schema/v0.9/virl.xsd">
+    <extensions>
+        <entry type="Boolean" key="AutoNetkit.enable_cdp">false</entry>
+        <entry type="Boolean" key="AutoNetkit.enable_routing">false</entry>
+    </extensions>
+    <node ipv4="192.168.0.3" location="396,321" subtype="IOSv" type="SIMPLE" name="Inside Device">
+        <extensions>
+            <entry type="String" key="AutoNetkit.ibgp_role">Disabled</entry>
+            <entry type="string" key="config">! IOS Config generated on 2015-07-18 21:54
+! by autonetkit_0.15.3
+!
+hostname Inside_Device
+boot-start-marker
+boot-end-marker
+!
+no aaa new-model
+!
+!
+ip cef
+ipv6 unicast-routing
+ipv6 cef
+!
+!
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+no service config
+enable password cisco
+ip classless
+ip subnet-zero
+no ip domain lookup
+line vty 0 4
+ transport input ssh telnet
+ exec-timeout 720 0
+ password cisco
+ login
+line con 0
+ password cisco
+!
+no cdp run
+!
+!
+interface Loopback0
+  description Loopback
+  ip address 192.168.0.3 255.255.255.255
+!
+interface GigabitEthernet0/0
+  description OOB Management
+  ! Configured on launch
+  no ip address
+  duplex auto
+  speed auto
+  no shutdown
+!
+interface GigabitEthernet0/1
+  description to SW1
+  ip address 10.0.0.6 255.255.255.252
+  duplex auto
+  speed auto
+  no shutdown
+!
+!
+!
+!
+!
+</entry>
+            <entry type="string" key="AutoNetkit.mgmt_ip"></entry>
+        </extensions>
+        <interface netPrefixLenV4="30" ipv4="10.0.0.6" name="GigabitEthernet0/1" id="0"/>
+    </node>
+    <node ipv4="192.168.0.2" location="884,320" subtype="IOSv" type="SIMPLE" name="Outside Device">
+        <extensions>
+            <entry type="String" key="AutoNetkit.ibgp_role">Disabled</entry>
+            <entry type="string" key="config">! IOS Config generated on 2015-07-18 21:54
+! by autonetkit_0.15.3
+!
+hostname Outside_Device
+boot-start-marker
+boot-end-marker
+!
+no aaa new-model
+!
+!
+ip cef
+ipv6 unicast-routing
+ipv6 cef
+!
+!
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+no service config
+enable password cisco
+ip classless
+ip subnet-zero
+no ip domain lookup
+line vty 0 4
+ transport input ssh telnet
+ exec-timeout 720 0
+ password cisco
+ login
+line con 0
+ password cisco
+!
+no cdp run
+!
+!
+interface Loopback0
+  description Loopback
+  ip address 192.168.0.2 255.255.255.255
+!
+interface GigabitEthernet0/0
+  description OOB Management
+  ! Configured on launch
+  no ip address
+  duplex auto
+  speed auto
+  no shutdown
+!
+interface GigabitEthernet0/1
+  description to SW2
+  ip address 10.0.0.10 255.255.255.252
+  duplex auto
+  speed auto
+  no shutdown
+!
+!
+!
+!
+!
+</entry>
+            <entry type="string" key="AutoNetkit.mgmt_ip"></entry>
+        </extensions>
+        <interface netPrefixLenV4="30" ipv4="10.0.0.10" name="GigabitEthernet0/1" id="0"/>
+    </node>
+    <node location="538,325" subtype="Unmanaged Switch" type="SIMPLE" name="SW1">
+        <extensions>
+            <entry type="String" key="AutoNetkit.ibgp_role">Disabled</entry>
+        </extensions>
+        <interface name="link1" id="0"/>
+        <interface name="link2" id="1"/>
+    </node>
+    <node location="771,324" subtype="Unmanaged Switch" type="SIMPLE" name="SW2">
+        <extensions>
+            <entry type="String" key="AutoNetkit.ibgp_role">Disabled</entry>
+        </extensions>
+        <interface name="link1" id="0"/>
+        <interface name="link2" id="1"/>
+    </node>
+    <node location="641,324" subtype="ASAv" type="SIMPLE" name="Cisco_ASA">
+        <extensions>
+            <entry type="String" key="AutoNetkit.ibgp_role">Disabled</entry>
+            <entry type="string" key="config">! ASAv Config generated on 2015-07-18 21:54
+! by autonetkit_0.15.3
+!
+hostname Cisco_ASA
+username cisco password cisco privilege 15
+enable password cisco
+passwd cisco
+names
+!
+interface Loopback100
+  description loopback
+  no ip address
+interface GigabitEthernet0/0
+  description to SW1
+  nameif outside
+  security-level 0
+  no shutdown
+  ip address 10.0.0.5 255.255.255.252
+interface GigabitEthernet0/1
+  description to SW2
+  nameif outside-1
+  security-level 0
+  no shutdown
+  ip address 10.0.0.9 255.255.255.252
+interface Management0/0
+  description OOB Management
+  management-only
+  nameif mgmt
+  security-level 100
+  no shutdown
+  ! Configured on launch
+  no ip address
+!
+same-security-traffic permit inter-interface
+logging enable
+logging asdm informational
+user-identity default-domain LOCAL
+aaa authentication ssh console LOCAL
+http server enable
+http 0.0.0.0 0.0.0.0 mgmt
+ssh 0.0.0.0 0.0.0.0 mgmt
+telnet 0.0.0.0 0.0.0.0 mgmt
+http 0.0.0.0 0.0.0.0 outside
+ssh 0.0.0.0 0.0.0.0 outside
+telnet 0.0.0.0 0.0.0.0 outside
+http 0.0.0.0 0.0.0.0 outside-1
+ssh 0.0.0.0 0.0.0.0 outside-1
+telnet 0.0.0.0 0.0.0.0 outside-1
+telnet timeout 15
+console timeout 0
+username cisco password cisco privilege 15
+!
+class-map inspection_default
+ match default-inspection-traffic
+!
+!
+policy-map type inspect dns preset_dns_map
+ parameters
+  message-length maximum client auto
+  message-length maximum 512
+policy-map global_policy
+ class inspection_default
+  inspect ip-options
+  inspect netbios
+  inspect rtsp
+  inspect sunrpc
+  inspect tftp
+  inspect xdmcp
+  inspect dns preset_dns_map
+  inspect ftp
+  inspect h323 h225
+  inspect h323 ras
+  inspect rsh
+  inspect esmtp
+  inspect sqlnet
+  inspect sip
+  inspect skinny
+  inspect icmp
+  inspect http
+!
+service-policy global_policy global
+no call-home reporting anonymous
+call-home
+ profile CiscoTAC-1
+  no active
+end
+        </entry>
+            <entry type="string" key="AutoNetkit.mgmt_ip"></entry>
+        </extensions>
+        <interface netPrefixLenV4="30" ipv4="10.0.0.5" name="GigabitEthernet0/0" id="0"/>
+        <interface netPrefixLenV4="30" ipv4="10.0.0.9" name="GigabitEthernet0/1" id="1"/>
+    </node>
+    <connection src="/virl:topology/virl:node[1]/virl:interface[1]" dst="/virl:topology/virl:node[3]/virl:interface[1]"/>
+    <connection src="/virl:topology/virl:node[3]/virl:interface[2]" dst="/virl:topology/virl:node[5]/virl:interface[1]"/>
+    <connection src="/virl:topology/virl:node[5]/virl:interface[2]" dst="/virl:topology/virl:node[4]/virl:interface[1]"/>
+    <connection src="/virl:topology/virl:node[4]/virl:interface[2]" dst="/virl:topology/virl:node[2]/virl:interface[1]"/>
+</topology>
