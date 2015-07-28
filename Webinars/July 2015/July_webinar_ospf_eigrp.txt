@@ -1,0 +1,7 @@
+Topology description
+--------------------
+18 nodes - 12 IOSv routers, 2 IOSvL2 switches, 4 Linux Containers
+
+Two ASs (100 and 200). OSPF running in AS100, EIGRP running in AS200. iBGP running within each AS and eBGP between each AS.
+
+LXCs are configured with Cloud-init configuration injection with required routes.

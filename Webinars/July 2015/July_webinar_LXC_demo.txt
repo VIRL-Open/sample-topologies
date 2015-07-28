@@ -1,0 +1,13 @@
+Topology description
+--------------------
+2 IOSv routers, 2 IOSvL2 switches, 8 Linux Containers
+
+LXC support is introduced in the new release. These are lightweight Linux instances that do not require the same compute resources as full VMs.
+
+LXC are based on the Ubuntu server with Cloud-init support.
+
+There is no snapshot capability.
+
+In this demo topology, 8 LXCs are split across Vlans 10 and 20 with routers providing gateway functions between the two subnets.
+
+LXCs do require some additional memory in order to unpack the filesystem but once you have one LXC instance up, additional instances can be added with minimal addition resources requirements.
