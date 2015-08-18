@@ -1,0 +1,173 @@
+version 15.5
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no platform punt-keepalive disable-kernel-core
+platform console serial
+!
+hostname CSR1000v-1
+!
+boot-start-marker
+boot-end-marker
+!
+!
+vrf definition A
+ rd 100:100
+ !
+ address-family ipv4
+  route-target export 100:100
+  route-target import 100:100
+ exit-address-family
+!
+vrf definition B
+ rd 200:200
+ !
+ address-family ipv4
+  route-target export 200:200
+  route-target import 200:200
+ exit-address-family
+!
+enable password cisco
+!
+no aaa new-model
+!
+!
+!
+!
+!
+!
+!
+!
+!
+
+
+no ip domain lookup
+
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+subscriber templating
+!
+multilink bundle-name authenticated
+!
+!
+!
+license udi pid CSR1000V sn 9JUK8FRLKY8
+spanning-tree extend system-id
+!
+!
+redundancy
+!
+!
+!
+!
+!
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+! 
+! 
+!
+interface Loopback0
+ ip address 1.1.1.4 255.255.255.255
+ ip ospf 1 area 0
+!
+interface GigabitEthernet1
+ no ip address
+ shutdown
+ negotiation auto
+!
+interface GigabitEthernet2
+ ip address 10.0.0.5 255.255.255.254
+ ip ospf 1 area 0
+ negotiation auto
+!
+interface GigabitEthernet3
+ vrf forwarding A
+ ip address 100.0.2.1 255.255.255.252
+ ip ospf 100 area 0
+ negotiation auto
+!
+interface GigabitEthernet4
+ vrf forwarding B
+ ip address 200.0.2.1 255.255.255.252
+ negotiation auto
+!
+router ospf 100 vrf A
+ redistribute bgp 1 subnets
+!
+router ospf 1
+ mpls ldp autoconfig
+!
+router rip
+ !
+ address-family ipv4 vrf B
+  redistribute bgp 1 metric 1
+  network 200.0.2.0
+  no auto-summary
+  version 2
+ exit-address-family
+!
+router bgp 1
+ bgp log-neighbor-changes
+ neighbor 1.1.1.2 remote-as 1
+ neighbor 1.1.1.2 update-source Loopback0
+ neighbor 1.1.1.3 remote-as 1
+ neighbor 1.1.1.3 update-source Loopback0
+ !
+ address-family vpnv4
+  neighbor 1.1.1.2 activate
+  neighbor 1.1.1.2 send-community extended
+  neighbor 1.1.1.3 activate
+  neighbor 1.1.1.3 send-community extended
+ exit-address-family
+ !
+ address-family ipv4 vrf A
+  redistribute ospf 100
+ exit-address-family
+ !
+ address-family ipv4 vrf B
+  redistribute rip
+ exit-address-family
+!
+!
+virtual-service csr_mgmt
+!
+ip forward-protocol nd
+!
+no ip http server
+no ip http secure-server
+!
+!
+!
+!
+control-plane
+!
+!
+line con 0
+ exec-timeout 0 0
+ stopbits 1
+line vty 0 4
+ no login
+ transport input all
+!
+!
+end
+

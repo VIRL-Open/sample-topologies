@@ -1,0 +1,165 @@
+version 15.5
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname IOSv-6
+!
+boot-start-marker
+boot-end-marker
+!
+!
+enable password cisco
+!
+no aaa new-model
+ethernet lmi ce
+!
+!
+!
+bsd-client server url https://cloudsso.cisco.com/as/token.oauth2
+mmi polling-interval 60
+no mmi auto-configure
+no mmi pvc
+mmi snmp-timeout 180
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+no ip domain lookup
+ip cef
+no ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+cts logging verbose
+!
+!
+!
+redundancy
+!
+!
+! 
+!
+!
+!
+!
+crypto isakmp policy 100
+ encr 3des
+ hash md5
+ authentication pre-share
+ group 2
+crypto isakmp key CISCO address 0.0.0.0        
+!
+!
+crypto ipsec transform-set 3DES_MD5 esp-3des esp-md5-hmac 
+ mode transport
+!
+crypto ipsec profile DMVPN
+ set transform-set 3DES_MD5 
+!
+!
+!
+!
+!
+!
+!
+interface Loopback192
+ ip address 192.168.255.3 255.255.255.255
+!
+interface Tunnel0
+ ip address 192.168.254.3 255.255.255.0
+ no ip redirects
+ no ip next-hop-self eigrp 123
+ no ip split-horizon eigrp 123
+ ip nhrp authentication CISCO
+ ip nhrp map 192.168.254.1 100.0.0.2
+ ip nhrp map multicast 100.0.0.2
+ ip nhrp network-id 123
+ ip nhrp nhs 192.168.254.1
+ tunnel source 172.16.2.2
+ tunnel mode gre multipoint
+ tunnel protection ipsec profile DMVPN
+!
+interface GigabitEthernet0/0
+ no ip address
+ shutdown
+ duplex auto
+ speed auto
+ media-type rj45
+!
+interface GigabitEthernet0/1
+ ip address 172.16.2.2 255.255.255.0
+ duplex auto
+ speed auto
+ media-type rj45
+!
+interface GigabitEthernet0/2
+ no ip address
+ shutdown
+ duplex auto
+ speed auto
+ media-type rj45
+!
+!
+router eigrp 123
+ network 192.168.0.0 0.0.255.255
+!
+ip forward-protocol nd
+!
+!
+no ip http server
+no ip http secure-server
+ip route 0.0.0.0 0.0.0.0 172.16.2.1
+!
+!
+!
+!
+control-plane
+!
+banner exec ^C
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************^C
+banner incoming ^C
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************^C
+banner login ^C
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************^C
+!
+line con 0
+ exec-timeout 0 0
+line aux 0
+line vty 0 4
+ no login
+ transport input all
+!
+no scheduler allocate
+!
+end
+
