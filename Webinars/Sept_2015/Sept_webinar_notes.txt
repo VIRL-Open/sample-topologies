@@ -1,0 +1,83 @@
+*** After PPT and Visio review ***
+
+
+connect to server-1
+~# netstat -nr
+	note: default GW -- known networks
+~# ping google.com
+	success
+~# ifconfig
+
+^^ Repeat for server-2
+
+NOTE common link is VLAN20
+
+connect to IOSv-2
+~# sho ip int br
+~# sho ip route
+	note: gw of last resort is set -- how? from ANK
+	note: remember to plan for connectivity
+	note: next hop IOSv-1 on VLAN20
+
+connect IOSv-1
+~# sho ip int br
+~# ping 8.8.8.8
+~# sho ip route
+	note: static route -- show Design view and ANK settings
+	note: look at FLAT-1 connector extension; static IP is set on each sim
+
+connect to server-1
+~# netstat -nr
+	note: external connectivity but not to SJC
+~# ping 90.90.0.2
+	note: ping fails
+~# ip route
+	note: no data path on eth0
+	note: create route -- based on next hop
+~# sudo route add -net 90.90.0.0/16 gw 10.0.0.2
+~# ip route
+	note: newly installed route
+~# ping 90.90.0.2 (IOSv)
+	success
+~# ping 90.90.0.1
+	fails
+
+connect to server-2
+~# ip route
+~# ip addr
+~# sudo route add -net 10.0.0.0/16 gw 90.90.0.2
+	note: can we get the webpage now??
+~# curl http://10.0.0.1
+
+CHECK POINT
+connectivity between sims but don't have web page, so install apache web-server!
+ 
+ connect server-1
+ ~# sudo apt-get update
+ ~# sudo apt-get install -y apache2
+
+connect to server-2
+~# curl http://10.0.0.1
+
+CHECK POINT
+on server-2
+~# ping 10.0.0.1 (let run)
+* disable IOSv interface through UWM or Live Vis
+	note: ping success / fail
+* enable interface
+	note: ping fail / success
+
+CHECK POINT
+connect to webpage from workstation
+	success
+
+
+
+
+
+
+
+
+
+
+
