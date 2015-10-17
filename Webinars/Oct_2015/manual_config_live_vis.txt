@@ -1,0 +1,9 @@
+Topology description
+--------------------
+6 nodes - 6 IOSv routers
+
+This demonstration contains two topologies. The first topology (manual_config_live_vis_base.virl) is set up so that if this is you press 'Build initial configurations', sending the topology to AutoNetkit for processing, the resulting .VIRL file will not have routing or interface addressing set up but will have the required configuration for each node to be connected to the IP management network and default usernames and passwords set up.
+
+The second topology (manual_config_live_vis_configured.virl) contains the topology with three nodes configured with OSPF, three with EIGRP, static routes and redistribution in place.
+
+The configuration has been created manually, not by AutoNetkit. The topology is used in the video at https://www.youtube.com/watch?v=2OtyuUU1sdw
