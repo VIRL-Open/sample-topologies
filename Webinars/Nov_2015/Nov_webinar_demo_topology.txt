@@ -1,0 +1,25 @@
+Topology description
+--------------------
+12 nodes - 6 IOSv routers, 6 Routem LXCs
+
+This demonstration contains a simple network topology with 6 IOSv nodes. The nodes are configured to run OSPF (area 0). Each one has an interface into another OSPF area (non-zero). The nodes are also configured for BGP.
+
+If you are having trouble running this simulation on your server, use the 'Ram overcommit value' control that can be found at http://<your virl server IP address>:19400/admin/sysconfig/ under 'Resources'.
+
+Each node has a LXC-routem instance connected to it. To run these LXC instance you MUST have installed the VIRL release that contains these images. The LXC-routem instance is NOT supported on VIRL-0.9.293 or earlier releases. The VIRL release MUST be 0.10.x or later.
+
+Each of the LXC-routem node can be accessed using the 'ssh' connection method. Telnet will NOT work.
+
+Log in the node as username 'cisco', password 'cisco'.
+
+You will find a file on each of the LXC instance called 'routem.txt'. This is a configuration file for the Routem application.
+
+To start the routem application, issue the command 'routem -f ./routem.txt'. This will then process the routem configuration file and bring up the protocol session to the neighbouring router.
+
+LXCs 1 and 6 are configured for BGP operation. LXCs 2,3,4 and 5 are configured for OSPF operation.
+
+Detailed example of the Routem configuration options can be found at http://<your virl server IP address>:19400/docs/routem/
+
+Note that any changes you make to the routem configuration will NOT be saved if you perform a configuration extraction operation.
+
+A detailed video on the Routem application will be available on the VIRL channel on Youtube - https://www.youtube.com/channel/UC41WuzXlJCGY5qLsuZ8aHkQ/videos
