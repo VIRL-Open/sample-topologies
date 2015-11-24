@@ -4,6 +4,8 @@ Topology description
 
 This demonstration contains a simple network topology with 6 IOSv nodes. The nodes are configured to run OSPF (area 0). Each one has an interface into another OSPF area (non-zero). The nodes are also configured for BGP.
 
+This topology also demonstrates the use of Static TCP ports for console and aux port access to the nodes. The nodes can be accessed via the Mgmt-LXC that has been configured to run at 172.16.1.202. If you are able to ping 172.16.1.202, the ports are then accessible using the command 'telnet 172.16.1.202 <port number>', for example 'telnet 172.16.1.202 5001'.
+
 If you are having trouble running this simulation on your server, use the 'Ram overcommit value' control that can be found at http://<your virl server IP address>:19400/admin/sysconfig/ under 'Resources'.
 
 Each node has a LXC-routem instance connected to it. To run these LXC instance you MUST have installed the VIRL release that contains these images. The LXC-routem instance is NOT supported on VIRL-0.9.293 or earlier releases. The VIRL release MUST be 0.10.x or later.
