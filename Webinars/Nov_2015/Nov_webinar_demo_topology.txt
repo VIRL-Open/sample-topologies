@@ -8,7 +8,7 @@ This topology also demonstrates the use of Static TCP ports for console and aux 
 
 If you are having trouble running this simulation on your server, use the 'Ram overcommit value' control that can be found at http://<your virl server IP address>:19400/admin/sysconfig/ under 'Resources'.
 
-Each node has a LXC-routem instance connected to it. To run these LXC instance you MUST have installed the VIRL release that contains these images. The LXC-routem instance is NOT supported on VIRL-0.9.293 or earlier releases. The VIRL release MUST be 0.10.x or later.
+Each node has a LXC-routem instance connected to it. To run these LXC instance you MUST have installed the VIRL release that contains these images. The LXC-routem instance is NOT supported on VIRL-0.9.293 or earlier releases. The VIRL release MUST be 1.0.x or later.
 
 Each of the LXC-routem node can be accessed using the 'ssh' connection method. Telnet will NOT work.
 
