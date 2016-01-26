@@ -1,0 +1,17 @@
+Topology description
+--------------------
+16 nodes - 2 IOSv routers, 5 IOSvL2 switches, 9 iPerf LXCs
+
+This simulation requires the use of VIRL 1.0.x or later.
+
+In this webinar, we walk through designing a simple network topology and exploring some of the parameters that can be set in order to generate viable configurations for each device using the AutoNetkit configuration generation engine.
+
+The 1-initial topology is only partially configured, whereas the 2-configured topology is fully configured.
+
+The topology includes placing interfaces into specific Vlans, setting OSPF areas, disabling BGP, the use of custom configuration lines (setting the spanning-tree root) as well as setting static serial ports for the IOSv and IOSvL2 devices.
+
+If you are having trouble running this simulation on your server, use the 'Ram overcommit value' control that can be found at http://<your virl server IP address>:19400/admin/sysconfig/ under 'Resources'.
+
+Each of the LXC nodes can be accessed using the 'ssh' connection method. Telnet will NOT work.
+
+Log in the node as username 'cisco', password 'cisco'.

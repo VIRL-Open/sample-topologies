@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<topology xmlns="http://www.cisco.com/VIRL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" schemaVersion="0.9" xsi:schemaLocation="http://www.cisco.com/VIRL https://raw.github.com/CiscoVIRL/schema/v0.9/virl.xsd">
+    <node name="iosv-1" type="SIMPLE" subtype="IOSv" location="360,216">
+        <interface id="0" name="GigabitEthernet0/1"/>
+    </node>
+    <node name="iosv-2" type="SIMPLE" subtype="IOSv" location="552,216">
+        <interface id="0" name="GigabitEthernet0/1"/>
+        <interface id="1" name="GigabitEthernet0/2">
+            <extensions>
+                <entry key="AutoNetkit.vlan" type="Integer">30</entry>
+            </extensions>
+        </interface>
+    </node>
+    <node name="iosvl2-1" type="SIMPLE" subtype="IOSvL2" location="348,324">
+        <interface id="0" name="GigabitEthernet0/1"/>
+        <interface id="1" name="GigabitEthernet0/2"/>
+        <interface id="2" name="GigabitEthernet0/3"/>
+        <interface id="3" name="GigabitEthernet1/0"/>
+    </node>
+    <node name="iosvl2-2" type="SIMPLE" subtype="IOSvL2" location="552,324">
+        <extensions>
+            <entry key="AutoNetkit.custom_config_global" type="String">spanning-tree vlan 30 root primary</entry>
+            <entry key="static_serial_port_0" type="Integer">4022</entry>
+        </extensions>
+        <interface id="0" name="GigabitEthernet0/1"/>
+        <interface id="1" name="GigabitEthernet0/2"/>
+        <interface id="2" name="GigabitEthernet0/3"/>
+        <interface id="3" name="GigabitEthernet1/0"/>
+        <interface id="4" name="GigabitEthernet1/1"/>
+    </node>
+    <node name="iosvl2-3" type="SIMPLE" subtype="IOSvL2" location="252,408">
+        <extensions>
+            <entry key="static_serial_port_0" type="Integer">4023</entry>
+        </extensions>
+        <interface id="0" name="GigabitEthernet0/1"/>
+        <interface id="1" name="GigabitEthernet0/2"/>
+        <interface id="2" name="GigabitEthernet0/3"/>
+        <interface id="3" name="GigabitEthernet1/0"/>
+        <interface id="4" name="GigabitEthernet1/1"/>
+    </node>
+    <node name="iosvl2-4" type="SIMPLE" subtype="IOSvL2" location="444,408">
+        <extensions>
+            <entry key="static_serial_port_0" type="Integer">4024</entry>
+        </extensions>
+        <interface id="0" name="GigabitEthernet0/1"/>
+        <interface id="1" name="GigabitEthernet0/2"/>
+        <interface id="2" name="GigabitEthernet0/3"/>
+        <interface id="3" name="GigabitEthernet1/0"/>
+        <interface id="4" name="GigabitEthernet1/1"/>
+    </node>
+    <node name="iosvl2-5" type="SIMPLE" subtype="IOSvL2" location="636,408">
+        <extensions>
+            <entry key="static_serial_port_0" type="Integer">4025</entry>
+        </extensions>
+        <interface id="0" name="GigabitEthernet0/1"/>
+        <interface id="1" name="GigabitEthernet0/2"/>
+        <interface id="2" name="GigabitEthernet0/3"/>
+        <interface id="3" name="GigabitEthernet1/0"/>
+        <interface id="4" name="GigabitEthernet1/1"/>
+    </node>
+    <node name="lxc-iperf-1" type="SIMPLE" subtype="lxc-iperf" location="192,480">
+        <interface id="0" name="eth1"/>
+    </node>
+    <node name="lxc-iperf-3" type="SIMPLE" subtype="lxc-iperf" location="288,480">
+        <interface id="0" name="eth1"/>
+    </node>
+    <node name="lxc-iperf-5" type="SIMPLE" subtype="lxc-iperf" location="396,480">
+        <extensions>
+            <entry key="AutoNetkit.ospf_area" type="String">10</entry>
+        </extensions>
+        <interface id="0" name="eth1">
+            <extensions>
+                <entry key="AutoNetkit.vlan" type="Integer">10</entry>
+            </extensions>
+        </interface>
+    </node>
+    <node name="lxc-iperf-2" type="SIMPLE" subtype="lxc-iperf" location="240,516">
+        <interface id="0" name="eth1"/>
+    </node>
+    <node name="lxc-iperf-4" type="SIMPLE" subtype="lxc-iperf" location="492,480">
+        <extensions>
+            <entry key="AutoNetkit.ospf_area" type="String">30</entry>
+        </extensions>
+        <interface id="0" name="eth1">
+            <extensions>
+                <entry key="AutoNetkit.vlan" type="Integer">30</entry>
+            </extensions>
+        </interface>
+    </node>
+    <node name="lxc-iperf-6" type="SIMPLE" subtype="lxc-iperf" location="444,516">
+        <extensions>
+            <entry key="AutoNetkit.ospf_area" type="String">20</entry>
+        </extensions>
+        <interface id="0" name="eth1">
+            <extensions>
+                <entry key="AutoNetkit.vlan" type="Integer">20</entry>
+            </extensions>
+        </interface>
+    </node>
+    <node name="lxc-iperf-7" type="SIMPLE" subtype="lxc-iperf" location="588,480">
+        <extensions>
+            <entry key="AutoNetkit.ospf_area" type="String">10</entry>
+        </extensions>
+        <interface id="0" name="eth1">
+            <extensions>
+                <entry key="AutoNetkit.vlan" type="Integer">10</entry>
+            </extensions>
+        </interface>
+    </node>
+    <node name="lxc-iperf-8" type="SIMPLE" subtype="lxc-iperf" location="636,516">
+        <extensions>
+            <entry key="AutoNetkit.ospf_area" type="String">20</entry>
+        </extensions>
+        <interface id="0" name="eth1">
+            <extensions>
+                <entry key="AutoNetkit.vlan" type="Integer">20</entry>
+            </extensions>
+        </interface>
+    </node>
+    <node name="lxc-iperf-9" type="SIMPLE" subtype="lxc-iperf" location="684,480">
+        <extensions>
+            <entry key="AutoNetkit.ospf_area" type="String">30</entry>
+        </extensions>
+        <interface id="0" name="eth1">
+            <extensions>
+                <entry key="AutoNetkit.vlan" type="Integer">30</entry>
+            </extensions>
+        </interface>
+    </node>
+    <connection dst="/virl:topology/virl:node[5]/virl:interface[1]" src="/virl:topology/virl:node[8]/virl:interface[1]"/>
+    <connection dst="/virl:topology/virl:node[5]/virl:interface[2]" src="/virl:topology/virl:node[11]/virl:interface[1]"/>
+    <connection dst="/virl:topology/virl:node[5]/virl:interface[3]" src="/virl:topology/virl:node[9]/virl:interface[1]"/>
+    <connection dst="/virl:topology/virl:node[6]/virl:interface[1]" src="/virl:topology/virl:node[10]/virl:interface[1]"/>
+    <connection dst="/virl:topology/virl:node[6]/virl:interface[2]" src="/virl:topology/virl:node[13]/virl:interface[1]"/>
+    <connection dst="/virl:topology/virl:node[6]/virl:interface[3]" src="/virl:topology/virl:node[12]/virl:interface[1]"/>
+    <connection dst="/virl:topology/virl:node[7]/virl:interface[1]" src="/virl:topology/virl:node[14]/virl:interface[1]"/>
+    <connection dst="/virl:topology/virl:node[7]/virl:interface[2]" src="/virl:topology/virl:node[15]/virl:interface[1]"/>
+    <connection dst="/virl:topology/virl:node[7]/virl:interface[3]" src="/virl:topology/virl:node[16]/virl:interface[1]"/>
+    <connection dst="/virl:topology/virl:node[3]/virl:interface[1]" src="/virl:topology/virl:node[5]/virl:interface[4]"/>
+    <connection dst="/virl:topology/virl:node[4]/virl:interface[1]" src="/virl:topology/virl:node[5]/virl:interface[5]"/>
+    <connection dst="/virl:topology/virl:node[3]/virl:interface[2]" src="/virl:topology/virl:node[6]/virl:interface[4]"/>
+    <connection dst="/virl:topology/virl:node[4]/virl:interface[2]" src="/virl:topology/virl:node[6]/virl:interface[5]"/>
+    <connection dst="/virl:topology/virl:node[4]/virl:interface[3]" src="/virl:topology/virl:node[7]/virl:interface[4]"/>
+    <connection dst="/virl:topology/virl:node[3]/virl:interface[3]" src="/virl:topology/virl:node[7]/virl:interface[5]"/>
+    <connection dst="/virl:topology/virl:node[4]/virl:interface[4]" src="/virl:topology/virl:node[3]/virl:interface[4]"/>
+    <connection dst="/virl:topology/virl:node[2]/virl:interface[1]" src="/virl:topology/virl:node[1]/virl:interface[1]"/>
+    <connection dst="/virl:topology/virl:node[4]/virl:interface[5]" src="/virl:topology/virl:node[2]/virl:interface[2]"/>
+</topology>
