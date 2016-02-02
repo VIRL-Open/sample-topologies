@@ -1,0 +1,15 @@
+Topology description
+--------------------
+50 nodes - 8 IOS XRv routers, 4 CSR1000v routers, 2 NXOSv routers, 2 IOSv routers, 14 IOSvL2 switches, 20 9 iPerf LXCs
+
+This simulation requires the use of VIRL 1.0.x or later.
+
+The simulation will require ~50Gb to run.
+
+This simulation includes eBGP, iBGP, OSPF, ISIS and EIGRP along with the use of VLANs between LXC instances, switches and routers.
+
+This scale topology will run within the 30 node license for VIRL. 
+
+Each of the LXC nodes can be accessed using the 'ssh' connection method. Telnet will NOT work.
+
+Log in the node as username 'cisco', password 'cisco'.
