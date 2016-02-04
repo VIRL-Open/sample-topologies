@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <topology xmlns="http://www.cisco.com/VIRL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" schemaVersion="0.9" xsi:schemaLocation="http://www.cisco.com/VIRL https://raw.github.com/CiscoVIRL/schema/v0.9/virl.xsd">
-    <node name="iosxrv-1" type="SIMPLE" subtype="IOS XRv" location="720,425" ipv4="192.168.0.65">
+    <node name="iosxrv-1" type="SIMPLE" subtype="IOS XRv" location="720,428" ipv4="192.168.0.33">
         <extensions>
             <entry key="AutoNetkit.ASN" type="Integer">200</entry>
             <entry key="AutoNetkit.IGP" type="String">isis</entry>
             <entry key="AutoNetkit.ibgp_role" type="String">RR</entry>
             <entry key="AutoNetkit.RR_cluster" type="String">200</entry>
-            <entry key="config" type="string">!  IOS-XR Config generated on 2016-02-02 10:54
+            <entry key="config" type="string">!  IOS-XR Config generated on 2016-02-04 20:54
 ! by autonetkit_0.21.4
 !
 hostname iosxrv-1
@@ -48,16 +48,16 @@ control-plane
 !
 interface Loopback0
   description Loopback
-  ipv4 address 192.168.0.65 255.255.255.255
+  ipv4 address 192.168.0.33 255.255.255.255
 !
 interface GigabitEthernet0/0/0/0
   description to iosxrv-3
-  ipv4 address 10.3.128.22 255.255.255.252
+  ipv4 address 10.0.0.54 255.255.255.252
   no shutdown
 !
 interface GigabitEthernet0/0/0/1
   description to iosxrv-2
-  ipv4 address 10.0.128.1 255.255.255.252
+  ipv4 address 10.1.0.1 255.255.255.252
   no shutdown
 !
 interface GigabitEthernet0/0/0/2
@@ -66,8 +66,8 @@ interface GigabitEthernet0/0/0/2
   no shutdown
 !
 interface GigabitEthernet0/0/0/3
-  description to iosvl2-1
-  ipv4 address 10.0.0.1 255.255.255.248
+  description to iosv-3
+  ipv4 address 10.1.0.5 255.255.255.252
   no shutdown
 !
 interface mgmteth0/0/CPU0/0
@@ -80,7 +80,7 @@ interface mgmteth0/0/CPU0/0
 !
 !
 router isis 200
-  net 49.1921.6800.0065.00
+  net 49.1921.6800.0033.00
   address-family ipv4 unicast
     metric-style wide
   !
@@ -119,25 +119,19 @@ end-policy
 !
 router static
   address-family ipv4 unicast
-    10.0.0.0 255.255.255.248 Null0 254
-    10.0.0.8 255.255.255.252 Null0 254
-    10.0.0.16 255.255.255.240 Null0 254
-    10.0.128.0 255.255.255.252 Null0 254
+    10.1.0.0 255.255.0.0 Null0 254
   !
 !
 router bgp 200
-  bgp router-id 192.168.0.65
+  bgp router-id 192.168.0.33
   address-family ipv4 unicast
-    network 192.168.0.65/32
-    network 10.0.0.0/29
-    network 10.0.0.8/30
-    network 10.0.0.16/28
-    network 10.0.128.0/30
+    network 192.168.0.33/32
+    network 10.1.0.0/16
   !
 ! iBGP
 ! iBGP clients
   !
-  neighbor 192.168.0.71
+  neighbor 192.168.0.41
     description RR client csr1000v-1
     remote-as 200
     update-source Loopback0
@@ -148,7 +142,7 @@ router bgp 200
     !
   !
   !
-  neighbor 192.168.0.72
+  neighbor 192.168.0.42
     description RR client csr1000v-2
     remote-as 200
     update-source Loopback0
@@ -161,7 +155,25 @@ router bgp 200
 !
 ! iBGP peers
   !
-  neighbor 192.168.0.67
+  neighbor 192.168.0.38
+    description iBGP peer iosv-3
+    remote-as 200
+    update-source Loopback0
+    address-family ipv4 unicast
+      next-hop-self
+    !
+    !
+  !
+  neighbor 192.168.0.39
+    description iBGP peer iosv-4
+    remote-as 200
+    update-source Loopback0
+    address-family ipv4 unicast
+      next-hop-self
+    !
+    !
+  !
+  neighbor 192.168.0.36
     description iBGP peer iosxrv-2
     remote-as 200
     update-source Loopback0
@@ -171,7 +183,7 @@ router bgp 200
     !
 ! eBGP peers
   !
-  neighbor 10.3.128.21
+  neighbor 10.0.0.53
     description eBGP peer iosxrv-3
     remote-as 100
     address-family ipv4 unicast
@@ -183,18 +195,18 @@ router bgp 200
         </entry>
             <entry key="AutoNetkit.mgmt_ip" type="string"></entry>
         </extensions>
-        <interface id="0" name="GigabitEthernet0/0/0/0" ipv4="10.3.128.22" netPrefixLenV4="30"/>
-        <interface id="1" name="GigabitEthernet0/0/0/1" ipv4="10.0.128.1" netPrefixLenV4="30"/>
+        <interface id="0" name="GigabitEthernet0/0/0/0" ipv4="10.0.0.54" netPrefixLenV4="30"/>
+        <interface id="1" name="GigabitEthernet0/0/0/1" ipv4="10.1.0.1" netPrefixLenV4="30"/>
         <interface id="2" name="GigabitEthernet0/0/0/2"/>
-        <interface id="3" name="GigabitEthernet0/0/0/3" ipv4="10.0.0.1" netPrefixLenV4="29"/>
+        <interface id="3" name="GigabitEthernet0/0/0/3" ipv4="10.1.0.5" netPrefixLenV4="30"/>
     </node>
-    <node name="iosxrv-2" type="SIMPLE" subtype="IOS XRv" location="720,564" ipv4="192.168.0.67">
+    <node name="iosxrv-2" type="SIMPLE" subtype="IOS XRv" location="720,561" ipv4="192.168.0.36">
         <extensions>
             <entry key="AutoNetkit.ASN" type="Integer">200</entry>
             <entry key="AutoNetkit.IGP" type="String">isis</entry>
             <entry key="AutoNetkit.ibgp_role" type="String">RR</entry>
             <entry key="AutoNetkit.RR_cluster" type="String">200</entry>
-            <entry key="config" type="string">!  IOS-XR Config generated on 2016-02-02 10:54
+            <entry key="config" type="string">!  IOS-XR Config generated on 2016-02-04 20:54
 ! by autonetkit_0.21.4
 !
 hostname iosxrv-2
@@ -236,16 +248,16 @@ control-plane
 !
 interface Loopback0
   description Loopback
-  ipv4 address 192.168.0.67 255.255.255.255
+  ipv4 address 192.168.0.36 255.255.255.255
 !
 interface GigabitEthernet0/0/0/0
   description to iosxrv-7
-  ipv4 address 10.0.128.6 255.255.255.252
+  ipv4 address 10.1.0.18 255.255.255.252
   no shutdown
 !
 interface GigabitEthernet0/0/0/1
   description to iosxrv-1
-  ipv4 address 10.0.128.2 255.255.255.252
+  ipv4 address 10.1.0.2 255.255.255.252
   no shutdown
 !
 interface GigabitEthernet0/0/0/2
@@ -254,8 +266,8 @@ interface GigabitEthernet0/0/0/2
   no shutdown
 !
 interface GigabitEthernet0/0/0/3
-  description to iosvl2-2
-  ipv4 address 10.0.0.2 255.255.255.248
+  description to iosv-4
+  ipv4 address 10.1.0.9 255.255.255.252
   no shutdown
 !
 interface mgmteth0/0/CPU0/0
@@ -268,7 +280,7 @@ interface mgmteth0/0/CPU0/0
 !
 !
 router isis 200
-  net 49.1921.6800.0067.00
+  net 49.1921.6800.0036.00
   address-family ipv4 unicast
     metric-style wide
   !
@@ -307,25 +319,19 @@ end-policy
 !
 router static
   address-family ipv4 unicast
-    10.0.0.0 255.255.255.248 Null0 254
-    10.0.0.8 255.255.255.252 Null0 254
-    10.0.0.16 255.255.255.240 Null0 254
-    10.0.128.0 255.255.255.252 Null0 254
+    10.1.0.0 255.255.0.0 Null0 254
   !
 !
 router bgp 200
-  bgp router-id 192.168.0.67
+  bgp router-id 192.168.0.36
   address-family ipv4 unicast
-    network 192.168.0.67/32
-    network 10.0.0.0/29
-    network 10.0.0.8/30
-    network 10.0.0.16/28
-    network 10.0.128.0/30
+    network 192.168.0.36/32
+    network 10.1.0.0/16
   !
 ! iBGP
 ! iBGP clients
   !
-  neighbor 192.168.0.71
+  neighbor 192.168.0.41
     description RR client csr1000v-1
     remote-as 200
     update-source Loopback0
@@ -336,7 +342,7 @@ router bgp 200
     !
   !
   !
-  neighbor 192.168.0.72
+  neighbor 192.168.0.42
     description RR client csr1000v-2
     remote-as 200
     update-source Loopback0
@@ -349,7 +355,25 @@ router bgp 200
 !
 ! iBGP peers
   !
-  neighbor 192.168.0.65
+  neighbor 192.168.0.38
+    description iBGP peer iosv-3
+    remote-as 200
+    update-source Loopback0
+    address-family ipv4 unicast
+      next-hop-self
+    !
+    !
+  !
+  neighbor 192.168.0.39
+    description iBGP peer iosv-4
+    remote-as 200
+    update-source Loopback0
+    address-family ipv4 unicast
+      next-hop-self
+    !
+    !
+  !
+  neighbor 192.168.0.33
     description iBGP peer iosxrv-1
     remote-as 200
     update-source Loopback0
@@ -359,7 +383,7 @@ router bgp 200
     !
 ! eBGP peers
   !
-  neighbor 10.0.128.5
+  neighbor 10.1.0.17
     description eBGP peer iosxrv-7
     remote-as 100
     address-family ipv4 unicast
@@ -371,15 +395,15 @@ router bgp 200
         </entry>
             <entry key="AutoNetkit.mgmt_ip" type="string"></entry>
         </extensions>
-        <interface id="0" name="GigabitEthernet0/0/0/0" ipv4="10.0.128.6" netPrefixLenV4="30"/>
-        <interface id="1" name="GigabitEthernet0/0/0/1" ipv4="10.0.128.2" netPrefixLenV4="30"/>
+        <interface id="0" name="GigabitEthernet0/0/0/0" ipv4="10.1.0.18" netPrefixLenV4="30"/>
+        <interface id="1" name="GigabitEthernet0/0/0/1" ipv4="10.1.0.2" netPrefixLenV4="30"/>
         <interface id="2" name="GigabitEthernet0/0/0/2"/>
-        <interface id="3" name="GigabitEthernet0/0/0/3" ipv4="10.0.0.2" netPrefixLenV4="29"/>
+        <interface id="3" name="GigabitEthernet0/0/0/3" ipv4="10.1.0.9" netPrefixLenV4="30"/>
     </node>
     <node name="iosxrv-3" type="SIMPLE" subtype="IOS XRv" location="835,351" ipv4="192.168.0.3">
         <extensions>
             <entry key="AutoNetkit.ASN" type="Integer">100</entry>
-            <entry key="config" type="string">!  IOS-XR Config generated on 2016-02-02 10:54
+            <entry key="config" type="string">!  IOS-XR Config generated on 2016-02-04 20:54
 ! by autonetkit_0.21.4
 !
 hostname iosxrv-3
@@ -425,27 +449,27 @@ interface Loopback0
 !
 interface GigabitEthernet0/0/0/0
   description to iosxrv-1
-  ipv4 address 10.3.128.21 255.255.255.252
+  ipv4 address 10.0.0.53 255.255.255.252
   no shutdown
 !
 interface GigabitEthernet0/0/0/1
   description to iosxrv-4
-  ipv4 address 10.3.128.25 255.255.255.252
+  ipv4 address 10.0.0.57 255.255.255.252
   no shutdown
 !
 interface GigabitEthernet0/0/0/2
   description to iosxrv-7
-  ipv4 address 10.3.128.29 255.255.255.252
+  ipv4 address 10.0.0.61 255.255.255.252
   no shutdown
 !
 interface GigabitEthernet0/0/0/3
   description to iosvl2-5
-  ipv4 address 10.3.128.9 255.255.255.248
+  ipv4 address 10.0.0.25 255.255.255.248
   no shutdown
 !
 interface GigabitEthernet0/0/0/4
   description to iosvl2-6
-  ipv4 address 10.3.128.1 255.255.255.248
+  ipv4 address 10.0.0.41 255.255.255.248
   no shutdown
 !
 interface mgmteth0/0/CPU0/0
@@ -490,26 +514,14 @@ end-policy
 !
 router static
   address-family ipv4 unicast
-    10.0.128.4 255.255.255.252 Null0 254
-    10.1.128.0 255.255.255.252 Null0 254
-    10.1.128.8 255.255.255.252 Null0 254
-    10.3.0.0 255.255.255.240 Null0 254
-    10.3.0.16 255.255.255.252 Null0 254
-    10.3.0.32 255.255.255.224 Null0 254
-    10.3.128.0 255.255.255.224 Null0 254
+    10.0.0.0 255.255.0.0 Null0 254
   !
 !
 router bgp 100
   bgp router-id 192.168.0.3
   address-family ipv4 unicast
     network 192.168.0.3/32
-    network 10.0.128.4/30
-    network 10.1.128.0/30
-    network 10.1.128.8/30
-    network 10.3.0.0/28
-    network 10.3.0.16/30
-    network 10.3.0.32/27
-    network 10.3.128.0/27
+    network 10.0.0.0/16
   !
 ! iBGP
 ! iBGP clients
@@ -566,7 +578,7 @@ router bgp 100
     !
 ! eBGP peers
   !
-  neighbor 10.3.128.22
+  neighbor 10.0.0.54
     description eBGP peer iosxrv-1
     remote-as 200
     address-family ipv4 unicast
@@ -580,16 +592,16 @@ router bgp 100
             <entry key="AutoNetkit.ibgp_role" type="String">RR</entry>
             <entry key="AutoNetkit.RR_cluster" type="String">top</entry>
         </extensions>
-        <interface id="0" name="GigabitEthernet0/0/0/0" ipv4="10.3.128.21" netPrefixLenV4="30"/>
-        <interface id="1" name="GigabitEthernet0/0/0/1" ipv4="10.3.128.25" netPrefixLenV4="30"/>
-        <interface id="2" name="GigabitEthernet0/0/0/2" ipv4="10.3.128.29" netPrefixLenV4="30"/>
-        <interface id="3" name="GigabitEthernet0/0/0/3" ipv4="10.3.128.9" netPrefixLenV4="29"/>
-        <interface id="4" name="GigabitEthernet0/0/0/4" ipv4="10.3.128.1" netPrefixLenV4="29"/>
+        <interface id="0" name="GigabitEthernet0/0/0/0" ipv4="10.0.0.53" netPrefixLenV4="30"/>
+        <interface id="1" name="GigabitEthernet0/0/0/1" ipv4="10.0.0.57" netPrefixLenV4="30"/>
+        <interface id="2" name="GigabitEthernet0/0/0/2" ipv4="10.0.0.61" netPrefixLenV4="30"/>
+        <interface id="3" name="GigabitEthernet0/0/0/3" ipv4="10.0.0.25" netPrefixLenV4="29"/>
+        <interface id="4" name="GigabitEthernet0/0/0/4" ipv4="10.0.0.41" netPrefixLenV4="29"/>
     </node>
     <node name="iosxrv-4" type="SIMPLE" subtype="IOS XRv" location="982,353" ipv4="192.168.0.4">
         <extensions>
             <entry key="AutoNetkit.ASN" type="Integer">100</entry>
-            <entry key="config" type="string">!  IOS-XR Config generated on 2016-02-02 10:54
+            <entry key="config" type="string">!  IOS-XR Config generated on 2016-02-04 20:54
 ! by autonetkit_0.21.4
 !
 hostname iosxrv-4
@@ -635,27 +647,27 @@ interface Loopback0
 !
 interface GigabitEthernet0/0/0/0
   description to iosxrv-3
-  ipv4 address 10.3.128.26 255.255.255.252
+  ipv4 address 10.0.0.58 255.255.255.252
   no shutdown
 !
 interface GigabitEthernet0/0/0/1
   description to iosxrv-5
-  ipv4 address 10.1.128.1 255.255.255.252
+  ipv4 address 10.2.128.25 255.255.255.252
   no shutdown
 !
 interface GigabitEthernet0/0/0/2
   description to iosxrv-8
-  ipv4 address 10.3.0.1 255.255.255.252
+  ipv4 address 10.0.128.1 255.255.255.252
   no shutdown
 !
 interface GigabitEthernet0/0/0/3
   description to iosvl2-6
-  ipv4 address 10.3.128.2 255.255.255.248
+  ipv4 address 10.0.0.42 255.255.255.248
   no shutdown
 !
 interface GigabitEthernet0/0/0/4
   description to iosvl2-5
-  ipv4 address 10.3.128.10 255.255.255.248
+  ipv4 address 10.0.0.26 255.255.255.248
   no shutdown
 !
 interface mgmteth0/0/CPU0/0
@@ -700,26 +712,14 @@ end-policy
 !
 router static
   address-family ipv4 unicast
-    10.0.128.4 255.255.255.252 Null0 254
-    10.1.128.0 255.255.255.252 Null0 254
-    10.1.128.8 255.255.255.252 Null0 254
-    10.3.0.0 255.255.255.240 Null0 254
-    10.3.0.16 255.255.255.252 Null0 254
-    10.3.0.32 255.255.255.224 Null0 254
-    10.3.128.0 255.255.255.224 Null0 254
+    10.0.0.0 255.255.0.0 Null0 254
   !
 !
 router bgp 100
   bgp router-id 192.168.0.4
   address-family ipv4 unicast
     network 192.168.0.4/32
-    network 10.0.128.4/30
-    network 10.1.128.0/30
-    network 10.1.128.8/30
-    network 10.3.0.0/28
-    network 10.3.0.16/30
-    network 10.3.0.32/27
-    network 10.3.128.0/27
+    network 10.0.0.0/16
   !
 ! iBGP
 ! iBGP clients
@@ -776,7 +776,7 @@ router bgp 100
     !
 ! eBGP peers
   !
-  neighbor 10.1.128.2
+  neighbor 10.2.128.26
     description eBGP peer iosxrv-5
     remote-as 300
     address-family ipv4 unicast
@@ -790,15 +790,15 @@ router bgp 100
             <entry key="AutoNetkit.ibgp_role" type="String">RR</entry>
             <entry key="AutoNetkit.RR_cluster" type="String">top</entry>
         </extensions>
-        <interface id="0" name="GigabitEthernet0/0/0/0" ipv4="10.3.128.26" netPrefixLenV4="30"/>
-        <interface id="1" name="GigabitEthernet0/0/0/1" ipv4="10.1.128.1" netPrefixLenV4="30"/>
-        <interface id="2" name="GigabitEthernet0/0/0/2" ipv4="10.3.0.1" netPrefixLenV4="30"/>
-        <interface id="3" name="GigabitEthernet0/0/0/3" ipv4="10.3.128.2" netPrefixLenV4="29"/>
-        <interface id="4" name="GigabitEthernet0/0/0/4" ipv4="10.3.128.10" netPrefixLenV4="29"/>
+        <interface id="0" name="GigabitEthernet0/0/0/0" ipv4="10.0.0.58" netPrefixLenV4="30"/>
+        <interface id="1" name="GigabitEthernet0/0/0/1" ipv4="10.2.128.25" netPrefixLenV4="30"/>
+        <interface id="2" name="GigabitEthernet0/0/0/2" ipv4="10.0.128.1" netPrefixLenV4="30"/>
+        <interface id="3" name="GigabitEthernet0/0/0/3" ipv4="10.0.0.42" netPrefixLenV4="29"/>
+        <interface id="4" name="GigabitEthernet0/0/0/4" ipv4="10.0.0.26" netPrefixLenV4="29"/>
     </node>
-    <node name="iosxrv-5" type="SIMPLE" subtype="IOS XRv" location="1094,429" ipv4="192.168.0.49">
+    <node name="iosxrv-5" type="SIMPLE" subtype="IOS XRv" location="1094,429" ipv4="192.168.0.52">
         <extensions>
-            <entry key="config" type="string">!  IOS-XR Config generated on 2016-02-02 10:54
+            <entry key="config" type="string">!  IOS-XR Config generated on 2016-02-04 20:54
 ! by autonetkit_0.21.4
 !
 hostname iosxrv-5
@@ -840,26 +840,26 @@ control-plane
 !
 interface Loopback0
   description Loopback
-  ipv4 address 192.168.0.49 255.255.255.255
+  ipv4 address 192.168.0.52 255.255.255.255
 !
 interface GigabitEthernet0/0/0/0
   description to iosxrv-6
-  ipv4 address 10.1.128.5 255.255.255.252
+  ipv4 address 10.2.128.29 255.255.255.252
   no shutdown
 !
 interface GigabitEthernet0/0/0/1
   description to iosxrv-4
-  ipv4 address 10.1.128.2 255.255.255.252
+  ipv4 address 10.2.128.26 255.255.255.252
   no shutdown
 !
 interface GigabitEthernet0/0/0/2
   description to iosvl2-3
-  ipv4 address 10.1.0.3 255.255.255.248
+  ipv4 address 10.2.0.3 255.255.255.248
   no shutdown
 !
 interface GigabitEthernet0/0/0/3
   description to iosvl2-3
-  ipv4 address 10.1.0.11 255.255.255.248
+  ipv4 address 10.2.0.19 255.255.255.248
   no shutdown
 !
 interface mgmteth0/0/CPU0/0
@@ -872,7 +872,7 @@ interface mgmteth0/0/CPU0/0
 !
 router eigrp 300
  address-family ipv4
-  router-id 192.168.0.49
+  router-id 192.168.0.52
   interface GigabitEthernet0/0/0/0
   !
   interface GigabitEthernet0/0/0/2
@@ -898,26 +898,20 @@ end-policy
 !
 router static
   address-family ipv4 unicast
-    10.1.0.0 255.255.255.240 Null0 254
-    10.1.128.4 255.255.255.252 Null0 254
-    10.2.0.0 255.255.255.240 Null0 254
-    10.2.128.0 255.255.255.240 Null0 254
+    10.2.0.0 255.255.0.0 Null0 254
   !
 !
 router bgp 300
-  bgp router-id 192.168.0.49
+  bgp router-id 192.168.0.52
   address-family ipv4 unicast
-    network 192.168.0.49/32
-    network 10.1.0.0/28
-    network 10.1.128.4/30
-    network 10.2.0.0/28
-    network 10.2.128.0/28
+    network 192.168.0.52/32
+    network 10.2.0.0/16
   !
 ! iBGP
 !
 ! iBGP peers
   !
-  neighbor 192.168.0.50
+  neighbor 192.168.0.53
     description iBGP peer iosxrv-6
     remote-as 300
     update-source Loopback0
@@ -926,7 +920,7 @@ router bgp 300
     !
     !
   !
-  neighbor 192.168.0.33
+  neighbor 192.168.0.49
     description iBGP peer nx-osv-1
     remote-as 300
     update-source Loopback0
@@ -935,7 +929,7 @@ router bgp 300
     !
     !
   !
-  neighbor 192.168.0.34
+  neighbor 192.168.0.50
     description iBGP peer nx-osv-2
     remote-as 300
     update-source Loopback0
@@ -945,7 +939,7 @@ router bgp 300
     !
 ! eBGP peers
   !
-  neighbor 10.1.128.1
+  neighbor 10.2.128.25
     description eBGP peer iosxrv-4
     remote-as 100
     address-family ipv4 unicast
@@ -959,22 +953,22 @@ router bgp 300
             <entry key="AutoNetkit.ASN" type="Integer">300</entry>
             <entry key="AutoNetkit.IGP" type="String">eigrp</entry>
         </extensions>
-        <interface id="0" name="GigabitEthernet0/0/0/0" ipv4="10.1.128.5" netPrefixLenV4="30"/>
-        <interface id="1" name="GigabitEthernet0/0/0/1" ipv4="10.1.128.2" netPrefixLenV4="30"/>
-        <interface id="2" name="GigabitEthernet0/0/0/2" ipv4="10.1.0.3" netPrefixLenV4="29">
+        <interface id="0" name="GigabitEthernet0/0/0/0" ipv4="10.2.128.29" netPrefixLenV4="30"/>
+        <interface id="1" name="GigabitEthernet0/0/0/1" ipv4="10.2.128.26" netPrefixLenV4="30"/>
+        <interface id="2" name="GigabitEthernet0/0/0/2" ipv4="10.2.0.3" netPrefixLenV4="29">
             <extensions>
                 <entry key="AutoNetkit.vlan" type="Integer">40</entry>
             </extensions>
         </interface>
-        <interface id="3" name="GigabitEthernet0/0/0/3" ipv4="10.1.0.11" netPrefixLenV4="29">
+        <interface id="3" name="GigabitEthernet0/0/0/3" ipv4="10.2.0.19" netPrefixLenV4="29">
             <extensions>
                 <entry key="AutoNetkit.vlan" type="Integer">50</entry>
             </extensions>
         </interface>
     </node>
-    <node name="iosxrv-6" type="SIMPLE" subtype="IOS XRv" location="1094,568" ipv4="192.168.0.50">
+    <node name="iosxrv-6" type="SIMPLE" subtype="IOS XRv" location="1094,568" ipv4="192.168.0.53">
         <extensions>
-            <entry key="config" type="string">!  IOS-XR Config generated on 2016-02-02 10:54
+            <entry key="config" type="string">!  IOS-XR Config generated on 2016-02-04 20:54
 ! by autonetkit_0.21.4
 !
 hostname iosxrv-6
@@ -1016,26 +1010,26 @@ control-plane
 !
 interface Loopback0
   description Loopback
-  ipv4 address 192.168.0.50 255.255.255.255
+  ipv4 address 192.168.0.53 255.255.255.255
 !
 interface GigabitEthernet0/0/0/0
   description to iosxrv-5
-  ipv4 address 10.1.128.6 255.255.255.252
+  ipv4 address 10.2.128.30 255.255.255.252
   no shutdown
 !
 interface GigabitEthernet0/0/0/1
   description to iosxrv-8
-  ipv4 address 10.1.128.10 255.255.255.252
+  ipv4 address 10.2.0.10 255.255.255.252
   no shutdown
 !
 interface GigabitEthernet0/0/0/2
   description to iosvl2-4
-  ipv4 address 10.1.0.4 255.255.255.248
+  ipv4 address 10.2.0.4 255.255.255.248
   no shutdown
 !
 interface GigabitEthernet0/0/0/3
   description to iosvl2-4
-  ipv4 address 10.1.0.12 255.255.255.248
+  ipv4 address 10.2.0.20 255.255.255.248
   no shutdown
 !
 interface mgmteth0/0/CPU0/0
@@ -1048,7 +1042,7 @@ interface mgmteth0/0/CPU0/0
 !
 router eigrp 300
  address-family ipv4
-  router-id 192.168.0.50
+  router-id 192.168.0.53
   interface GigabitEthernet0/0/0/0
   !
   interface GigabitEthernet0/0/0/2
@@ -1074,26 +1068,20 @@ end-policy
 !
 router static
   address-family ipv4 unicast
-    10.1.0.0 255.255.255.240 Null0 254
-    10.1.128.4 255.255.255.252 Null0 254
-    10.2.0.0 255.255.255.240 Null0 254
-    10.2.128.0 255.255.255.240 Null0 254
+    10.2.0.0 255.255.0.0 Null0 254
   !
 !
 router bgp 300
-  bgp router-id 192.168.0.50
+  bgp router-id 192.168.0.53
   address-family ipv4 unicast
-    network 192.168.0.50/32
-    network 10.1.0.0/28
-    network 10.1.128.4/30
-    network 10.2.0.0/28
-    network 10.2.128.0/28
+    network 192.168.0.53/32
+    network 10.2.0.0/16
   !
 ! iBGP
 !
 ! iBGP peers
   !
-  neighbor 192.168.0.49
+  neighbor 192.168.0.52
     description iBGP peer iosxrv-5
     remote-as 300
     update-source Loopback0
@@ -1102,7 +1090,7 @@ router bgp 300
     !
     !
   !
-  neighbor 192.168.0.33
+  neighbor 192.168.0.49
     description iBGP peer nx-osv-1
     remote-as 300
     update-source Loopback0
@@ -1111,7 +1099,7 @@ router bgp 300
     !
     !
   !
-  neighbor 192.168.0.34
+  neighbor 192.168.0.50
     description iBGP peer nx-osv-2
     remote-as 300
     update-source Loopback0
@@ -1121,7 +1109,7 @@ router bgp 300
     !
 ! eBGP peers
   !
-  neighbor 10.1.128.9
+  neighbor 10.2.0.9
     description eBGP peer iosxrv-8
     remote-as 100
     address-family ipv4 unicast
@@ -1135,79 +1123,29 @@ router bgp 300
             <entry key="AutoNetkit.ASN" type="Integer">300</entry>
             <entry key="AutoNetkit.IGP" type="String">eigrp</entry>
         </extensions>
-        <interface id="0" name="GigabitEthernet0/0/0/0" ipv4="10.1.128.6" netPrefixLenV4="30"/>
-        <interface id="1" name="GigabitEthernet0/0/0/1" ipv4="10.1.128.10" netPrefixLenV4="30"/>
-        <interface id="2" name="GigabitEthernet0/0/0/2" ipv4="10.1.0.4" netPrefixLenV4="29">
+        <interface id="0" name="GigabitEthernet0/0/0/0" ipv4="10.2.128.30" netPrefixLenV4="30"/>
+        <interface id="1" name="GigabitEthernet0/0/0/1" ipv4="10.2.0.10" netPrefixLenV4="30"/>
+        <interface id="2" name="GigabitEthernet0/0/0/2" ipv4="10.2.0.4" netPrefixLenV4="29">
             <extensions>
                 <entry key="AutoNetkit.vlan" type="Integer">40</entry>
             </extensions>
         </interface>
-        <interface id="3" name="GigabitEthernet0/0/0/3" ipv4="10.1.0.12" netPrefixLenV4="29">
+        <interface id="3" name="GigabitEthernet0/0/0/3" ipv4="10.2.0.20" netPrefixLenV4="29">
             <extensions>
                 <entry key="AutoNetkit.vlan" type="Integer">50</entry>
             </extensions>
         </interface>
     </node>
-    <node name="iosvl2-1" type="SIMPLE" subtype="IOSvL2" location="606,428">
+    <node name="iosv-3" type="SIMPLE" subtype="IOSv" location="606,425" ipv4="192.168.0.38">
         <extensions>
             <entry key="AutoNetkit.ASN" type="Integer">200</entry>
             <entry key="AutoNetkit.IGP" type="String">isis</entry>
-            <entry key="config" type="string">! IOSvL2 Config generated on 2016-02-02 10:54
+            <entry key="config" type="string">! IOS Config generated on 2016-02-04 20:54
 ! by autonetkit_0.21.4
 !
-version 15.2
-service timestamps debug datetime msec
-service timestamps log datetime msec
-no service password-encryption
-service compress-config
-no service config
-enable password cisco
-ip classless
-ip subnet-zero
-no ip domain lookup
-!
-line vty 0 4
-transport input ssh telnet
-exec-timeout 720 0
-password cisco
-login
-!
-line con 0
-password cisco
-!
-hostname iosvl2-1
-!
+hostname iosv-3
 boot-start-marker
 boot-end-marker
-!
-!
-!
-no aaa new-model
-!
-vtp domain virl.lab
-vtp mode transparent
-!
-vlan 2
-  name ank_vlan2
-!
-!
-!
-!
-no cdp run
-!
-!
-!
-ip cef
-no ipv6 cef
-!
-!
-spanning-tree mode pvst
-spanning-tree extend system-id
-!
-vlan internal allocation policy ascending
-!
-!
-!
 !
 vrf definition Mgmt-intf
 !
@@ -1219,120 +1157,139 @@ vrf definition Mgmt-intf
 !
 !
 !
+no aaa new-model
+!
+!
+ip cef
+ipv6 unicast-routing
+ipv6 cef
+!
+!
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+no service config
+enable password cisco
+ip classless
+ip subnet-zero
+no ip domain lookup
+ip domain name virl.info
+crypto key generate rsa modulus 768
+ip ssh server algorithm authentication password
+username cisco privilege 15 secret cisco
+line vty 0 4
+ transport input ssh telnet
+ exec-timeout 720 0
+ password cisco
+ login local
+line con 0
+ password cisco
+!
+no cdp run
 !
 !
 interface Loopback0
   description Loopback
+  ip address 192.168.0.38 255.255.255.255
+  ip router isis 200
 !
 interface GigabitEthernet0/0
-  description OOB management
-  ! Configured on launch
-  no switchport
+  description OOB Management
   vrf forwarding Mgmt-intf
+  ! Configured on launch
   no ip address
+  duplex full
+  speed auto
   no shutdown
 !
 interface GigabitEthernet0/1
   description to iosxrv-1
-  switchport access vlan 2
-  switchport mode access
+  ip address 10.1.0.6 255.255.255.252
+  ip router isis 200
+  isis circuit-type level-2-only
+  isis network point-to-point
+  isis metric 1
+  clns mtu 1430
+  duplex full
+  speed auto
   no shutdown
 !
 interface GigabitEthernet0/2
-  description to iosvl2-2
-  switchport trunk encapsulation dot1q
-  switchport mode trunk
+  description to iosv-4
+  ip address 10.1.0.13 255.255.255.252
+  ip router isis 200
+  isis circuit-type level-2-only
+  isis network point-to-point
+  isis metric 1
+  duplex full
+  speed auto
   no shutdown
 !
 interface GigabitEthernet0/3
   description to csr1000v-1
-  switchport access vlan 2
-  switchport mode access
+  ip address 10.1.0.21 255.255.255.252
+  ip router isis 200
+  isis circuit-type level-2-only
+  isis network point-to-point
+  isis metric 1
+  duplex full
+  speed auto
   no shutdown
 !
 !
-ip forward-protocol nd
 !
-no ip http server
-no ip http secure-server
-!
-!
+router isis 200
+  net 49.1921.6800.0038.00
+  metric-style wide
 !
 !
+router bgp 200
+  bgp router-id 192.168.0.38
+  no synchronization
+! ibgp
+  ! ibgp peers
+  !
+  neighbor 192.168.0.39 remote-as 200
+  neighbor 192.168.0.39 description iBGP peer iosv-4
+  neighbor 192.168.0.39 update-source Loopback0
+  !
+  neighbor 192.168.0.33 remote-as 200
+  neighbor 192.168.0.33 description iBGP peer iosxrv-1
+  neighbor 192.168.0.33 update-source Loopback0
+  !
+  neighbor 192.168.0.36 remote-as 200
+  neighbor 192.168.0.36 description iBGP peer iosxrv-2
+  neighbor 192.168.0.36 update-source Loopback0
 !
 !
-control-plane
+ !
+ address-family ipv4
+  network 192.168.0.38 mask 255.255.255.255
+  neighbor 192.168.0.39 activate
+  neighbor 192.168.0.33 activate
+  neighbor 192.168.0.36 activate
+ exit-address-family
 !
 !
 !
 end
-        </entry>
+</entry>
             <entry key="AutoNetkit.mgmt_ip" type="string"></entry>
         </extensions>
-        <interface id="0" name="GigabitEthernet0/1"/>
-        <interface id="1" name="GigabitEthernet0/2"/>
-        <interface id="2" name="GigabitEthernet0/3"/>
+        <interface id="0" name="GigabitEthernet0/1" ipv4="10.1.0.6" netPrefixLenV4="30"/>
+        <interface id="1" name="GigabitEthernet0/2" ipv4="10.1.0.13" netPrefixLenV4="30"/>
+        <interface id="2" name="GigabitEthernet0/3" ipv4="10.1.0.21" netPrefixLenV4="30"/>
     </node>
-    <node name="iosvl2-2" type="SIMPLE" subtype="IOSvL2" location="606,567">
+    <node name="iosv-4" type="SIMPLE" subtype="IOSv" location="606,559" ipv4="192.168.0.39">
         <extensions>
             <entry key="AutoNetkit.ASN" type="Integer">200</entry>
             <entry key="AutoNetkit.IGP" type="String">isis</entry>
-            <entry key="config" type="string">! IOSvL2 Config generated on 2016-02-02 10:54
+            <entry key="config" type="string">! IOS Config generated on 2016-02-04 20:54
 ! by autonetkit_0.21.4
 !
-version 15.2
-service timestamps debug datetime msec
-service timestamps log datetime msec
-no service password-encryption
-service compress-config
-no service config
-enable password cisco
-ip classless
-ip subnet-zero
-no ip domain lookup
-!
-line vty 0 4
-transport input ssh telnet
-exec-timeout 720 0
-password cisco
-login
-!
-line con 0
-password cisco
-!
-hostname iosvl2-2
-!
+hostname iosv-4
 boot-start-marker
 boot-end-marker
-!
-!
-!
-no aaa new-model
-!
-vtp domain virl.lab
-vtp mode transparent
-!
-vlan 2
-  name ank_vlan2
-!
-!
-!
-!
-no cdp run
-!
-!
-!
-ip cef
-no ipv6 cef
-!
-!
-spanning-tree mode pvst
-spanning-tree extend system-id
-!
-vlan internal allocation policy ascending
-!
-!
-!
 !
 vrf definition Mgmt-intf
 !
@@ -1344,63 +1301,132 @@ vrf definition Mgmt-intf
 !
 !
 !
+no aaa new-model
+!
+!
+ip cef
+ipv6 unicast-routing
+ipv6 cef
+!
+!
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+no service config
+enable password cisco
+ip classless
+ip subnet-zero
+no ip domain lookup
+ip domain name virl.info
+crypto key generate rsa modulus 768
+ip ssh server algorithm authentication password
+username cisco privilege 15 secret cisco
+line vty 0 4
+ transport input ssh telnet
+ exec-timeout 720 0
+ password cisco
+ login local
+line con 0
+ password cisco
+!
+no cdp run
 !
 !
 interface Loopback0
   description Loopback
+  ip address 192.168.0.39 255.255.255.255
+  ip router isis 200
 !
 interface GigabitEthernet0/0
-  description OOB management
-  ! Configured on launch
-  no switchport
+  description OOB Management
   vrf forwarding Mgmt-intf
+  ! Configured on launch
   no ip address
+  duplex full
+  speed auto
   no shutdown
 !
 interface GigabitEthernet0/1
   description to iosxrv-2
-  switchport access vlan 2
-  switchport mode access
+  ip address 10.1.0.10 255.255.255.252
+  ip router isis 200
+  isis circuit-type level-2-only
+  isis network point-to-point
+  isis metric 1
+  clns mtu 1430
+  duplex full
+  speed auto
   no shutdown
 !
 interface GigabitEthernet0/2
-  description to iosvl2-1
-  switchport trunk encapsulation dot1q
-  switchport mode trunk
+  description to iosv-3
+  ip address 10.1.0.14 255.255.255.252
+  ip router isis 200
+  isis circuit-type level-2-only
+  isis network point-to-point
+  isis metric 1
+  duplex full
+  speed auto
   no shutdown
 !
 interface GigabitEthernet0/3
   description to csr1000v-2
-  switchport access vlan 2
-  switchport mode access
+  ip address 10.1.0.25 255.255.255.252
+  ip router isis 200
+  isis circuit-type level-2-only
+  isis network point-to-point
+  isis metric 1
+  duplex full
+  speed auto
   no shutdown
 !
 !
-ip forward-protocol nd
 !
-no ip http server
-no ip http secure-server
-!
-!
+router isis 200
+  net 49.1921.6800.0039.00
+  metric-style wide
 !
 !
+router bgp 200
+  bgp router-id 192.168.0.39
+  no synchronization
+! ibgp
+  ! ibgp peers
+  !
+  neighbor 192.168.0.38 remote-as 200
+  neighbor 192.168.0.38 description iBGP peer iosv-3
+  neighbor 192.168.0.38 update-source Loopback0
+  !
+  neighbor 192.168.0.33 remote-as 200
+  neighbor 192.168.0.33 description iBGP peer iosxrv-1
+  neighbor 192.168.0.33 update-source Loopback0
+  !
+  neighbor 192.168.0.36 remote-as 200
+  neighbor 192.168.0.36 description iBGP peer iosxrv-2
+  neighbor 192.168.0.36 update-source Loopback0
 !
 !
-control-plane
+ !
+ address-family ipv4
+  network 192.168.0.39 mask 255.255.255.255
+  neighbor 192.168.0.38 activate
+  neighbor 192.168.0.33 activate
+  neighbor 192.168.0.36 activate
+ exit-address-family
 !
 !
 !
 end
-        </entry>
+</entry>
             <entry key="AutoNetkit.mgmt_ip" type="string"></entry>
         </extensions>
-        <interface id="0" name="GigabitEthernet0/1"/>
-        <interface id="1" name="GigabitEthernet0/2"/>
-        <interface id="2" name="GigabitEthernet0/3"/>
+        <interface id="0" name="GigabitEthernet0/1" ipv4="10.1.0.10" netPrefixLenV4="30"/>
+        <interface id="1" name="GigabitEthernet0/2" ipv4="10.1.0.14" netPrefixLenV4="30"/>
+        <interface id="2" name="GigabitEthernet0/3" ipv4="10.1.0.25" netPrefixLenV4="30"/>
     </node>
     <node name="iosvl2-3" type="SIMPLE" subtype="IOSvL2" location="1238,432">
         <extensions>
-            <entry key="config" type="string">! IOSvL2 Config generated on 2016-02-02 10:54
+            <entry key="config" type="string">! IOSvL2 Config generated on 2016-02-04 20:54
 ! by autonetkit_0.21.4
 !
 version 15.2
@@ -1541,7 +1567,7 @@ end
     </node>
     <node name="iosvl2-4" type="SIMPLE" subtype="IOSvL2" location="1238,571">
         <extensions>
-            <entry key="config" type="string">! IOSvL2 Config generated on 2016-02-02 10:54
+            <entry key="config" type="string">! IOSvL2 Config generated on 2016-02-04 20:54
 ! by autonetkit_0.21.4
 !
 version 15.2
@@ -1683,7 +1709,7 @@ end
     <node name="iosvl2-5" type="SIMPLE" subtype="IOSvL2" location="835,263">
         <extensions>
             <entry key="AutoNetkit.ASN" type="Integer">100</entry>
-            <entry key="config" type="string">! IOSvL2 Config generated on 2016-02-02 10:54
+            <entry key="config" type="string">! IOSvL2 Config generated on 2016-02-04 20:54
 ! by autonetkit_0.21.4
 !
 version 15.2
@@ -1814,7 +1840,7 @@ end
     <node name="iosvl2-6" type="SIMPLE" subtype="IOSvL2" location="982,263">
         <extensions>
             <entry key="AutoNetkit.ASN" type="Integer">100</entry>
-            <entry key="config" type="string">! IOSvL2 Config generated on 2016-02-02 10:54
+            <entry key="config" type="string">! IOSvL2 Config generated on 2016-02-04 20:54
 ! by autonetkit_0.21.4
 !
 version 15.2
@@ -1942,13 +1968,13 @@ end
         <interface id="2" name="GigabitEthernet0/3"/>
         <interface id="3" name="GigabitEthernet1/0"/>
     </node>
-    <node name="csr1000v-1" type="SIMPLE" subtype="CSR1000v" location="498,421" ipv4="192.168.0.71">
+    <node name="csr1000v-1" type="SIMPLE" subtype="CSR1000v" location="498,424" ipv4="192.168.0.41">
         <extensions>
             <entry key="AutoNetkit.ASN" type="Integer">200</entry>
             <entry key="AutoNetkit.IGP" type="String">isis</entry>
             <entry key="AutoNetkit.ibgp_role" type="String">RRC</entry>
             <entry key="AutoNetkit.RR_cluster" type="String">200</entry>
-            <entry key="config" type="string">! IOS Config generated on 2016-02-02 10:54
+            <entry key="config" type="string">! IOS Config generated on 2016-02-04 20:54
 ! by autonetkit_0.21.4
 !
 hostname csr1000v-1
@@ -2001,7 +2027,7 @@ no cdp run
 !
 interface Loopback0
   description Loopback
-  ip address 192.168.0.71 255.255.255.255
+  ip address 192.168.0.41 255.255.255.255
   ip router isis 200
 !
 interface GigabitEthernet1
@@ -2012,8 +2038,8 @@ interface GigabitEthernet1
   no shutdown
 !
 interface GigabitEthernet2
-  description to iosvl2-1
-  ip address 10.0.0.3 255.255.255.248
+  description to iosv-3
+  ip address 10.1.0.22 255.255.255.252
   ip router isis 200
   isis circuit-type level-2-only
   isis network point-to-point
@@ -2022,7 +2048,7 @@ interface GigabitEthernet2
 !
 interface GigabitEthernet3
   description to iosvl2-7
-  ip address 10.0.0.27 255.255.255.248
+  ip address 10.1.128.11 255.255.255.248
   ip router isis 200
   isis circuit-type level-2-only
   isis network point-to-point
@@ -2031,7 +2057,7 @@ interface GigabitEthernet3
 !
 interface GigabitEthernet4
   description to csr1000v-2
-  ip address 10.0.0.9 255.255.255.252
+  ip address 10.1.0.29 255.255.255.252
   ip router isis 200
   isis circuit-type level-2-only
   isis network point-to-point
@@ -2041,30 +2067,30 @@ interface GigabitEthernet4
 !
 !
 router isis 200
-  net 49.1921.6800.0071.00
+  net 49.1921.6800.0041.00
   metric-style wide
 !
 !
 router bgp 200
-  bgp router-id 192.168.0.71
+  bgp router-id 192.168.0.41
   no synchronization
 ! ibgp
   ! ibgp route reflector servers
   !
-  neighbor 192.168.0.65 remote-as 200
-  neighbor 192.168.0.65 description rr parent iosxrv-1
-  neighbor 192.168.0.65 update-source Loopback0
+  neighbor 192.168.0.33 remote-as 200
+  neighbor 192.168.0.33 description rr parent iosxrv-1
+  neighbor 192.168.0.33 update-source Loopback0
   !
-  neighbor 192.168.0.67 remote-as 200
-  neighbor 192.168.0.67 description rr parent iosxrv-2
-  neighbor 192.168.0.67 update-source Loopback0
+  neighbor 192.168.0.36 remote-as 200
+  neighbor 192.168.0.36 description rr parent iosxrv-2
+  neighbor 192.168.0.36 update-source Loopback0
 !
 !
  !
  address-family ipv4
-  network 192.168.0.71 mask 255.255.255.255
-  neighbor 192.168.0.65 activate
-  neighbor 192.168.0.67 activate
+  network 192.168.0.41 mask 255.255.255.255
+  neighbor 192.168.0.33 activate
+  neighbor 192.168.0.36 activate
  exit-address-family
 !
 !
@@ -2073,17 +2099,17 @@ end
 </entry>
             <entry key="AutoNetkit.mgmt_ip" type="string"></entry>
         </extensions>
-        <interface id="0" name="GigabitEthernet2" ipv4="10.0.0.3" netPrefixLenV4="29"/>
-        <interface id="1" name="GigabitEthernet3" ipv4="10.0.0.27" netPrefixLenV4="29"/>
-        <interface id="2" name="GigabitEthernet4" ipv4="10.0.0.9" netPrefixLenV4="30"/>
+        <interface id="0" name="GigabitEthernet2" ipv4="10.1.0.22" netPrefixLenV4="30"/>
+        <interface id="1" name="GigabitEthernet3" ipv4="10.1.128.11" netPrefixLenV4="29"/>
+        <interface id="2" name="GigabitEthernet4" ipv4="10.1.0.29" netPrefixLenV4="30"/>
     </node>
-    <node name="csr1000v-2" type="SIMPLE" subtype="CSR1000v" location="498,560" ipv4="192.168.0.72">
+    <node name="csr1000v-2" type="SIMPLE" subtype="CSR1000v" location="498,557" ipv4="192.168.0.42">
         <extensions>
             <entry key="AutoNetkit.ASN" type="Integer">200</entry>
             <entry key="AutoNetkit.IGP" type="String">isis</entry>
             <entry key="AutoNetkit.ibgp_role" type="String">RRC</entry>
             <entry key="AutoNetkit.RR_cluster" type="String">200</entry>
-            <entry key="config" type="string">! IOS Config generated on 2016-02-02 10:54
+            <entry key="config" type="string">! IOS Config generated on 2016-02-04 20:54
 ! by autonetkit_0.21.4
 !
 hostname csr1000v-2
@@ -2136,7 +2162,7 @@ no cdp run
 !
 interface Loopback0
   description Loopback
-  ip address 192.168.0.72 255.255.255.255
+  ip address 192.168.0.42 255.255.255.255
   ip router isis 200
 !
 interface GigabitEthernet1
@@ -2147,8 +2173,8 @@ interface GigabitEthernet1
   no shutdown
 !
 interface GigabitEthernet2
-  description to iosvl2-2
-  ip address 10.0.0.4 255.255.255.248
+  description to iosv-4
+  ip address 10.1.0.26 255.255.255.252
   ip router isis 200
   isis circuit-type level-2-only
   isis network point-to-point
@@ -2157,7 +2183,7 @@ interface GigabitEthernet2
 !
 interface GigabitEthernet3
   description to iosvl2-8
-  ip address 10.0.0.19 255.255.255.248
+  ip address 10.1.128.3 255.255.255.248
   ip router isis 200
   isis circuit-type level-2-only
   isis network point-to-point
@@ -2166,7 +2192,7 @@ interface GigabitEthernet3
 !
 interface GigabitEthernet4
   description to csr1000v-1
-  ip address 10.0.0.10 255.255.255.252
+  ip address 10.1.0.30 255.255.255.252
   ip router isis 200
   isis circuit-type level-2-only
   isis network point-to-point
@@ -2176,30 +2202,30 @@ interface GigabitEthernet4
 !
 !
 router isis 200
-  net 49.1921.6800.0072.00
+  net 49.1921.6800.0042.00
   metric-style wide
 !
 !
 router bgp 200
-  bgp router-id 192.168.0.72
+  bgp router-id 192.168.0.42
   no synchronization
 ! ibgp
   ! ibgp route reflector servers
   !
-  neighbor 192.168.0.65 remote-as 200
-  neighbor 192.168.0.65 description rr parent iosxrv-1
-  neighbor 192.168.0.65 update-source Loopback0
+  neighbor 192.168.0.33 remote-as 200
+  neighbor 192.168.0.33 description rr parent iosxrv-1
+  neighbor 192.168.0.33 update-source Loopback0
   !
-  neighbor 192.168.0.67 remote-as 200
-  neighbor 192.168.0.67 description rr parent iosxrv-2
-  neighbor 192.168.0.67 update-source Loopback0
+  neighbor 192.168.0.36 remote-as 200
+  neighbor 192.168.0.36 description rr parent iosxrv-2
+  neighbor 192.168.0.36 update-source Loopback0
 !
 !
  !
  address-family ipv4
-  network 192.168.0.72 mask 255.255.255.255
-  neighbor 192.168.0.65 activate
-  neighbor 192.168.0.67 activate
+  network 192.168.0.42 mask 255.255.255.255
+  neighbor 192.168.0.33 activate
+  neighbor 192.168.0.36 activate
  exit-address-family
 !
 !
@@ -2208,15 +2234,15 @@ end
 </entry>
             <entry key="AutoNetkit.mgmt_ip" type="string"></entry>
         </extensions>
-        <interface id="0" name="GigabitEthernet2" ipv4="10.0.0.4" netPrefixLenV4="29"/>
-        <interface id="1" name="GigabitEthernet3" ipv4="10.0.0.19" netPrefixLenV4="29"/>
-        <interface id="2" name="GigabitEthernet4" ipv4="10.0.0.10" netPrefixLenV4="30"/>
+        <interface id="0" name="GigabitEthernet2" ipv4="10.1.0.26" netPrefixLenV4="30"/>
+        <interface id="1" name="GigabitEthernet3" ipv4="10.1.128.3" netPrefixLenV4="29"/>
+        <interface id="2" name="GigabitEthernet4" ipv4="10.1.0.30" netPrefixLenV4="30"/>
     </node>
     <node name="csr1000v-3" type="SIMPLE" subtype="CSR1000v" location="825,190" ipv4="192.168.0.15">
         <extensions>
             <entry key="AutoNetkit.ASN" type="Integer">100</entry>
             <entry key="AutoNetkit.ospf_area" type="String">0</entry>
-            <entry key="config" type="string">! IOS Config generated on 2016-02-02 10:54
+            <entry key="config" type="string">! IOS Config generated on 2016-02-04 20:54
 ! by autonetkit_0.21.4
 !
 hostname csr1000v-3
@@ -2280,25 +2306,25 @@ interface GigabitEthernet1
 !
 interface GigabitEthernet2
   description to iosvl2-5
-  ip address 10.3.128.11 255.255.255.248
+  ip address 10.0.0.27 255.255.255.248
   ip ospf cost 1
   no shutdown
 !
 interface GigabitEthernet3
   description to iosvl2-6
-  ip address 10.3.128.3 255.255.255.248
+  ip address 10.0.0.43 255.255.255.248
   ip ospf cost 1
   no shutdown
 !
 interface GigabitEthernet4
   description to iosvl2-9
-  ip address 10.3.0.51 255.255.255.248
+  ip address 10.0.0.19 255.255.255.248
   ip ospf cost 1
   no shutdown
 !
 interface GigabitEthernet5
   description to iosvl2-10
-  ip address 10.3.0.59 255.255.255.248
+  ip address 10.0.0.35 255.255.255.248
   ip ospf cost 1
   no shutdown
 !
@@ -2308,10 +2334,10 @@ router ospf 100
   network 192.168.0.15 0.0.0.0 area 0
   log-adjacency-changes
   passive-interface Loopback0
-  network 10.3.128.8 0.0.0.7 area 0
-  network 10.3.128.0 0.0.0.7 area 0
-  network 10.3.0.48 0.0.0.7 area 0
-  network 10.3.0.56 0.0.0.7 area 0
+  network 10.0.0.24 0.0.0.7 area 0
+  network 10.0.0.40 0.0.0.7 area 0
+  network 10.0.0.16 0.0.0.7 area 0
+  network 10.0.0.32 0.0.0.7 area 4.0.0.4
 !
 !
 router bgp 100
@@ -2344,16 +2370,16 @@ end
             <entry key="AutoNetkit.ibgp_role" type="String">RRC</entry>
             <entry key="AutoNetkit.RR_cluster" type="String">top</entry>
         </extensions>
-        <interface id="0" name="GigabitEthernet2" ipv4="10.3.128.11" netPrefixLenV4="29"/>
-        <interface id="1" name="GigabitEthernet3" ipv4="10.3.128.3" netPrefixLenV4="29"/>
-        <interface id="2" name="GigabitEthernet4" ipv4="10.3.0.51" netPrefixLenV4="29"/>
-        <interface id="3" name="GigabitEthernet5" ipv4="10.3.0.59" netPrefixLenV4="29"/>
+        <interface id="0" name="GigabitEthernet2" ipv4="10.0.0.27" netPrefixLenV4="29"/>
+        <interface id="1" name="GigabitEthernet3" ipv4="10.0.0.43" netPrefixLenV4="29"/>
+        <interface id="2" name="GigabitEthernet4" ipv4="10.0.0.19" netPrefixLenV4="29"/>
+        <interface id="3" name="GigabitEthernet5" ipv4="10.0.0.35" netPrefixLenV4="29"/>
     </node>
     <node name="csr1000v-4" type="SIMPLE" subtype="CSR1000v" location="972,190" ipv4="192.168.0.16">
         <extensions>
             <entry key="AutoNetkit.ASN" type="Integer">100</entry>
             <entry key="AutoNetkit.ospf_area" type="String">0</entry>
-            <entry key="config" type="string">! IOS Config generated on 2016-02-02 10:54
+            <entry key="config" type="string">! IOS Config generated on 2016-02-04 20:54
 ! by autonetkit_0.21.4
 !
 hostname csr1000v-4
@@ -2417,25 +2443,25 @@ interface GigabitEthernet1
 !
 interface GigabitEthernet2
   description to iosvl2-5
-  ip address 10.3.128.12 255.255.255.248
+  ip address 10.0.0.28 255.255.255.248
   ip ospf cost 1
   no shutdown
 !
 interface GigabitEthernet3
   description to iosvl2-6
-  ip address 10.3.128.4 255.255.255.248
+  ip address 10.0.0.44 255.255.255.248
   ip ospf cost 1
   no shutdown
 !
 interface GigabitEthernet4
   description to iosvl2-10
-  ip address 10.3.0.60 255.255.255.248
+  ip address 10.0.0.36 255.255.255.248
   ip ospf cost 1
   no shutdown
 !
 interface GigabitEthernet5
   description to iosvl2-9
-  ip address 10.3.0.52 255.255.255.248
+  ip address 10.0.0.20 255.255.255.248
   ip ospf cost 1
   no shutdown
 !
@@ -2445,10 +2471,10 @@ router ospf 100
   network 192.168.0.16 0.0.0.0 area 0
   log-adjacency-changes
   passive-interface Loopback0
-  network 10.3.128.8 0.0.0.7 area 0
-  network 10.3.128.0 0.0.0.7 area 0
-  network 10.3.0.56 0.0.0.7 area 0
-  network 10.3.0.48 0.0.0.7 area 0
+  network 10.0.0.24 0.0.0.7 area 0
+  network 10.0.0.40 0.0.0.7 area 0
+  network 10.0.0.32 0.0.0.7 area 4.0.0.4
+  network 10.0.0.16 0.0.0.7 area 3.0.0.3
 !
 !
 router bgp 100
@@ -2481,16 +2507,16 @@ end
             <entry key="AutoNetkit.ibgp_role" type="String">RRC</entry>
             <entry key="AutoNetkit.RR_cluster" type="String">top</entry>
         </extensions>
-        <interface id="0" name="GigabitEthernet2" ipv4="10.3.128.12" netPrefixLenV4="29"/>
-        <interface id="1" name="GigabitEthernet3" ipv4="10.3.128.4" netPrefixLenV4="29"/>
-        <interface id="2" name="GigabitEthernet4" ipv4="10.3.0.60" netPrefixLenV4="29"/>
-        <interface id="3" name="GigabitEthernet5" ipv4="10.3.0.52" netPrefixLenV4="29"/>
+        <interface id="0" name="GigabitEthernet2" ipv4="10.0.0.28" netPrefixLenV4="29"/>
+        <interface id="1" name="GigabitEthernet3" ipv4="10.0.0.44" netPrefixLenV4="29"/>
+        <interface id="2" name="GigabitEthernet4" ipv4="10.0.0.36" netPrefixLenV4="29"/>
+        <interface id="3" name="GigabitEthernet5" ipv4="10.0.0.20" netPrefixLenV4="29"/>
     </node>
-    <node name="iosvl2-7" type="SIMPLE" subtype="IOSvL2" location="381,428">
+    <node name="iosvl2-7" type="SIMPLE" subtype="IOSvL2" location="381,431">
         <extensions>
             <entry key="AutoNetkit.ASN" type="Integer">200</entry>
             <entry key="AutoNetkit.IGP" type="String">isis</entry>
-            <entry key="config" type="string">! IOSvL2 Config generated on 2016-02-02 10:54
+            <entry key="config" type="string">! IOSvL2 Config generated on 2016-02-04 20:54
 ! by autonetkit_0.21.4
 !
 version 15.2
@@ -2611,11 +2637,11 @@ end
         <interface id="1" name="GigabitEthernet0/2"/>
         <interface id="2" name="GigabitEthernet0/3"/>
     </node>
-    <node name="iosvl2-8" type="SIMPLE" subtype="IOSvL2" location="381,567">
+    <node name="iosvl2-8" type="SIMPLE" subtype="IOSvL2" location="381,564">
         <extensions>
             <entry key="AutoNetkit.ASN" type="Integer">200</entry>
             <entry key="AutoNetkit.IGP" type="String">isis</entry>
-            <entry key="config" type="string">! IOSvL2 Config generated on 2016-02-02 10:54
+            <entry key="config" type="string">! IOSvL2 Config generated on 2016-02-04 20:54
 ! by autonetkit_0.21.4
 !
 version 15.2
@@ -2740,7 +2766,7 @@ end
         <extensions>
             <entry key="AutoNetkit.ASN" type="Integer">100</entry>
             <entry key="AutoNetkit.ospf_area" type="String">0</entry>
-            <entry key="config" type="string">! IOSvL2 Config generated on 2016-02-02 10:54
+            <entry key="config" type="string">! IOSvL2 Config generated on 2016-02-04 20:54
 ! by autonetkit_0.21.4
 !
 version 15.2
@@ -2872,7 +2898,7 @@ end
         <extensions>
             <entry key="AutoNetkit.ASN" type="Integer">100</entry>
             <entry key="AutoNetkit.ospf_area" type="String">0</entry>
-            <entry key="config" type="string">! IOSvL2 Config generated on 2016-02-02 10:54
+            <entry key="config" type="string">! IOSvL2 Config generated on 2016-02-04 20:54
 ! by autonetkit_0.21.4
 !
 version 15.2
@@ -3003,7 +3029,7 @@ end
     <node name="iosxrv-7" type="SIMPLE" subtype="IOS XRv" location="835,662" ipv4="192.168.0.5">
         <extensions>
             <entry key="AutoNetkit.ASN" type="Integer">100</entry>
-            <entry key="config" type="string">!  IOS-XR Config generated on 2016-02-02 10:54
+            <entry key="config" type="string">!  IOS-XR Config generated on 2016-02-04 20:54
 ! by autonetkit_0.21.4
 !
 hostname iosxrv-7
@@ -3049,27 +3075,27 @@ interface Loopback0
 !
 interface GigabitEthernet0/0/0/0
   description to iosxrv-2
-  ipv4 address 10.0.128.5 255.255.255.252
+  ipv4 address 10.1.0.17 255.255.255.252
   no shutdown
 !
 interface GigabitEthernet0/0/0/1
   description to iosxrv-8
-  ipv4 address 10.3.0.5 255.255.255.252
+  ipv4 address 10.0.128.5 255.255.255.252
   no shutdown
 !
 interface GigabitEthernet0/0/0/2
   description to iosxrv-3
-  ipv4 address 10.3.128.30 255.255.255.252
+  ipv4 address 10.0.0.62 255.255.255.252
   no shutdown
 !
 interface GigabitEthernet0/0/0/3
   description to iosvl2-13
-  ipv4 address 10.3.0.35 255.255.255.248
+  ipv4 address 10.0.0.3 255.255.255.248
   no shutdown
 !
 interface GigabitEthernet0/0/0/4
   description to iosvl2-13
-  ipv4 address 10.3.0.43 255.255.255.248
+  ipv4 address 10.0.0.11 255.255.255.248
   no shutdown
 !
 interface mgmteth0/0/CPU0/0
@@ -3114,26 +3140,14 @@ end-policy
 !
 router static
   address-family ipv4 unicast
-    10.0.128.4 255.255.255.252 Null0 254
-    10.1.128.0 255.255.255.252 Null0 254
-    10.1.128.8 255.255.255.252 Null0 254
-    10.3.0.0 255.255.255.240 Null0 254
-    10.3.0.16 255.255.255.252 Null0 254
-    10.3.0.32 255.255.255.224 Null0 254
-    10.3.128.0 255.255.255.224 Null0 254
+    10.0.0.0 255.255.0.0 Null0 254
   !
 !
 router bgp 100
   bgp router-id 192.168.0.5
   address-family ipv4 unicast
     network 192.168.0.5/32
-    network 10.0.128.4/30
-    network 10.1.128.0/30
-    network 10.1.128.8/30
-    network 10.3.0.0/28
-    network 10.3.0.16/30
-    network 10.3.0.32/27
-    network 10.3.128.0/27
+    network 10.0.0.0/16
   !
 ! iBGP
 ! iBGP clients
@@ -3190,7 +3204,7 @@ router bgp 100
     !
 ! eBGP peers
   !
-  neighbor 10.0.128.6
+  neighbor 10.1.0.18
     description eBGP peer iosxrv-2
     remote-as 200
     address-family ipv4 unicast
@@ -3204,15 +3218,15 @@ router bgp 100
             <entry key="AutoNetkit.ibgp_role" type="String">RR</entry>
             <entry key="AutoNetkit.RR_cluster" type="String">bottom</entry>
         </extensions>
-        <interface id="0" name="GigabitEthernet0/0/0/0" ipv4="10.0.128.5" netPrefixLenV4="30"/>
-        <interface id="1" name="GigabitEthernet0/0/0/1" ipv4="10.3.0.5" netPrefixLenV4="30"/>
-        <interface id="2" name="GigabitEthernet0/0/0/2" ipv4="10.3.128.30" netPrefixLenV4="30"/>
-        <interface id="3" name="GigabitEthernet0/0/0/3" ipv4="10.3.0.35" netPrefixLenV4="29">
+        <interface id="0" name="GigabitEthernet0/0/0/0" ipv4="10.1.0.17" netPrefixLenV4="30"/>
+        <interface id="1" name="GigabitEthernet0/0/0/1" ipv4="10.0.128.5" netPrefixLenV4="30"/>
+        <interface id="2" name="GigabitEthernet0/0/0/2" ipv4="10.0.0.62" netPrefixLenV4="30"/>
+        <interface id="3" name="GigabitEthernet0/0/0/3" ipv4="10.0.0.3" netPrefixLenV4="29">
             <extensions>
                 <entry key="AutoNetkit.vlan" type="Integer">10</entry>
             </extensions>
         </interface>
-        <interface id="4" name="GigabitEthernet0/0/0/4" ipv4="10.3.0.43" netPrefixLenV4="29">
+        <interface id="4" name="GigabitEthernet0/0/0/4" ipv4="10.0.0.11" netPrefixLenV4="29">
             <extensions>
                 <entry key="AutoNetkit.vlan" type="Integer">20</entry>
             </extensions>
@@ -3221,7 +3235,7 @@ router bgp 100
     <node name="iosxrv-8" type="SIMPLE" subtype="IOS XRv" location="982,662" ipv4="192.168.0.6">
         <extensions>
             <entry key="AutoNetkit.ASN" type="Integer">100</entry>
-            <entry key="config" type="string">!  IOS-XR Config generated on 2016-02-02 10:54
+            <entry key="config" type="string">!  IOS-XR Config generated on 2016-02-04 20:54
 ! by autonetkit_0.21.4
 !
 hostname iosxrv-8
@@ -3267,27 +3281,27 @@ interface Loopback0
 !
 interface GigabitEthernet0/0/0/0
   description to iosxrv-7
-  ipv4 address 10.3.0.6 255.255.255.252
+  ipv4 address 10.0.128.6 255.255.255.252
   no shutdown
 !
 interface GigabitEthernet0/0/0/1
   description to iosxrv-6
-  ipv4 address 10.1.128.9 255.255.255.252
+  ipv4 address 10.2.0.9 255.255.255.252
   no shutdown
 !
 interface GigabitEthernet0/0/0/2
   description to iosxrv-4
-  ipv4 address 10.3.0.2 255.255.255.252
+  ipv4 address 10.0.128.2 255.255.255.252
   no shutdown
 !
 interface GigabitEthernet0/0/0/3
   description to iosvl2-14
-  ipv4 address 10.3.0.36 255.255.255.248
+  ipv4 address 10.0.0.4 255.255.255.248
   no shutdown
 !
 interface GigabitEthernet0/0/0/4
   description to iosvl2-14
-  ipv4 address 10.3.0.44 255.255.255.248
+  ipv4 address 10.0.0.12 255.255.255.248
   no shutdown
 !
 interface mgmteth0/0/CPU0/0
@@ -3334,26 +3348,14 @@ end-policy
 !
 router static
   address-family ipv4 unicast
-    10.0.128.4 255.255.255.252 Null0 254
-    10.1.128.0 255.255.255.252 Null0 254
-    10.1.128.8 255.255.255.252 Null0 254
-    10.3.0.0 255.255.255.240 Null0 254
-    10.3.0.16 255.255.255.252 Null0 254
-    10.3.0.32 255.255.255.224 Null0 254
-    10.3.128.0 255.255.255.224 Null0 254
+    10.0.0.0 255.255.0.0 Null0 254
   !
 !
 router bgp 100
   bgp router-id 192.168.0.6
   address-family ipv4 unicast
     network 192.168.0.6/32
-    network 10.0.128.4/30
-    network 10.1.128.0/30
-    network 10.1.128.8/30
-    network 10.3.0.0/28
-    network 10.3.0.16/30
-    network 10.3.0.32/27
-    network 10.3.128.0/27
+    network 10.0.0.0/16
   !
 ! iBGP
 ! iBGP clients
@@ -3410,7 +3412,7 @@ router bgp 100
     !
 ! eBGP peers
   !
-  neighbor 10.1.128.10
+  neighbor 10.2.0.10
     description eBGP peer iosxrv-6
     remote-as 300
     address-family ipv4 unicast
@@ -3424,15 +3426,15 @@ router bgp 100
             <entry key="AutoNetkit.ibgp_role" type="String">RR</entry>
             <entry key="AutoNetkit.RR_cluster" type="String">bottom</entry>
         </extensions>
-        <interface id="0" name="GigabitEthernet0/0/0/0" ipv4="10.3.0.6" netPrefixLenV4="30"/>
-        <interface id="1" name="GigabitEthernet0/0/0/1" ipv4="10.1.128.9" netPrefixLenV4="30"/>
-        <interface id="2" name="GigabitEthernet0/0/0/2" ipv4="10.3.0.2" netPrefixLenV4="30"/>
-        <interface id="3" name="GigabitEthernet0/0/0/3" ipv4="10.3.0.36" netPrefixLenV4="29">
+        <interface id="0" name="GigabitEthernet0/0/0/0" ipv4="10.0.128.6" netPrefixLenV4="30"/>
+        <interface id="1" name="GigabitEthernet0/0/0/1" ipv4="10.2.0.9" netPrefixLenV4="30"/>
+        <interface id="2" name="GigabitEthernet0/0/0/2" ipv4="10.0.128.2" netPrefixLenV4="30"/>
+        <interface id="3" name="GigabitEthernet0/0/0/3" ipv4="10.0.0.4" netPrefixLenV4="29">
             <extensions>
                 <entry key="AutoNetkit.vlan" type="Integer">10</entry>
             </extensions>
         </interface>
-        <interface id="4" name="GigabitEthernet0/0/0/4" ipv4="10.3.0.44" netPrefixLenV4="29">
+        <interface id="4" name="GigabitEthernet0/0/0/4" ipv4="10.0.0.12" netPrefixLenV4="29">
             <extensions>
                 <entry key="AutoNetkit.vlan" type="Integer">20</entry>
             </extensions>
@@ -3441,7 +3443,7 @@ router bgp 100
     <node name="iosvl2-13" type="SIMPLE" subtype="IOSvL2" location="832,784">
         <extensions>
             <entry key="AutoNetkit.ASN" type="Integer">100</entry>
-            <entry key="config" type="string">! IOSvL2 Config generated on 2016-02-02 10:54
+            <entry key="config" type="string">! IOSvL2 Config generated on 2016-02-04 20:54
 ! by autonetkit_0.21.4
 !
 version 15.2
@@ -3581,7 +3583,7 @@ end
     <node name="iosvl2-14" type="SIMPLE" subtype="IOSvL2" location="979,784">
         <extensions>
             <entry key="AutoNetkit.ASN" type="Integer">100</entry>
-            <entry key="config" type="string">! IOSvL2 Config generated on 2016-02-02 10:54
+            <entry key="config" type="string">! IOSvL2 Config generated on 2016-02-04 20:54
 ! by autonetkit_0.21.4
 !
 version 15.2
@@ -3722,7 +3724,7 @@ end
         <extensions>
             <entry key="AutoNetkit.ASN" type="Integer">100</entry>
             <entry key="AutoNetkit.ospf_area" type="String">1.0.0.1</entry>
-            <entry key="config" type="string">! IOS Config generated on 2016-02-02 10:54
+            <entry key="config" type="string">! IOS Config generated on 2016-02-04 20:54
 ! by autonetkit_0.21.4
 !
 hostname iosv-1
@@ -3785,7 +3787,7 @@ interface GigabitEthernet0/0
 !
 interface GigabitEthernet0/1
   description to iosvl2-13
-  ip address 10.3.0.33 255.255.255.248
+  ip address 10.0.0.1 255.255.255.248
   ip ospf cost 1
   duplex full
   speed auto
@@ -3793,7 +3795,7 @@ interface GigabitEthernet0/1
 !
 interface GigabitEthernet0/2
   description to iosvl2-14
-  ip address 10.3.0.41 255.255.255.248
+  ip address 10.0.0.9 255.255.255.248
   ip ospf cost 1
   duplex full
   speed auto
@@ -3801,7 +3803,7 @@ interface GigabitEthernet0/2
 !
 interface GigabitEthernet0/3
   description to lxc-iperf-9
-  ip address 10.3.128.17 255.255.255.252
+  ip address 10.0.0.49 255.255.255.252
   ip ospf cost 1
   duplex full
   speed auto
@@ -3809,7 +3811,7 @@ interface GigabitEthernet0/3
 !
 interface GigabitEthernet0/4
   description to lxc-iperf-10
-  ip address 10.3.0.9 255.255.255.252
+  ip address 10.0.128.9 255.255.255.252
   ip ospf cost 1
   duplex full
   speed auto
@@ -3821,10 +3823,10 @@ router ospf 100
   network 192.168.0.1 0.0.0.0 area 1.0.0.1
   log-adjacency-changes
   passive-interface Loopback0
-  network 10.3.0.32 0.0.0.7 area 1.0.0.1
-  network 10.3.0.40 0.0.0.7 area 1.0.0.1
-  network 10.3.128.16 0.0.0.3 area 1.0.0.1
-  network 10.3.0.8 0.0.0.3 area 1.0.0.1
+  network 10.0.0.0 0.0.0.7 area 1.0.0.1
+  network 10.0.0.8 0.0.0.7 area 1.0.0.1
+  network 10.0.0.48 0.0.0.3 area 1.0.0.1
+  network 10.0.128.8 0.0.0.3 area 1.0.0.1
 !
 !
 router bgp 100
@@ -3857,24 +3859,24 @@ end
             <entry key="AutoNetkit.ibgp_role" type="String">RRC</entry>
             <entry key="AutoNetkit.RR_cluster" type="String">bottom</entry>
         </extensions>
-        <interface id="0" name="GigabitEthernet0/1" ipv4="10.3.0.33" netPrefixLenV4="29">
+        <interface id="0" name="GigabitEthernet0/1" ipv4="10.0.0.1" netPrefixLenV4="29">
             <extensions>
                 <entry key="AutoNetkit.vlan" type="Integer">10</entry>
             </extensions>
         </interface>
-        <interface id="1" name="GigabitEthernet0/2" ipv4="10.3.0.41" netPrefixLenV4="29">
+        <interface id="1" name="GigabitEthernet0/2" ipv4="10.0.0.9" netPrefixLenV4="29">
             <extensions>
                 <entry key="AutoNetkit.vlan" type="Integer">20</entry>
             </extensions>
         </interface>
-        <interface id="2" name="GigabitEthernet0/3" ipv4="10.3.128.17" netPrefixLenV4="30"/>
-        <interface id="3" name="GigabitEthernet0/4" ipv4="10.3.0.9" netPrefixLenV4="30"/>
+        <interface id="2" name="GigabitEthernet0/3" ipv4="10.0.0.49" netPrefixLenV4="30"/>
+        <interface id="3" name="GigabitEthernet0/4" ipv4="10.0.128.9" netPrefixLenV4="30"/>
     </node>
     <node name="iosv-2" type="SIMPLE" subtype="IOSv" location="987,894" ipv4="192.168.0.2">
         <extensions>
             <entry key="AutoNetkit.ASN" type="Integer">100</entry>
             <entry key="AutoNetkit.ospf_area" type="String">2.0.0.2</entry>
-            <entry key="config" type="string">! IOS Config generated on 2016-02-02 10:54
+            <entry key="config" type="string">! IOS Config generated on 2016-02-04 20:54
 ! by autonetkit_0.21.4
 !
 hostname iosv-2
@@ -3937,7 +3939,7 @@ interface GigabitEthernet0/0
 !
 interface GigabitEthernet0/1
   description to iosvl2-14
-  ip address 10.3.0.34 255.255.255.248
+  ip address 10.0.0.2 255.255.255.248
   ip ospf cost 1
   duplex full
   speed auto
@@ -3945,7 +3947,7 @@ interface GigabitEthernet0/1
 !
 interface GigabitEthernet0/2
   description to iosvl2-13
-  ip address 10.3.0.42 255.255.255.248
+  ip address 10.0.0.10 255.255.255.248
   ip ospf cost 1
   duplex full
   speed auto
@@ -3953,7 +3955,7 @@ interface GigabitEthernet0/2
 !
 interface GigabitEthernet0/3
   description to lxc-iperf-11
-  ip address 10.3.0.13 255.255.255.252
+  ip address 10.0.128.13 255.255.255.252
   ip ospf cost 1
   duplex full
   speed auto
@@ -3961,7 +3963,7 @@ interface GigabitEthernet0/3
 !
 interface GigabitEthernet0/4
   description to lxc-iperf-12
-  ip address 10.3.0.17 255.255.255.252
+  ip address 10.0.128.17 255.255.255.252
   ip ospf cost 1
   duplex full
   speed auto
@@ -3973,10 +3975,10 @@ router ospf 100
   network 192.168.0.2 0.0.0.0 area 2.0.0.2
   log-adjacency-changes
   passive-interface Loopback0
-  network 10.3.0.32 0.0.0.7 area 2.0.0.2
-  network 10.3.0.40 0.0.0.7 area 2.0.0.2
-  network 10.3.0.12 0.0.0.3 area 2.0.0.2
-  network 10.3.0.16 0.0.0.3 area 2.0.0.2
+  network 10.0.0.0 0.0.0.7 area 2.0.0.2
+  network 10.0.0.8 0.0.0.7 area 2.0.0.2
+  network 10.0.128.12 0.0.0.3 area 2.0.0.2
+  network 10.0.128.16 0.0.0.3 area 2.0.0.2
 !
 !
 router bgp 100
@@ -4009,18 +4011,18 @@ end
             <entry key="AutoNetkit.ibgp_role" type="String">RRC</entry>
             <entry key="AutoNetkit.RR_cluster" type="String">bottom</entry>
         </extensions>
-        <interface id="0" name="GigabitEthernet0/1" ipv4="10.3.0.34" netPrefixLenV4="29">
+        <interface id="0" name="GigabitEthernet0/1" ipv4="10.0.0.2" netPrefixLenV4="29">
             <extensions>
                 <entry key="AutoNetkit.vlan" type="Integer">10</entry>
             </extensions>
         </interface>
-        <interface id="1" name="GigabitEthernet0/2" ipv4="10.3.0.42" netPrefixLenV4="29">
+        <interface id="1" name="GigabitEthernet0/2" ipv4="10.0.0.10" netPrefixLenV4="29">
             <extensions>
                 <entry key="AutoNetkit.vlan" type="Integer">20</entry>
             </extensions>
         </interface>
-        <interface id="2" name="GigabitEthernet0/3" ipv4="10.3.0.13" netPrefixLenV4="30"/>
-        <interface id="3" name="GigabitEthernet0/4" ipv4="10.3.0.17" netPrefixLenV4="30"/>
+        <interface id="2" name="GigabitEthernet0/3" ipv4="10.0.128.13" netPrefixLenV4="30"/>
+        <interface id="3" name="GigabitEthernet0/4" ipv4="10.0.128.17" netPrefixLenV4="30"/>
     </node>
     <node name="lxc-iperf-1" type="SIMPLE" subtype="lxc-iperf" location="312,384">
         <extensions>
@@ -4064,40 +4066,17 @@ write_files:
   permissions: '0755'
   content: |-
     #!/bin/sh
-    ifconfig eth1 up 10.0.0.25 netmask 255.255.255.248
-    route add -host 192.168.0.65 gw 10.0.0.27 dev eth1
-    route add -host 192.168.0.67 gw 10.0.0.27 dev eth1
-    route add -host 192.168.0.71 gw 10.0.0.27 dev eth1
-    route add -host 192.168.0.72 gw 10.0.0.27 dev eth1
-    route add -host 192.168.0.1 gw 10.0.0.27 dev eth1
-    route add -host 192.168.0.6 gw 10.0.0.27 dev eth1
-    route add -host 192.168.0.15 gw 10.0.0.27 dev eth1
-    route add -host 192.168.0.16 gw 10.0.0.27 dev eth1
-    route add -host 192.168.0.33 gw 10.0.0.27 dev eth1
-    route add -host 192.168.0.34 gw 10.0.0.27 dev eth1
-    route add -host 192.168.0.49 gw 10.0.0.27 dev eth1
-    route add -host 192.168.0.50 gw 10.0.0.27 dev eth1
-    route add -net 10.0.0.0/29 gw 10.0.0.27 dev eth1
-    route add -net 10.0.0.8/30 gw 10.0.0.27 dev eth1
-    route add -net 10.0.0.16/28 gw 10.0.0.27 dev eth1
-    route add -net 10.0.128.0/30 gw 10.0.0.27 dev eth1
-    route add -net 10.0.128.4/30 gw 10.0.0.27 dev eth1
-    route add -net 10.1.128.0/30 gw 10.0.0.27 dev eth1
-    route add -net 10.1.128.8/30 gw 10.0.0.27 dev eth1
-    route add -net 10.3.0.0/28 gw 10.0.0.27 dev eth1
-    route add -net 10.3.0.16/30 gw 10.0.0.27 dev eth1
-    route add -net 10.3.0.32/27 gw 10.0.0.27 dev eth1
-    route add -net 10.3.128.0/27 gw 10.0.0.27 dev eth1
-    route add -net 10.1.0.0/28 gw 10.0.0.27 dev eth1
-    route add -net 10.1.128.4/30 gw 10.0.0.27 dev eth1
-    route add -net 10.2.0.0/28 gw 10.0.0.27 dev eth1
-    route add -net 10.2.128.0/28 gw 10.0.0.27 dev eth1
-    route add -net 192.168.0.2/31 gw 10.0.0.27 dev eth1
-    route add -net 192.168.0.4/31 gw 10.0.0.27 dev eth1
+    ifconfig eth1 up 10.1.128.9 netmask 255.255.255.248
+    route add -net 10.1.0.0/16 gw 10.1.128.11 dev eth1
+    route add -net 10.2.0.0/16 gw 10.1.128.11 dev eth1
+    route add -net 10.0.0.0/16 gw 10.1.128.11 dev eth1
+    route add -net 192.168.0.32/28 gw 10.1.128.11 dev eth1
+    route add -net 192.168.0.48/28 gw 10.1.128.11 dev eth1
+    route add -net 192.168.0.0/27 gw 10.1.128.11 dev eth1
     exit 0
 </entry>
         </extensions>
-        <interface id="0" name="eth1" ipv4="10.0.0.25" netPrefixLenV4="29"/>
+        <interface id="0" name="eth1" ipv4="10.1.128.9" netPrefixLenV4="29"/>
     </node>
     <node name="lxc-iperf-2" type="SIMPLE" subtype="lxc-iperf" location="312,444">
         <extensions>
@@ -4141,40 +4120,17 @@ write_files:
   permissions: '0755'
   content: |-
     #!/bin/sh
-    ifconfig eth1 up 10.0.0.26 netmask 255.255.255.248
-    route add -host 192.168.0.65 gw 10.0.0.27 dev eth1
-    route add -host 192.168.0.67 gw 10.0.0.27 dev eth1
-    route add -host 192.168.0.71 gw 10.0.0.27 dev eth1
-    route add -host 192.168.0.72 gw 10.0.0.27 dev eth1
-    route add -host 192.168.0.1 gw 10.0.0.27 dev eth1
-    route add -host 192.168.0.6 gw 10.0.0.27 dev eth1
-    route add -host 192.168.0.15 gw 10.0.0.27 dev eth1
-    route add -host 192.168.0.16 gw 10.0.0.27 dev eth1
-    route add -host 192.168.0.33 gw 10.0.0.27 dev eth1
-    route add -host 192.168.0.34 gw 10.0.0.27 dev eth1
-    route add -host 192.168.0.49 gw 10.0.0.27 dev eth1
-    route add -host 192.168.0.50 gw 10.0.0.27 dev eth1
-    route add -net 10.0.0.0/29 gw 10.0.0.27 dev eth1
-    route add -net 10.0.0.8/30 gw 10.0.0.27 dev eth1
-    route add -net 10.0.0.16/28 gw 10.0.0.27 dev eth1
-    route add -net 10.0.128.0/30 gw 10.0.0.27 dev eth1
-    route add -net 10.0.128.4/30 gw 10.0.0.27 dev eth1
-    route add -net 10.1.128.0/30 gw 10.0.0.27 dev eth1
-    route add -net 10.1.128.8/30 gw 10.0.0.27 dev eth1
-    route add -net 10.3.0.0/28 gw 10.0.0.27 dev eth1
-    route add -net 10.3.0.16/30 gw 10.0.0.27 dev eth1
-    route add -net 10.3.0.32/27 gw 10.0.0.27 dev eth1
-    route add -net 10.3.128.0/27 gw 10.0.0.27 dev eth1
-    route add -net 10.1.0.0/28 gw 10.0.0.27 dev eth1
-    route add -net 10.1.128.4/30 gw 10.0.0.27 dev eth1
-    route add -net 10.2.0.0/28 gw 10.0.0.27 dev eth1
-    route add -net 10.2.128.0/28 gw 10.0.0.27 dev eth1
-    route add -net 192.168.0.2/31 gw 10.0.0.27 dev eth1
-    route add -net 192.168.0.4/31 gw 10.0.0.27 dev eth1
+    ifconfig eth1 up 10.1.128.10 netmask 255.255.255.248
+    route add -net 10.1.0.0/16 gw 10.1.128.11 dev eth1
+    route add -net 10.2.0.0/16 gw 10.1.128.11 dev eth1
+    route add -net 10.0.0.0/16 gw 10.1.128.11 dev eth1
+    route add -net 192.168.0.32/28 gw 10.1.128.11 dev eth1
+    route add -net 192.168.0.48/28 gw 10.1.128.11 dev eth1
+    route add -net 192.168.0.0/27 gw 10.1.128.11 dev eth1
     exit 0
 </entry>
         </extensions>
-        <interface id="0" name="eth1" ipv4="10.0.0.26" netPrefixLenV4="29"/>
+        <interface id="0" name="eth1" ipv4="10.1.128.10" netPrefixLenV4="29"/>
     </node>
     <node name="lxc-iperf-3" type="SIMPLE" subtype="lxc-iperf" location="312,528">
         <extensions>
@@ -4218,40 +4174,17 @@ write_files:
   permissions: '0755'
   content: |-
     #!/bin/sh
-    ifconfig eth1 up 10.0.0.17 netmask 255.255.255.248
-    route add -host 192.168.0.65 gw 10.0.0.19 dev eth1
-    route add -host 192.168.0.67 gw 10.0.0.19 dev eth1
-    route add -host 192.168.0.71 gw 10.0.0.19 dev eth1
-    route add -host 192.168.0.72 gw 10.0.0.19 dev eth1
-    route add -host 192.168.0.1 gw 10.0.0.19 dev eth1
-    route add -host 192.168.0.6 gw 10.0.0.19 dev eth1
-    route add -host 192.168.0.15 gw 10.0.0.19 dev eth1
-    route add -host 192.168.0.16 gw 10.0.0.19 dev eth1
-    route add -host 192.168.0.33 gw 10.0.0.19 dev eth1
-    route add -host 192.168.0.34 gw 10.0.0.19 dev eth1
-    route add -host 192.168.0.49 gw 10.0.0.19 dev eth1
-    route add -host 192.168.0.50 gw 10.0.0.19 dev eth1
-    route add -net 10.0.0.0/29 gw 10.0.0.19 dev eth1
-    route add -net 10.0.0.8/30 gw 10.0.0.19 dev eth1
-    route add -net 10.0.0.16/28 gw 10.0.0.19 dev eth1
-    route add -net 10.0.128.0/30 gw 10.0.0.19 dev eth1
-    route add -net 10.0.128.4/30 gw 10.0.0.19 dev eth1
-    route add -net 10.1.128.0/30 gw 10.0.0.19 dev eth1
-    route add -net 10.1.128.8/30 gw 10.0.0.19 dev eth1
-    route add -net 10.3.0.0/28 gw 10.0.0.19 dev eth1
-    route add -net 10.3.0.16/30 gw 10.0.0.19 dev eth1
-    route add -net 10.3.0.32/27 gw 10.0.0.19 dev eth1
-    route add -net 10.3.128.0/27 gw 10.0.0.19 dev eth1
-    route add -net 10.1.0.0/28 gw 10.0.0.19 dev eth1
-    route add -net 10.1.128.4/30 gw 10.0.0.19 dev eth1
-    route add -net 10.2.0.0/28 gw 10.0.0.19 dev eth1
-    route add -net 10.2.128.0/28 gw 10.0.0.19 dev eth1
-    route add -net 192.168.0.2/31 gw 10.0.0.19 dev eth1
-    route add -net 192.168.0.4/31 gw 10.0.0.19 dev eth1
+    ifconfig eth1 up 10.1.128.1 netmask 255.255.255.248
+    route add -net 10.1.0.0/16 gw 10.1.128.3 dev eth1
+    route add -net 10.2.0.0/16 gw 10.1.128.3 dev eth1
+    route add -net 10.0.0.0/16 gw 10.1.128.3 dev eth1
+    route add -net 192.168.0.32/28 gw 10.1.128.3 dev eth1
+    route add -net 192.168.0.48/28 gw 10.1.128.3 dev eth1
+    route add -net 192.168.0.0/27 gw 10.1.128.3 dev eth1
     exit 0
 </entry>
         </extensions>
-        <interface id="0" name="eth1" ipv4="10.0.0.17" netPrefixLenV4="29"/>
+        <interface id="0" name="eth1" ipv4="10.1.128.1" netPrefixLenV4="29"/>
     </node>
     <node name="lxc-iperf-4" type="SIMPLE" subtype="lxc-iperf" location="312,588">
         <extensions>
@@ -4295,40 +4228,17 @@ write_files:
   permissions: '0755'
   content: |-
     #!/bin/sh
-    ifconfig eth1 up 10.0.0.18 netmask 255.255.255.248
-    route add -host 192.168.0.65 gw 10.0.0.19 dev eth1
-    route add -host 192.168.0.67 gw 10.0.0.19 dev eth1
-    route add -host 192.168.0.71 gw 10.0.0.19 dev eth1
-    route add -host 192.168.0.72 gw 10.0.0.19 dev eth1
-    route add -host 192.168.0.1 gw 10.0.0.19 dev eth1
-    route add -host 192.168.0.6 gw 10.0.0.19 dev eth1
-    route add -host 192.168.0.15 gw 10.0.0.19 dev eth1
-    route add -host 192.168.0.16 gw 10.0.0.19 dev eth1
-    route add -host 192.168.0.33 gw 10.0.0.19 dev eth1
-    route add -host 192.168.0.34 gw 10.0.0.19 dev eth1
-    route add -host 192.168.0.49 gw 10.0.0.19 dev eth1
-    route add -host 192.168.0.50 gw 10.0.0.19 dev eth1
-    route add -net 10.0.0.0/29 gw 10.0.0.19 dev eth1
-    route add -net 10.0.0.8/30 gw 10.0.0.19 dev eth1
-    route add -net 10.0.0.16/28 gw 10.0.0.19 dev eth1
-    route add -net 10.0.128.0/30 gw 10.0.0.19 dev eth1
-    route add -net 10.0.128.4/30 gw 10.0.0.19 dev eth1
-    route add -net 10.1.128.0/30 gw 10.0.0.19 dev eth1
-    route add -net 10.1.128.8/30 gw 10.0.0.19 dev eth1
-    route add -net 10.3.0.0/28 gw 10.0.0.19 dev eth1
-    route add -net 10.3.0.16/30 gw 10.0.0.19 dev eth1
-    route add -net 10.3.0.32/27 gw 10.0.0.19 dev eth1
-    route add -net 10.3.128.0/27 gw 10.0.0.19 dev eth1
-    route add -net 10.1.0.0/28 gw 10.0.0.19 dev eth1
-    route add -net 10.1.128.4/30 gw 10.0.0.19 dev eth1
-    route add -net 10.2.0.0/28 gw 10.0.0.19 dev eth1
-    route add -net 10.2.128.0/28 gw 10.0.0.19 dev eth1
-    route add -net 192.168.0.2/31 gw 10.0.0.19 dev eth1
-    route add -net 192.168.0.4/31 gw 10.0.0.19 dev eth1
+    ifconfig eth1 up 10.1.128.2 netmask 255.255.255.248
+    route add -net 10.1.0.0/16 gw 10.1.128.3 dev eth1
+    route add -net 10.2.0.0/16 gw 10.1.128.3 dev eth1
+    route add -net 10.0.0.0/16 gw 10.1.128.3 dev eth1
+    route add -net 192.168.0.32/28 gw 10.1.128.3 dev eth1
+    route add -net 192.168.0.48/28 gw 10.1.128.3 dev eth1
+    route add -net 192.168.0.0/27 gw 10.1.128.3 dev eth1
     exit 0
 </entry>
         </extensions>
-        <interface id="0" name="eth1" ipv4="10.0.0.18" netPrefixLenV4="29"/>
+        <interface id="0" name="eth1" ipv4="10.1.128.2" netPrefixLenV4="29"/>
     </node>
     <node name="lxc-iperf-9" type="SIMPLE" subtype="lxc-iperf" location="687,888">
         <extensions>
@@ -4372,40 +4282,17 @@ write_files:
   permissions: '0755'
   content: |-
     #!/bin/sh
-    ifconfig eth1 up 10.3.128.18 netmask 255.255.255.252
-    route add -host 192.168.0.65 gw 10.3.128.17 dev eth1
-    route add -host 192.168.0.67 gw 10.3.128.17 dev eth1
-    route add -host 192.168.0.71 gw 10.3.128.17 dev eth1
-    route add -host 192.168.0.72 gw 10.3.128.17 dev eth1
-    route add -host 192.168.0.1 gw 10.3.128.17 dev eth1
-    route add -host 192.168.0.6 gw 10.3.128.17 dev eth1
-    route add -host 192.168.0.15 gw 10.3.128.17 dev eth1
-    route add -host 192.168.0.16 gw 10.3.128.17 dev eth1
-    route add -host 192.168.0.33 gw 10.3.128.17 dev eth1
-    route add -host 192.168.0.34 gw 10.3.128.17 dev eth1
-    route add -host 192.168.0.49 gw 10.3.128.17 dev eth1
-    route add -host 192.168.0.50 gw 10.3.128.17 dev eth1
-    route add -net 10.0.0.0/29 gw 10.3.128.17 dev eth1
-    route add -net 10.0.0.8/30 gw 10.3.128.17 dev eth1
-    route add -net 10.0.0.16/28 gw 10.3.128.17 dev eth1
-    route add -net 10.0.128.0/30 gw 10.3.128.17 dev eth1
-    route add -net 10.0.128.4/30 gw 10.3.128.17 dev eth1
-    route add -net 10.1.128.0/30 gw 10.3.128.17 dev eth1
-    route add -net 10.1.128.8/30 gw 10.3.128.17 dev eth1
-    route add -net 10.3.0.0/28 gw 10.3.128.17 dev eth1
-    route add -net 10.3.0.16/30 gw 10.3.128.17 dev eth1
-    route add -net 10.3.0.32/27 gw 10.3.128.17 dev eth1
-    route add -net 10.3.128.0/27 gw 10.3.128.17 dev eth1
-    route add -net 10.1.0.0/28 gw 10.3.128.17 dev eth1
-    route add -net 10.1.128.4/30 gw 10.3.128.17 dev eth1
-    route add -net 10.2.0.0/28 gw 10.3.128.17 dev eth1
-    route add -net 10.2.128.0/28 gw 10.3.128.17 dev eth1
-    route add -net 192.168.0.2/31 gw 10.3.128.17 dev eth1
-    route add -net 192.168.0.4/31 gw 10.3.128.17 dev eth1
+    ifconfig eth1 up 10.0.0.50 netmask 255.255.255.252
+    route add -net 10.1.0.0/16 gw 10.0.0.49 dev eth1
+    route add -net 10.2.0.0/16 gw 10.0.0.49 dev eth1
+    route add -net 10.0.0.0/16 gw 10.0.0.49 dev eth1
+    route add -net 192.168.0.32/28 gw 10.0.0.49 dev eth1
+    route add -net 192.168.0.48/28 gw 10.0.0.49 dev eth1
+    route add -net 192.168.0.0/27 gw 10.0.0.49 dev eth1
     exit 0
 </entry>
         </extensions>
-        <interface id="0" name="eth1" ipv4="10.3.128.18" netPrefixLenV4="30"/>
+        <interface id="0" name="eth1" ipv4="10.0.0.50" netPrefixLenV4="30"/>
     </node>
     <node name="lxc-iperf-10" type="SIMPLE" subtype="lxc-iperf" location="684,960">
         <extensions>
@@ -4449,40 +4336,17 @@ write_files:
   permissions: '0755'
   content: |-
     #!/bin/sh
-    ifconfig eth1 up 10.3.0.10 netmask 255.255.255.252
-    route add -host 192.168.0.65 gw 10.3.0.9 dev eth1
-    route add -host 192.168.0.67 gw 10.3.0.9 dev eth1
-    route add -host 192.168.0.71 gw 10.3.0.9 dev eth1
-    route add -host 192.168.0.72 gw 10.3.0.9 dev eth1
-    route add -host 192.168.0.1 gw 10.3.0.9 dev eth1
-    route add -host 192.168.0.6 gw 10.3.0.9 dev eth1
-    route add -host 192.168.0.15 gw 10.3.0.9 dev eth1
-    route add -host 192.168.0.16 gw 10.3.0.9 dev eth1
-    route add -host 192.168.0.33 gw 10.3.0.9 dev eth1
-    route add -host 192.168.0.34 gw 10.3.0.9 dev eth1
-    route add -host 192.168.0.49 gw 10.3.0.9 dev eth1
-    route add -host 192.168.0.50 gw 10.3.0.9 dev eth1
-    route add -net 10.0.0.0/29 gw 10.3.0.9 dev eth1
-    route add -net 10.0.0.8/30 gw 10.3.0.9 dev eth1
-    route add -net 10.0.0.16/28 gw 10.3.0.9 dev eth1
-    route add -net 10.0.128.0/30 gw 10.3.0.9 dev eth1
-    route add -net 10.0.128.4/30 gw 10.3.0.9 dev eth1
-    route add -net 10.1.128.0/30 gw 10.3.0.9 dev eth1
-    route add -net 10.1.128.8/30 gw 10.3.0.9 dev eth1
-    route add -net 10.3.0.0/28 gw 10.3.0.9 dev eth1
-    route add -net 10.3.0.16/30 gw 10.3.0.9 dev eth1
-    route add -net 10.3.0.32/27 gw 10.3.0.9 dev eth1
-    route add -net 10.3.128.0/27 gw 10.3.0.9 dev eth1
-    route add -net 10.1.0.0/28 gw 10.3.0.9 dev eth1
-    route add -net 10.1.128.4/30 gw 10.3.0.9 dev eth1
-    route add -net 10.2.0.0/28 gw 10.3.0.9 dev eth1
-    route add -net 10.2.128.0/28 gw 10.3.0.9 dev eth1
-    route add -net 192.168.0.2/31 gw 10.3.0.9 dev eth1
-    route add -net 192.168.0.4/31 gw 10.3.0.9 dev eth1
+    ifconfig eth1 up 10.0.128.10 netmask 255.255.255.252
+    route add -net 10.1.0.0/16 gw 10.0.128.9 dev eth1
+    route add -net 10.2.0.0/16 gw 10.0.128.9 dev eth1
+    route add -net 10.0.0.0/16 gw 10.0.128.9 dev eth1
+    route add -net 192.168.0.32/28 gw 10.0.128.9 dev eth1
+    route add -net 192.168.0.48/28 gw 10.0.128.9 dev eth1
+    route add -net 192.168.0.0/27 gw 10.0.128.9 dev eth1
     exit 0
 </entry>
         </extensions>
-        <interface id="0" name="eth1" ipv4="10.3.0.10" netPrefixLenV4="30"/>
+        <interface id="0" name="eth1" ipv4="10.0.128.10" netPrefixLenV4="30"/>
     </node>
     <node name="lxc-iperf-11" type="SIMPLE" subtype="lxc-iperf" location="1092,960">
         <extensions>
@@ -4526,40 +4390,17 @@ write_files:
   permissions: '0755'
   content: |-
     #!/bin/sh
-    ifconfig eth1 up 10.3.0.14 netmask 255.255.255.252
-    route add -host 192.168.0.65 gw 10.3.0.13 dev eth1
-    route add -host 192.168.0.67 gw 10.3.0.13 dev eth1
-    route add -host 192.168.0.71 gw 10.3.0.13 dev eth1
-    route add -host 192.168.0.72 gw 10.3.0.13 dev eth1
-    route add -host 192.168.0.1 gw 10.3.0.13 dev eth1
-    route add -host 192.168.0.6 gw 10.3.0.13 dev eth1
-    route add -host 192.168.0.15 gw 10.3.0.13 dev eth1
-    route add -host 192.168.0.16 gw 10.3.0.13 dev eth1
-    route add -host 192.168.0.33 gw 10.3.0.13 dev eth1
-    route add -host 192.168.0.34 gw 10.3.0.13 dev eth1
-    route add -host 192.168.0.49 gw 10.3.0.13 dev eth1
-    route add -host 192.168.0.50 gw 10.3.0.13 dev eth1
-    route add -net 10.0.0.0/29 gw 10.3.0.13 dev eth1
-    route add -net 10.0.0.8/30 gw 10.3.0.13 dev eth1
-    route add -net 10.0.0.16/28 gw 10.3.0.13 dev eth1
-    route add -net 10.0.128.0/30 gw 10.3.0.13 dev eth1
-    route add -net 10.0.128.4/30 gw 10.3.0.13 dev eth1
-    route add -net 10.1.128.0/30 gw 10.3.0.13 dev eth1
-    route add -net 10.1.128.8/30 gw 10.3.0.13 dev eth1
-    route add -net 10.3.0.0/28 gw 10.3.0.13 dev eth1
-    route add -net 10.3.0.16/30 gw 10.3.0.13 dev eth1
-    route add -net 10.3.0.32/27 gw 10.3.0.13 dev eth1
-    route add -net 10.3.128.0/27 gw 10.3.0.13 dev eth1
-    route add -net 10.1.0.0/28 gw 10.3.0.13 dev eth1
-    route add -net 10.1.128.4/30 gw 10.3.0.13 dev eth1
-    route add -net 10.2.0.0/28 gw 10.3.0.13 dev eth1
-    route add -net 10.2.128.0/28 gw 10.3.0.13 dev eth1
-    route add -net 192.168.0.2/31 gw 10.3.0.13 dev eth1
-    route add -net 192.168.0.4/31 gw 10.3.0.13 dev eth1
+    ifconfig eth1 up 10.0.128.14 netmask 255.255.255.252
+    route add -net 10.1.0.0/16 gw 10.0.128.13 dev eth1
+    route add -net 10.2.0.0/16 gw 10.0.128.13 dev eth1
+    route add -net 10.0.0.0/16 gw 10.0.128.13 dev eth1
+    route add -net 192.168.0.32/28 gw 10.0.128.13 dev eth1
+    route add -net 192.168.0.48/28 gw 10.0.128.13 dev eth1
+    route add -net 192.168.0.0/27 gw 10.0.128.13 dev eth1
     exit 0
 </entry>
         </extensions>
-        <interface id="0" name="eth1" ipv4="10.3.0.14" netPrefixLenV4="30"/>
+        <interface id="0" name="eth1" ipv4="10.0.128.14" netPrefixLenV4="30"/>
     </node>
     <node name="lxc-iperf-12" type="SIMPLE" subtype="lxc-iperf" location="1092,888">
         <extensions>
@@ -4603,40 +4444,17 @@ write_files:
   permissions: '0755'
   content: |-
     #!/bin/sh
-    ifconfig eth1 up 10.3.0.18 netmask 255.255.255.252
-    route add -host 192.168.0.65 gw 10.3.0.17 dev eth1
-    route add -host 192.168.0.67 gw 10.3.0.17 dev eth1
-    route add -host 192.168.0.71 gw 10.3.0.17 dev eth1
-    route add -host 192.168.0.72 gw 10.3.0.17 dev eth1
-    route add -host 192.168.0.1 gw 10.3.0.17 dev eth1
-    route add -host 192.168.0.6 gw 10.3.0.17 dev eth1
-    route add -host 192.168.0.15 gw 10.3.0.17 dev eth1
-    route add -host 192.168.0.16 gw 10.3.0.17 dev eth1
-    route add -host 192.168.0.33 gw 10.3.0.17 dev eth1
-    route add -host 192.168.0.34 gw 10.3.0.17 dev eth1
-    route add -host 192.168.0.49 gw 10.3.0.17 dev eth1
-    route add -host 192.168.0.50 gw 10.3.0.17 dev eth1
-    route add -net 10.0.0.0/29 gw 10.3.0.17 dev eth1
-    route add -net 10.0.0.8/30 gw 10.3.0.17 dev eth1
-    route add -net 10.0.0.16/28 gw 10.3.0.17 dev eth1
-    route add -net 10.0.128.0/30 gw 10.3.0.17 dev eth1
-    route add -net 10.0.128.4/30 gw 10.3.0.17 dev eth1
-    route add -net 10.1.128.0/30 gw 10.3.0.17 dev eth1
-    route add -net 10.1.128.8/30 gw 10.3.0.17 dev eth1
-    route add -net 10.3.0.0/28 gw 10.3.0.17 dev eth1
-    route add -net 10.3.0.16/30 gw 10.3.0.17 dev eth1
-    route add -net 10.3.0.32/27 gw 10.3.0.17 dev eth1
-    route add -net 10.3.128.0/27 gw 10.3.0.17 dev eth1
-    route add -net 10.1.0.0/28 gw 10.3.0.17 dev eth1
-    route add -net 10.1.128.4/30 gw 10.3.0.17 dev eth1
-    route add -net 10.2.0.0/28 gw 10.3.0.17 dev eth1
-    route add -net 10.2.128.0/28 gw 10.3.0.17 dev eth1
-    route add -net 192.168.0.2/31 gw 10.3.0.17 dev eth1
-    route add -net 192.168.0.4/31 gw 10.3.0.17 dev eth1
+    ifconfig eth1 up 10.0.128.18 netmask 255.255.255.252
+    route add -net 10.1.0.0/16 gw 10.0.128.17 dev eth1
+    route add -net 10.2.0.0/16 gw 10.0.128.17 dev eth1
+    route add -net 10.0.0.0/16 gw 10.0.128.17 dev eth1
+    route add -net 192.168.0.32/28 gw 10.0.128.17 dev eth1
+    route add -net 192.168.0.48/28 gw 10.0.128.17 dev eth1
+    route add -net 192.168.0.0/27 gw 10.0.128.17 dev eth1
     exit 0
 </entry>
         </extensions>
-        <interface id="0" name="eth1" ipv4="10.3.0.18" netPrefixLenV4="30"/>
+        <interface id="0" name="eth1" ipv4="10.0.128.18" netPrefixLenV4="30"/>
     </node>
     <node name="lxc-iperf-13" type="SIMPLE" subtype="lxc-iperf" location="828,24">
         <extensions>
@@ -4680,69 +4498,23 @@ write_files:
   permissions: '0755'
   content: |-
     #!/bin/sh
-    ifconfig eth1 up 10.3.0.49 netmask 255.255.255.248
-    route add -host 192.168.0.65 gw 10.3.0.51 dev eth1
-    route add -host 192.168.0.67 gw 10.3.0.51 dev eth1
-    route add -host 192.168.0.71 gw 10.3.0.51 dev eth1
-    route add -host 192.168.0.72 gw 10.3.0.51 dev eth1
-    route add -host 192.168.0.1 gw 10.3.0.51 dev eth1
-    route add -host 192.168.0.6 gw 10.3.0.51 dev eth1
-    route add -host 192.168.0.15 gw 10.3.0.51 dev eth1
-    route add -host 192.168.0.16 gw 10.3.0.51 dev eth1
-    route add -host 192.168.0.33 gw 10.3.0.51 dev eth1
-    route add -host 192.168.0.34 gw 10.3.0.51 dev eth1
-    route add -host 192.168.0.49 gw 10.3.0.51 dev eth1
-    route add -host 192.168.0.50 gw 10.3.0.51 dev eth1
-    route add -net 10.0.0.0/29 gw 10.3.0.51 dev eth1
-    route add -net 10.0.0.8/30 gw 10.3.0.51 dev eth1
-    route add -net 10.0.0.16/28 gw 10.3.0.51 dev eth1
-    route add -net 10.0.128.0/30 gw 10.3.0.51 dev eth1
-    route add -net 10.0.128.4/30 gw 10.3.0.51 dev eth1
-    route add -net 10.1.128.0/30 gw 10.3.0.51 dev eth1
-    route add -net 10.1.128.8/30 gw 10.3.0.51 dev eth1
-    route add -net 10.3.0.0/28 gw 10.3.0.51 dev eth1
-    route add -net 10.3.0.16/30 gw 10.3.0.51 dev eth1
-    route add -net 10.3.0.32/27 gw 10.3.0.51 dev eth1
-    route add -net 10.3.128.0/27 gw 10.3.0.51 dev eth1
-    route add -net 10.1.0.0/28 gw 10.3.0.51 dev eth1
-    route add -net 10.1.128.4/30 gw 10.3.0.51 dev eth1
-    route add -net 10.2.0.0/28 gw 10.3.0.51 dev eth1
-    route add -net 10.2.128.0/28 gw 10.3.0.51 dev eth1
-    route add -net 192.168.0.2/31 gw 10.3.0.51 dev eth1
-    route add -net 192.168.0.4/31 gw 10.3.0.51 dev eth1
-    route add -host 192.168.0.65 gw 10.3.0.52 dev eth1
-    route add -host 192.168.0.67 gw 10.3.0.52 dev eth1
-    route add -host 192.168.0.71 gw 10.3.0.52 dev eth1
-    route add -host 192.168.0.72 gw 10.3.0.52 dev eth1
-    route add -host 192.168.0.1 gw 10.3.0.52 dev eth1
-    route add -host 192.168.0.6 gw 10.3.0.52 dev eth1
-    route add -host 192.168.0.15 gw 10.3.0.52 dev eth1
-    route add -host 192.168.0.16 gw 10.3.0.52 dev eth1
-    route add -host 192.168.0.33 gw 10.3.0.52 dev eth1
-    route add -host 192.168.0.34 gw 10.3.0.52 dev eth1
-    route add -host 192.168.0.49 gw 10.3.0.52 dev eth1
-    route add -host 192.168.0.50 gw 10.3.0.52 dev eth1
-    route add -net 10.0.0.0/29 gw 10.3.0.52 dev eth1
-    route add -net 10.0.0.8/30 gw 10.3.0.52 dev eth1
-    route add -net 10.0.0.16/28 gw 10.3.0.52 dev eth1
-    route add -net 10.0.128.0/30 gw 10.3.0.52 dev eth1
-    route add -net 10.0.128.4/30 gw 10.3.0.52 dev eth1
-    route add -net 10.1.128.0/30 gw 10.3.0.52 dev eth1
-    route add -net 10.1.128.8/30 gw 10.3.0.52 dev eth1
-    route add -net 10.3.0.0/28 gw 10.3.0.52 dev eth1
-    route add -net 10.3.0.16/30 gw 10.3.0.52 dev eth1
-    route add -net 10.3.0.32/27 gw 10.3.0.52 dev eth1
-    route add -net 10.3.128.0/27 gw 10.3.0.52 dev eth1
-    route add -net 10.1.0.0/28 gw 10.3.0.52 dev eth1
-    route add -net 10.1.128.4/30 gw 10.3.0.52 dev eth1
-    route add -net 10.2.0.0/28 gw 10.3.0.52 dev eth1
-    route add -net 10.2.128.0/28 gw 10.3.0.52 dev eth1
-    route add -net 192.168.0.2/31 gw 10.3.0.52 dev eth1
-    route add -net 192.168.0.4/31 gw 10.3.0.52 dev eth1
+    ifconfig eth1 up 10.0.0.17 netmask 255.255.255.248
+    route add -net 10.1.0.0/16 gw 10.0.0.19 dev eth1
+    route add -net 10.2.0.0/16 gw 10.0.0.19 dev eth1
+    route add -net 10.0.0.0/16 gw 10.0.0.19 dev eth1
+    route add -net 192.168.0.32/28 gw 10.0.0.19 dev eth1
+    route add -net 192.168.0.48/28 gw 10.0.0.19 dev eth1
+    route add -net 192.168.0.0/27 gw 10.0.0.19 dev eth1
+    route add -net 10.1.0.0/16 gw 10.0.0.20 dev eth1
+    route add -net 10.2.0.0/16 gw 10.0.0.20 dev eth1
+    route add -net 10.0.0.0/16 gw 10.0.0.20 dev eth1
+    route add -net 192.168.0.32/28 gw 10.0.0.20 dev eth1
+    route add -net 192.168.0.48/28 gw 10.0.0.20 dev eth1
+    route add -net 192.168.0.0/27 gw 10.0.0.20 dev eth1
     exit 0
 </entry>
         </extensions>
-        <interface id="0" name="eth1" ipv4="10.3.0.49" netPrefixLenV4="29"/>
+        <interface id="0" name="eth1" ipv4="10.0.0.17" netPrefixLenV4="29"/>
     </node>
     <node name="lxc-iperf-14" type="SIMPLE" subtype="lxc-iperf" location="756,24">
         <extensions>
@@ -4786,69 +4558,23 @@ write_files:
   permissions: '0755'
   content: |-
     #!/bin/sh
-    ifconfig eth1 up 10.3.0.50 netmask 255.255.255.248
-    route add -host 192.168.0.65 gw 10.3.0.51 dev eth1
-    route add -host 192.168.0.67 gw 10.3.0.51 dev eth1
-    route add -host 192.168.0.71 gw 10.3.0.51 dev eth1
-    route add -host 192.168.0.72 gw 10.3.0.51 dev eth1
-    route add -host 192.168.0.1 gw 10.3.0.51 dev eth1
-    route add -host 192.168.0.6 gw 10.3.0.51 dev eth1
-    route add -host 192.168.0.15 gw 10.3.0.51 dev eth1
-    route add -host 192.168.0.16 gw 10.3.0.51 dev eth1
-    route add -host 192.168.0.33 gw 10.3.0.51 dev eth1
-    route add -host 192.168.0.34 gw 10.3.0.51 dev eth1
-    route add -host 192.168.0.49 gw 10.3.0.51 dev eth1
-    route add -host 192.168.0.50 gw 10.3.0.51 dev eth1
-    route add -net 10.0.0.0/29 gw 10.3.0.51 dev eth1
-    route add -net 10.0.0.8/30 gw 10.3.0.51 dev eth1
-    route add -net 10.0.0.16/28 gw 10.3.0.51 dev eth1
-    route add -net 10.0.128.0/30 gw 10.3.0.51 dev eth1
-    route add -net 10.0.128.4/30 gw 10.3.0.51 dev eth1
-    route add -net 10.1.128.0/30 gw 10.3.0.51 dev eth1
-    route add -net 10.1.128.8/30 gw 10.3.0.51 dev eth1
-    route add -net 10.3.0.0/28 gw 10.3.0.51 dev eth1
-    route add -net 10.3.0.16/30 gw 10.3.0.51 dev eth1
-    route add -net 10.3.0.32/27 gw 10.3.0.51 dev eth1
-    route add -net 10.3.128.0/27 gw 10.3.0.51 dev eth1
-    route add -net 10.1.0.0/28 gw 10.3.0.51 dev eth1
-    route add -net 10.1.128.4/30 gw 10.3.0.51 dev eth1
-    route add -net 10.2.0.0/28 gw 10.3.0.51 dev eth1
-    route add -net 10.2.128.0/28 gw 10.3.0.51 dev eth1
-    route add -net 192.168.0.2/31 gw 10.3.0.51 dev eth1
-    route add -net 192.168.0.4/31 gw 10.3.0.51 dev eth1
-    route add -host 192.168.0.65 gw 10.3.0.52 dev eth1
-    route add -host 192.168.0.67 gw 10.3.0.52 dev eth1
-    route add -host 192.168.0.71 gw 10.3.0.52 dev eth1
-    route add -host 192.168.0.72 gw 10.3.0.52 dev eth1
-    route add -host 192.168.0.1 gw 10.3.0.52 dev eth1
-    route add -host 192.168.0.6 gw 10.3.0.52 dev eth1
-    route add -host 192.168.0.15 gw 10.3.0.52 dev eth1
-    route add -host 192.168.0.16 gw 10.3.0.52 dev eth1
-    route add -host 192.168.0.33 gw 10.3.0.52 dev eth1
-    route add -host 192.168.0.34 gw 10.3.0.52 dev eth1
-    route add -host 192.168.0.49 gw 10.3.0.52 dev eth1
-    route add -host 192.168.0.50 gw 10.3.0.52 dev eth1
-    route add -net 10.0.0.0/29 gw 10.3.0.52 dev eth1
-    route add -net 10.0.0.8/30 gw 10.3.0.52 dev eth1
-    route add -net 10.0.0.16/28 gw 10.3.0.52 dev eth1
-    route add -net 10.0.128.0/30 gw 10.3.0.52 dev eth1
-    route add -net 10.0.128.4/30 gw 10.3.0.52 dev eth1
-    route add -net 10.1.128.0/30 gw 10.3.0.52 dev eth1
-    route add -net 10.1.128.8/30 gw 10.3.0.52 dev eth1
-    route add -net 10.3.0.0/28 gw 10.3.0.52 dev eth1
-    route add -net 10.3.0.16/30 gw 10.3.0.52 dev eth1
-    route add -net 10.3.0.32/27 gw 10.3.0.52 dev eth1
-    route add -net 10.3.128.0/27 gw 10.3.0.52 dev eth1
-    route add -net 10.1.0.0/28 gw 10.3.0.52 dev eth1
-    route add -net 10.1.128.4/30 gw 10.3.0.52 dev eth1
-    route add -net 10.2.0.0/28 gw 10.3.0.52 dev eth1
-    route add -net 10.2.128.0/28 gw 10.3.0.52 dev eth1
-    route add -net 192.168.0.2/31 gw 10.3.0.52 dev eth1
-    route add -net 192.168.0.4/31 gw 10.3.0.52 dev eth1
+    ifconfig eth1 up 10.0.0.18 netmask 255.255.255.248
+    route add -net 10.1.0.0/16 gw 10.0.0.19 dev eth1
+    route add -net 10.2.0.0/16 gw 10.0.0.19 dev eth1
+    route add -net 10.0.0.0/16 gw 10.0.0.19 dev eth1
+    route add -net 192.168.0.32/28 gw 10.0.0.19 dev eth1
+    route add -net 192.168.0.48/28 gw 10.0.0.19 dev eth1
+    route add -net 192.168.0.0/27 gw 10.0.0.19 dev eth1
+    route add -net 10.1.0.0/16 gw 10.0.0.20 dev eth1
+    route add -net 10.2.0.0/16 gw 10.0.0.20 dev eth1
+    route add -net 10.0.0.0/16 gw 10.0.0.20 dev eth1
+    route add -net 192.168.0.32/28 gw 10.0.0.20 dev eth1
+    route add -net 192.168.0.48/28 gw 10.0.0.20 dev eth1
+    route add -net 192.168.0.0/27 gw 10.0.0.20 dev eth1
     exit 0
 </entry>
         </extensions>
-        <interface id="0" name="eth1" ipv4="10.3.0.50" netPrefixLenV4="29"/>
+        <interface id="0" name="eth1" ipv4="10.0.0.18" netPrefixLenV4="29"/>
     </node>
     <node name="lxc-iperf-15" type="SIMPLE" subtype="lxc-iperf" location="972,24">
         <extensions>
@@ -4892,69 +4618,23 @@ write_files:
   permissions: '0755'
   content: |-
     #!/bin/sh
-    ifconfig eth1 up 10.3.0.57 netmask 255.255.255.248
-    route add -host 192.168.0.65 gw 10.3.0.59 dev eth1
-    route add -host 192.168.0.67 gw 10.3.0.59 dev eth1
-    route add -host 192.168.0.71 gw 10.3.0.59 dev eth1
-    route add -host 192.168.0.72 gw 10.3.0.59 dev eth1
-    route add -host 192.168.0.1 gw 10.3.0.59 dev eth1
-    route add -host 192.168.0.6 gw 10.3.0.59 dev eth1
-    route add -host 192.168.0.15 gw 10.3.0.59 dev eth1
-    route add -host 192.168.0.16 gw 10.3.0.59 dev eth1
-    route add -host 192.168.0.33 gw 10.3.0.59 dev eth1
-    route add -host 192.168.0.34 gw 10.3.0.59 dev eth1
-    route add -host 192.168.0.49 gw 10.3.0.59 dev eth1
-    route add -host 192.168.0.50 gw 10.3.0.59 dev eth1
-    route add -net 10.0.0.0/29 gw 10.3.0.59 dev eth1
-    route add -net 10.0.0.8/30 gw 10.3.0.59 dev eth1
-    route add -net 10.0.0.16/28 gw 10.3.0.59 dev eth1
-    route add -net 10.0.128.0/30 gw 10.3.0.59 dev eth1
-    route add -net 10.0.128.4/30 gw 10.3.0.59 dev eth1
-    route add -net 10.1.128.0/30 gw 10.3.0.59 dev eth1
-    route add -net 10.1.128.8/30 gw 10.3.0.59 dev eth1
-    route add -net 10.3.0.0/28 gw 10.3.0.59 dev eth1
-    route add -net 10.3.0.16/30 gw 10.3.0.59 dev eth1
-    route add -net 10.3.0.32/27 gw 10.3.0.59 dev eth1
-    route add -net 10.3.128.0/27 gw 10.3.0.59 dev eth1
-    route add -net 10.1.0.0/28 gw 10.3.0.59 dev eth1
-    route add -net 10.1.128.4/30 gw 10.3.0.59 dev eth1
-    route add -net 10.2.0.0/28 gw 10.3.0.59 dev eth1
-    route add -net 10.2.128.0/28 gw 10.3.0.59 dev eth1
-    route add -net 192.168.0.2/31 gw 10.3.0.59 dev eth1
-    route add -net 192.168.0.4/31 gw 10.3.0.59 dev eth1
-    route add -host 192.168.0.65 gw 10.3.0.60 dev eth1
-    route add -host 192.168.0.67 gw 10.3.0.60 dev eth1
-    route add -host 192.168.0.71 gw 10.3.0.60 dev eth1
-    route add -host 192.168.0.72 gw 10.3.0.60 dev eth1
-    route add -host 192.168.0.1 gw 10.3.0.60 dev eth1
-    route add -host 192.168.0.6 gw 10.3.0.60 dev eth1
-    route add -host 192.168.0.15 gw 10.3.0.60 dev eth1
-    route add -host 192.168.0.16 gw 10.3.0.60 dev eth1
-    route add -host 192.168.0.33 gw 10.3.0.60 dev eth1
-    route add -host 192.168.0.34 gw 10.3.0.60 dev eth1
-    route add -host 192.168.0.49 gw 10.3.0.60 dev eth1
-    route add -host 192.168.0.50 gw 10.3.0.60 dev eth1
-    route add -net 10.0.0.0/29 gw 10.3.0.60 dev eth1
-    route add -net 10.0.0.8/30 gw 10.3.0.60 dev eth1
-    route add -net 10.0.0.16/28 gw 10.3.0.60 dev eth1
-    route add -net 10.0.128.0/30 gw 10.3.0.60 dev eth1
-    route add -net 10.0.128.4/30 gw 10.3.0.60 dev eth1
-    route add -net 10.1.128.0/30 gw 10.3.0.60 dev eth1
-    route add -net 10.1.128.8/30 gw 10.3.0.60 dev eth1
-    route add -net 10.3.0.0/28 gw 10.3.0.60 dev eth1
-    route add -net 10.3.0.16/30 gw 10.3.0.60 dev eth1
-    route add -net 10.3.0.32/27 gw 10.3.0.60 dev eth1
-    route add -net 10.3.128.0/27 gw 10.3.0.60 dev eth1
-    route add -net 10.1.0.0/28 gw 10.3.0.60 dev eth1
-    route add -net 10.1.128.4/30 gw 10.3.0.60 dev eth1
-    route add -net 10.2.0.0/28 gw 10.3.0.60 dev eth1
-    route add -net 10.2.128.0/28 gw 10.3.0.60 dev eth1
-    route add -net 192.168.0.2/31 gw 10.3.0.60 dev eth1
-    route add -net 192.168.0.4/31 gw 10.3.0.60 dev eth1
+    ifconfig eth1 up 10.0.0.33 netmask 255.255.255.248
+    route add -net 10.1.0.0/16 gw 10.0.0.35 dev eth1
+    route add -net 10.2.0.0/16 gw 10.0.0.35 dev eth1
+    route add -net 10.0.0.0/16 gw 10.0.0.35 dev eth1
+    route add -net 192.168.0.32/28 gw 10.0.0.35 dev eth1
+    route add -net 192.168.0.48/28 gw 10.0.0.35 dev eth1
+    route add -net 192.168.0.0/27 gw 10.0.0.35 dev eth1
+    route add -net 10.1.0.0/16 gw 10.0.0.36 dev eth1
+    route add -net 10.2.0.0/16 gw 10.0.0.36 dev eth1
+    route add -net 10.0.0.0/16 gw 10.0.0.36 dev eth1
+    route add -net 192.168.0.32/28 gw 10.0.0.36 dev eth1
+    route add -net 192.168.0.48/28 gw 10.0.0.36 dev eth1
+    route add -net 192.168.0.0/27 gw 10.0.0.36 dev eth1
     exit 0
 </entry>
         </extensions>
-        <interface id="0" name="eth1" ipv4="10.3.0.57" netPrefixLenV4="29"/>
+        <interface id="0" name="eth1" ipv4="10.0.0.33" netPrefixLenV4="29"/>
     </node>
     <node name="lxc-iperf-16" type="SIMPLE" subtype="lxc-iperf" location="1044,24">
         <extensions>
@@ -4998,73 +4678,27 @@ write_files:
   permissions: '0755'
   content: |-
     #!/bin/sh
-    ifconfig eth1 up 10.3.0.58 netmask 255.255.255.248
-    route add -host 192.168.0.65 gw 10.3.0.59 dev eth1
-    route add -host 192.168.0.67 gw 10.3.0.59 dev eth1
-    route add -host 192.168.0.71 gw 10.3.0.59 dev eth1
-    route add -host 192.168.0.72 gw 10.3.0.59 dev eth1
-    route add -host 192.168.0.1 gw 10.3.0.59 dev eth1
-    route add -host 192.168.0.6 gw 10.3.0.59 dev eth1
-    route add -host 192.168.0.15 gw 10.3.0.59 dev eth1
-    route add -host 192.168.0.16 gw 10.3.0.59 dev eth1
-    route add -host 192.168.0.33 gw 10.3.0.59 dev eth1
-    route add -host 192.168.0.34 gw 10.3.0.59 dev eth1
-    route add -host 192.168.0.49 gw 10.3.0.59 dev eth1
-    route add -host 192.168.0.50 gw 10.3.0.59 dev eth1
-    route add -net 10.0.0.0/29 gw 10.3.0.59 dev eth1
-    route add -net 10.0.0.8/30 gw 10.3.0.59 dev eth1
-    route add -net 10.0.0.16/28 gw 10.3.0.59 dev eth1
-    route add -net 10.0.128.0/30 gw 10.3.0.59 dev eth1
-    route add -net 10.0.128.4/30 gw 10.3.0.59 dev eth1
-    route add -net 10.1.128.0/30 gw 10.3.0.59 dev eth1
-    route add -net 10.1.128.8/30 gw 10.3.0.59 dev eth1
-    route add -net 10.3.0.0/28 gw 10.3.0.59 dev eth1
-    route add -net 10.3.0.16/30 gw 10.3.0.59 dev eth1
-    route add -net 10.3.0.32/27 gw 10.3.0.59 dev eth1
-    route add -net 10.3.128.0/27 gw 10.3.0.59 dev eth1
-    route add -net 10.1.0.0/28 gw 10.3.0.59 dev eth1
-    route add -net 10.1.128.4/30 gw 10.3.0.59 dev eth1
-    route add -net 10.2.0.0/28 gw 10.3.0.59 dev eth1
-    route add -net 10.2.128.0/28 gw 10.3.0.59 dev eth1
-    route add -net 192.168.0.2/31 gw 10.3.0.59 dev eth1
-    route add -net 192.168.0.4/31 gw 10.3.0.59 dev eth1
-    route add -host 192.168.0.65 gw 10.3.0.60 dev eth1
-    route add -host 192.168.0.67 gw 10.3.0.60 dev eth1
-    route add -host 192.168.0.71 gw 10.3.0.60 dev eth1
-    route add -host 192.168.0.72 gw 10.3.0.60 dev eth1
-    route add -host 192.168.0.1 gw 10.3.0.60 dev eth1
-    route add -host 192.168.0.6 gw 10.3.0.60 dev eth1
-    route add -host 192.168.0.15 gw 10.3.0.60 dev eth1
-    route add -host 192.168.0.16 gw 10.3.0.60 dev eth1
-    route add -host 192.168.0.33 gw 10.3.0.60 dev eth1
-    route add -host 192.168.0.34 gw 10.3.0.60 dev eth1
-    route add -host 192.168.0.49 gw 10.3.0.60 dev eth1
-    route add -host 192.168.0.50 gw 10.3.0.60 dev eth1
-    route add -net 10.0.0.0/29 gw 10.3.0.60 dev eth1
-    route add -net 10.0.0.8/30 gw 10.3.0.60 dev eth1
-    route add -net 10.0.0.16/28 gw 10.3.0.60 dev eth1
-    route add -net 10.0.128.0/30 gw 10.3.0.60 dev eth1
-    route add -net 10.0.128.4/30 gw 10.3.0.60 dev eth1
-    route add -net 10.1.128.0/30 gw 10.3.0.60 dev eth1
-    route add -net 10.1.128.8/30 gw 10.3.0.60 dev eth1
-    route add -net 10.3.0.0/28 gw 10.3.0.60 dev eth1
-    route add -net 10.3.0.16/30 gw 10.3.0.60 dev eth1
-    route add -net 10.3.0.32/27 gw 10.3.0.60 dev eth1
-    route add -net 10.3.128.0/27 gw 10.3.0.60 dev eth1
-    route add -net 10.1.0.0/28 gw 10.3.0.60 dev eth1
-    route add -net 10.1.128.4/30 gw 10.3.0.60 dev eth1
-    route add -net 10.2.0.0/28 gw 10.3.0.60 dev eth1
-    route add -net 10.2.128.0/28 gw 10.3.0.60 dev eth1
-    route add -net 192.168.0.2/31 gw 10.3.0.60 dev eth1
-    route add -net 192.168.0.4/31 gw 10.3.0.60 dev eth1
+    ifconfig eth1 up 10.0.0.34 netmask 255.255.255.248
+    route add -net 10.1.0.0/16 gw 10.0.0.35 dev eth1
+    route add -net 10.2.0.0/16 gw 10.0.0.35 dev eth1
+    route add -net 10.0.0.0/16 gw 10.0.0.35 dev eth1
+    route add -net 192.168.0.32/28 gw 10.0.0.35 dev eth1
+    route add -net 192.168.0.48/28 gw 10.0.0.35 dev eth1
+    route add -net 192.168.0.0/27 gw 10.0.0.35 dev eth1
+    route add -net 10.1.0.0/16 gw 10.0.0.36 dev eth1
+    route add -net 10.2.0.0/16 gw 10.0.0.36 dev eth1
+    route add -net 10.0.0.0/16 gw 10.0.0.36 dev eth1
+    route add -net 192.168.0.32/28 gw 10.0.0.36 dev eth1
+    route add -net 192.168.0.48/28 gw 10.0.0.36 dev eth1
+    route add -net 192.168.0.0/27 gw 10.0.0.36 dev eth1
     exit 0
 </entry>
         </extensions>
-        <interface id="0" name="eth1" ipv4="10.3.0.58" netPrefixLenV4="29"/>
+        <interface id="0" name="eth1" ipv4="10.0.0.34" netPrefixLenV4="29"/>
     </node>
-    <node name="nx-osv-1" type="SIMPLE" subtype="NX-OSv" location="1418,432" ipv4="192.168.0.33">
+    <node name="nx-osv-1" type="SIMPLE" subtype="NX-OSv" location="1418,432" ipv4="192.168.0.49">
         <extensions>
-            <entry key="config" type="string">! NX-OSv Config generated on 2016-02-02 10:54
+            <entry key="config" type="string">! NX-OSv Config generated on 2016-02-04 20:54
 ! by autonetkit_0.21.4
 !
 version 6.2(1)
@@ -5113,12 +4747,12 @@ hardware forwarding unicast trace
 
 interface Loopback0
   description Loopback
-  ip address 192.168.0.33/32
+  ip address 192.168.0.49/32
   ip router eigrp 300
 
 interface Ethernet2/1
   description to iosvl2-4
-  ip address 10.1.0.9/29
+  ip address 10.2.0.17/29
   ip router eigrp 300
   duplex full
   mac-address fa16.3e00.0001
@@ -5126,7 +4760,7 @@ interface Ethernet2/1
 
 interface Ethernet2/2
   description to iosvl2-3
-  ip address 10.1.0.1/29
+  ip address 10.2.0.1/29
   ip router eigrp 300
   duplex full
   mac-address fa16.3e00.0002
@@ -5134,7 +4768,7 @@ interface Ethernet2/2
 
 interface Ethernet2/3
   description to iosvl2-11
-  ip address 10.2.0.1/29
+  ip address 10.2.0.25/29
   ip router eigrp 300
   duplex full
   mac-address fa16.3e00.0003
@@ -5142,7 +4776,7 @@ interface Ethernet2/3
 
 interface Ethernet2/4
   description to iosvl2-12
-  ip address 10.2.128.9/29
+  ip address 10.2.128.17/29
   ip router eigrp 300
   duplex full
   mac-address fa16.3e00.0004
@@ -5162,32 +4796,32 @@ line console
 line vty
 router eigrp 300
  autonomous-system 300
- router-id 192.168.0.33
+ router-id 192.168.0.49
  address-family ipv4 unicast
 router bgp 300
-  router-id 192.168.0.33
+  router-id 192.168.0.49
   address-family ipv4 unicast
-    network 192.168.0.33/32
+    network 192.168.0.49/32
   !
 ! iBGP
 !
 ! iBGP peers
   !
-  neighbor 192.168.0.49 remote-as 300
+  neighbor 192.168.0.52 remote-as 300
     description iBGP peer iosxrv-5
     update-source Loopback0
     address-family ipv4 unicast
     !
     !
   !
-  neighbor 192.168.0.50 remote-as 300
+  neighbor 192.168.0.53 remote-as 300
     description iBGP peer iosxrv-6
     update-source Loopback0
     address-family ipv4 unicast
     !
     !
   !
-  neighbor 192.168.0.34 remote-as 300
+  neighbor 192.168.0.50 remote-as 300
     description iBGP peer nx-osv-2
     update-source Loopback0
     address-family ipv4 unicast
@@ -5198,30 +4832,30 @@ router bgp 300
             <entry key="AutoNetkit.ASN" type="Integer">300</entry>
             <entry key="AutoNetkit.IGP" type="String">eigrp</entry>
         </extensions>
-        <interface id="0" name="Ethernet2/1" ipv4="10.1.0.9" netPrefixLenV4="29">
+        <interface id="0" name="Ethernet2/1" ipv4="10.2.0.17" netPrefixLenV4="29">
             <extensions>
                 <entry key="AutoNetkit.vlan" type="Integer">50</entry>
             </extensions>
         </interface>
-        <interface id="1" name="Ethernet2/2" ipv4="10.1.0.1" netPrefixLenV4="29">
+        <interface id="1" name="Ethernet2/2" ipv4="10.2.0.1" netPrefixLenV4="29">
             <extensions>
                 <entry key="AutoNetkit.vlan" type="Integer">40</entry>
             </extensions>
         </interface>
-        <interface id="2" name="Ethernet2/3" ipv4="10.2.0.1" netPrefixLenV4="29">
+        <interface id="2" name="Ethernet2/3" ipv4="10.2.0.25" netPrefixLenV4="29">
             <extensions>
                 <entry key="AutoNetkit.vlan" type="Integer">60</entry>
             </extensions>
         </interface>
-        <interface id="3" name="Ethernet2/4" ipv4="10.2.128.9" netPrefixLenV4="29">
+        <interface id="3" name="Ethernet2/4" ipv4="10.2.128.17" netPrefixLenV4="29">
             <extensions>
                 <entry key="AutoNetkit.vlan" type="Integer">70</entry>
             </extensions>
         </interface>
     </node>
-    <node name="nx-osv-2" type="SIMPLE" subtype="NX-OSv" location="1418,571" ipv4="192.168.0.34">
+    <node name="nx-osv-2" type="SIMPLE" subtype="NX-OSv" location="1418,571" ipv4="192.168.0.50">
         <extensions>
-            <entry key="config" type="string">! NX-OSv Config generated on 2016-02-02 10:54
+            <entry key="config" type="string">! NX-OSv Config generated on 2016-02-04 20:54
 ! by autonetkit_0.21.4
 !
 version 6.2(1)
@@ -5270,12 +4904,12 @@ hardware forwarding unicast trace
 
 interface Loopback0
   description Loopback
-  ip address 192.168.0.34/32
+  ip address 192.168.0.50/32
   ip router eigrp 300
 
 interface Ethernet2/1
   description to iosvl2-4
-  ip address 10.1.0.2/29
+  ip address 10.2.0.2/29
   ip router eigrp 300
   duplex full
   mac-address fa16.3e00.0006
@@ -5283,7 +4917,7 @@ interface Ethernet2/1
 
 interface Ethernet2/2
   description to iosvl2-3
-  ip address 10.1.0.10/29
+  ip address 10.2.0.18/29
   ip router eigrp 300
   duplex full
   mac-address fa16.3e00.0007
@@ -5291,7 +4925,7 @@ interface Ethernet2/2
 
 interface Ethernet2/3
   description to iosvl2-12
-  ip address 10.2.128.1/29
+  ip address 10.2.128.9/29
   ip router eigrp 300
   duplex full
   mac-address fa16.3e00.0008
@@ -5299,7 +4933,7 @@ interface Ethernet2/3
 
 interface Ethernet2/4
   description to iosvl2-11
-  ip address 10.2.0.9/29
+  ip address 10.2.128.1/29
   ip router eigrp 300
   duplex full
   mac-address fa16.3e00.0009
@@ -5319,32 +4953,32 @@ line console
 line vty
 router eigrp 300
  autonomous-system 300
- router-id 192.168.0.34
+ router-id 192.168.0.50
  address-family ipv4 unicast
 router bgp 300
-  router-id 192.168.0.34
+  router-id 192.168.0.50
   address-family ipv4 unicast
-    network 192.168.0.34/32
+    network 192.168.0.50/32
   !
 ! iBGP
 !
 ! iBGP peers
   !
-  neighbor 192.168.0.49 remote-as 300
+  neighbor 192.168.0.52 remote-as 300
     description iBGP peer iosxrv-5
     update-source Loopback0
     address-family ipv4 unicast
     !
     !
   !
-  neighbor 192.168.0.50 remote-as 300
+  neighbor 192.168.0.53 remote-as 300
     description iBGP peer iosxrv-6
     update-source Loopback0
     address-family ipv4 unicast
     !
     !
   !
-  neighbor 192.168.0.33 remote-as 300
+  neighbor 192.168.0.49 remote-as 300
     description iBGP peer nx-osv-1
     update-source Loopback0
     address-family ipv4 unicast
@@ -5355,22 +4989,22 @@ router bgp 300
             <entry key="AutoNetkit.ASN" type="Integer">300</entry>
             <entry key="AutoNetkit.IGP" type="String">eigrp</entry>
         </extensions>
-        <interface id="0" name="Ethernet2/1" ipv4="10.1.0.2" netPrefixLenV4="29">
+        <interface id="0" name="Ethernet2/1" ipv4="10.2.0.2" netPrefixLenV4="29">
             <extensions>
                 <entry key="AutoNetkit.vlan" type="Integer">40</entry>
             </extensions>
         </interface>
-        <interface id="1" name="Ethernet2/2" ipv4="10.1.0.10" netPrefixLenV4="29">
+        <interface id="1" name="Ethernet2/2" ipv4="10.2.0.18" netPrefixLenV4="29">
             <extensions>
                 <entry key="AutoNetkit.vlan" type="Integer">50</entry>
             </extensions>
         </interface>
-        <interface id="2" name="Ethernet2/3" ipv4="10.2.128.1" netPrefixLenV4="29">
+        <interface id="2" name="Ethernet2/3" ipv4="10.2.128.9" netPrefixLenV4="29">
             <extensions>
                 <entry key="AutoNetkit.vlan" type="Integer">60</entry>
             </extensions>
         </interface>
-        <interface id="3" name="Ethernet2/4" ipv4="10.2.0.9" netPrefixLenV4="29">
+        <interface id="3" name="Ethernet2/4" ipv4="10.2.128.1" netPrefixLenV4="29">
             <extensions>
                 <entry key="AutoNetkit.vlan" type="Integer">70</entry>
             </extensions>
@@ -5378,7 +5012,7 @@ router bgp 300
     </node>
     <node name="iosvl2-11" type="SIMPLE" subtype="IOSvL2" location="1543,432">
         <extensions>
-            <entry key="config" type="string">! IOSvL2 Config generated on 2016-02-02 10:54
+            <entry key="config" type="string">! IOSvL2 Config generated on 2016-02-04 20:54
 ! by autonetkit_0.21.4
 !
 version 15.2
@@ -5526,7 +5160,7 @@ end
     </node>
     <node name="iosvl2-12" type="SIMPLE" subtype="IOSvL2" location="1543,571">
         <extensions>
-            <entry key="config" type="string">! IOSvL2 Config generated on 2016-02-02 10:54
+            <entry key="config" type="string">! IOSvL2 Config generated on 2016-02-04 20:54
 ! by autonetkit_0.21.4
 !
 version 15.2
@@ -5712,42 +5346,19 @@ write_files:
   permissions: '0755'
   content: |-
     #!/bin/sh
-    ifconfig eth1 up 10.2.0.2 netmask 255.255.255.248
-    route add -host 192.168.0.65 gw 10.2.0.1 dev eth1
-    route add -host 192.168.0.67 gw 10.2.0.1 dev eth1
-    route add -host 192.168.0.71 gw 10.2.0.1 dev eth1
-    route add -host 192.168.0.72 gw 10.2.0.1 dev eth1
-    route add -host 192.168.0.1 gw 10.2.0.1 dev eth1
-    route add -host 192.168.0.6 gw 10.2.0.1 dev eth1
-    route add -host 192.168.0.15 gw 10.2.0.1 dev eth1
-    route add -host 192.168.0.16 gw 10.2.0.1 dev eth1
-    route add -host 192.168.0.33 gw 10.2.0.1 dev eth1
-    route add -host 192.168.0.34 gw 10.2.0.1 dev eth1
-    route add -host 192.168.0.49 gw 10.2.0.1 dev eth1
-    route add -host 192.168.0.50 gw 10.2.0.1 dev eth1
-    route add -net 10.0.0.0/29 gw 10.2.0.1 dev eth1
-    route add -net 10.0.0.8/30 gw 10.2.0.1 dev eth1
-    route add -net 10.0.0.16/28 gw 10.2.0.1 dev eth1
-    route add -net 10.0.128.0/30 gw 10.2.0.1 dev eth1
-    route add -net 10.0.128.4/30 gw 10.2.0.1 dev eth1
-    route add -net 10.1.128.0/30 gw 10.2.0.1 dev eth1
-    route add -net 10.1.128.8/30 gw 10.2.0.1 dev eth1
-    route add -net 10.3.0.0/28 gw 10.2.0.1 dev eth1
-    route add -net 10.3.0.16/30 gw 10.2.0.1 dev eth1
-    route add -net 10.3.0.32/27 gw 10.2.0.1 dev eth1
-    route add -net 10.3.128.0/27 gw 10.2.0.1 dev eth1
-    route add -net 10.1.0.0/28 gw 10.2.0.1 dev eth1
-    route add -net 10.1.128.4/30 gw 10.2.0.1 dev eth1
-    route add -net 10.2.0.0/28 gw 10.2.0.1 dev eth1
-    route add -net 10.2.128.0/28 gw 10.2.0.1 dev eth1
-    route add -net 192.168.0.2/31 gw 10.2.0.1 dev eth1
-    route add -net 192.168.0.4/31 gw 10.2.0.1 dev eth1
+    ifconfig eth1 up 10.2.0.26 netmask 255.255.255.248
+    route add -net 10.1.0.0/16 gw 10.2.0.25 dev eth1
+    route add -net 10.2.0.0/16 gw 10.2.0.25 dev eth1
+    route add -net 10.0.0.0/16 gw 10.2.0.25 dev eth1
+    route add -net 192.168.0.32/28 gw 10.2.0.25 dev eth1
+    route add -net 192.168.0.48/28 gw 10.2.0.25 dev eth1
+    route add -net 192.168.0.0/27 gw 10.2.0.25 dev eth1
     exit 0
 </entry>
             <entry key="AutoNetkit.ASN" type="Integer">300</entry>
             <entry key="AutoNetkit.IGP" type="String">eigrp</entry>
         </extensions>
-        <interface id="0" name="eth1" ipv4="10.2.0.2" netPrefixLenV4="29">
+        <interface id="0" name="eth1" ipv4="10.2.0.26" netPrefixLenV4="29">
             <extensions>
                 <entry key="AutoNetkit.vlan" type="Integer">60</entry>
             </extensions>
@@ -5793,42 +5404,19 @@ write_files:
   permissions: '0755'
   content: |-
     #!/bin/sh
-    ifconfig eth1 up 10.2.0.10 netmask 255.255.255.248
-    route add -host 192.168.0.65 gw 10.2.0.9 dev eth1
-    route add -host 192.168.0.67 gw 10.2.0.9 dev eth1
-    route add -host 192.168.0.71 gw 10.2.0.9 dev eth1
-    route add -host 192.168.0.72 gw 10.2.0.9 dev eth1
-    route add -host 192.168.0.1 gw 10.2.0.9 dev eth1
-    route add -host 192.168.0.6 gw 10.2.0.9 dev eth1
-    route add -host 192.168.0.15 gw 10.2.0.9 dev eth1
-    route add -host 192.168.0.16 gw 10.2.0.9 dev eth1
-    route add -host 192.168.0.33 gw 10.2.0.9 dev eth1
-    route add -host 192.168.0.34 gw 10.2.0.9 dev eth1
-    route add -host 192.168.0.49 gw 10.2.0.9 dev eth1
-    route add -host 192.168.0.50 gw 10.2.0.9 dev eth1
-    route add -net 10.0.0.0/29 gw 10.2.0.9 dev eth1
-    route add -net 10.0.0.8/30 gw 10.2.0.9 dev eth1
-    route add -net 10.0.0.16/28 gw 10.2.0.9 dev eth1
-    route add -net 10.0.128.0/30 gw 10.2.0.9 dev eth1
-    route add -net 10.0.128.4/30 gw 10.2.0.9 dev eth1
-    route add -net 10.1.128.0/30 gw 10.2.0.9 dev eth1
-    route add -net 10.1.128.8/30 gw 10.2.0.9 dev eth1
-    route add -net 10.3.0.0/28 gw 10.2.0.9 dev eth1
-    route add -net 10.3.0.16/30 gw 10.2.0.9 dev eth1
-    route add -net 10.3.0.32/27 gw 10.2.0.9 dev eth1
-    route add -net 10.3.128.0/27 gw 10.2.0.9 dev eth1
-    route add -net 10.1.0.0/28 gw 10.2.0.9 dev eth1
-    route add -net 10.1.128.4/30 gw 10.2.0.9 dev eth1
-    route add -net 10.2.0.0/28 gw 10.2.0.9 dev eth1
-    route add -net 10.2.128.0/28 gw 10.2.0.9 dev eth1
-    route add -net 192.168.0.2/31 gw 10.2.0.9 dev eth1
-    route add -net 192.168.0.4/31 gw 10.2.0.9 dev eth1
+    ifconfig eth1 up 10.2.128.2 netmask 255.255.255.248
+    route add -net 10.1.0.0/16 gw 10.2.128.1 dev eth1
+    route add -net 10.2.0.0/16 gw 10.2.128.1 dev eth1
+    route add -net 10.0.0.0/16 gw 10.2.128.1 dev eth1
+    route add -net 192.168.0.32/28 gw 10.2.128.1 dev eth1
+    route add -net 192.168.0.48/28 gw 10.2.128.1 dev eth1
+    route add -net 192.168.0.0/27 gw 10.2.128.1 dev eth1
     exit 0
 </entry>
             <entry key="AutoNetkit.ASN" type="Integer">300</entry>
             <entry key="AutoNetkit.IGP" type="String">eigrp</entry>
         </extensions>
-        <interface id="0" name="eth1" ipv4="10.2.0.10" netPrefixLenV4="29">
+        <interface id="0" name="eth1" ipv4="10.2.128.2" netPrefixLenV4="29">
             <extensions>
                 <entry key="AutoNetkit.vlan" type="Integer">70</entry>
             </extensions>
@@ -5874,42 +5462,19 @@ write_files:
   permissions: '0755'
   content: |-
     #!/bin/sh
-    ifconfig eth1 up 10.2.0.3 netmask 255.255.255.248
-    route add -host 192.168.0.65 gw 10.2.0.1 dev eth1
-    route add -host 192.168.0.67 gw 10.2.0.1 dev eth1
-    route add -host 192.168.0.71 gw 10.2.0.1 dev eth1
-    route add -host 192.168.0.72 gw 10.2.0.1 dev eth1
-    route add -host 192.168.0.1 gw 10.2.0.1 dev eth1
-    route add -host 192.168.0.6 gw 10.2.0.1 dev eth1
-    route add -host 192.168.0.15 gw 10.2.0.1 dev eth1
-    route add -host 192.168.0.16 gw 10.2.0.1 dev eth1
-    route add -host 192.168.0.33 gw 10.2.0.1 dev eth1
-    route add -host 192.168.0.34 gw 10.2.0.1 dev eth1
-    route add -host 192.168.0.49 gw 10.2.0.1 dev eth1
-    route add -host 192.168.0.50 gw 10.2.0.1 dev eth1
-    route add -net 10.0.0.0/29 gw 10.2.0.1 dev eth1
-    route add -net 10.0.0.8/30 gw 10.2.0.1 dev eth1
-    route add -net 10.0.0.16/28 gw 10.2.0.1 dev eth1
-    route add -net 10.0.128.0/30 gw 10.2.0.1 dev eth1
-    route add -net 10.0.128.4/30 gw 10.2.0.1 dev eth1
-    route add -net 10.1.128.0/30 gw 10.2.0.1 dev eth1
-    route add -net 10.1.128.8/30 gw 10.2.0.1 dev eth1
-    route add -net 10.3.0.0/28 gw 10.2.0.1 dev eth1
-    route add -net 10.3.0.16/30 gw 10.2.0.1 dev eth1
-    route add -net 10.3.0.32/27 gw 10.2.0.1 dev eth1
-    route add -net 10.3.128.0/27 gw 10.2.0.1 dev eth1
-    route add -net 10.1.0.0/28 gw 10.2.0.1 dev eth1
-    route add -net 10.1.128.4/30 gw 10.2.0.1 dev eth1
-    route add -net 10.2.0.0/28 gw 10.2.0.1 dev eth1
-    route add -net 10.2.128.0/28 gw 10.2.0.1 dev eth1
-    route add -net 192.168.0.2/31 gw 10.2.0.1 dev eth1
-    route add -net 192.168.0.4/31 gw 10.2.0.1 dev eth1
+    ifconfig eth1 up 10.2.0.27 netmask 255.255.255.248
+    route add -net 10.1.0.0/16 gw 10.2.0.25 dev eth1
+    route add -net 10.2.0.0/16 gw 10.2.0.25 dev eth1
+    route add -net 10.0.0.0/16 gw 10.2.0.25 dev eth1
+    route add -net 192.168.0.32/28 gw 10.2.0.25 dev eth1
+    route add -net 192.168.0.48/28 gw 10.2.0.25 dev eth1
+    route add -net 192.168.0.0/27 gw 10.2.0.25 dev eth1
     exit 0
 </entry>
             <entry key="AutoNetkit.ASN" type="Integer">300</entry>
             <entry key="AutoNetkit.IGP" type="String">eigrp</entry>
         </extensions>
-        <interface id="0" name="eth1" ipv4="10.2.0.3" netPrefixLenV4="29">
+        <interface id="0" name="eth1" ipv4="10.2.0.27" netPrefixLenV4="29">
             <extensions>
                 <entry key="AutoNetkit.vlan" type="Integer">60</entry>
             </extensions>
@@ -5955,42 +5520,19 @@ write_files:
   permissions: '0755'
   content: |-
     #!/bin/sh
-    ifconfig eth1 up 10.2.0.11 netmask 255.255.255.248
-    route add -host 192.168.0.65 gw 10.2.0.9 dev eth1
-    route add -host 192.168.0.67 gw 10.2.0.9 dev eth1
-    route add -host 192.168.0.71 gw 10.2.0.9 dev eth1
-    route add -host 192.168.0.72 gw 10.2.0.9 dev eth1
-    route add -host 192.168.0.1 gw 10.2.0.9 dev eth1
-    route add -host 192.168.0.6 gw 10.2.0.9 dev eth1
-    route add -host 192.168.0.15 gw 10.2.0.9 dev eth1
-    route add -host 192.168.0.16 gw 10.2.0.9 dev eth1
-    route add -host 192.168.0.33 gw 10.2.0.9 dev eth1
-    route add -host 192.168.0.34 gw 10.2.0.9 dev eth1
-    route add -host 192.168.0.49 gw 10.2.0.9 dev eth1
-    route add -host 192.168.0.50 gw 10.2.0.9 dev eth1
-    route add -net 10.0.0.0/29 gw 10.2.0.9 dev eth1
-    route add -net 10.0.0.8/30 gw 10.2.0.9 dev eth1
-    route add -net 10.0.0.16/28 gw 10.2.0.9 dev eth1
-    route add -net 10.0.128.0/30 gw 10.2.0.9 dev eth1
-    route add -net 10.0.128.4/30 gw 10.2.0.9 dev eth1
-    route add -net 10.1.128.0/30 gw 10.2.0.9 dev eth1
-    route add -net 10.1.128.8/30 gw 10.2.0.9 dev eth1
-    route add -net 10.3.0.0/28 gw 10.2.0.9 dev eth1
-    route add -net 10.3.0.16/30 gw 10.2.0.9 dev eth1
-    route add -net 10.3.0.32/27 gw 10.2.0.9 dev eth1
-    route add -net 10.3.128.0/27 gw 10.2.0.9 dev eth1
-    route add -net 10.1.0.0/28 gw 10.2.0.9 dev eth1
-    route add -net 10.1.128.4/30 gw 10.2.0.9 dev eth1
-    route add -net 10.2.0.0/28 gw 10.2.0.9 dev eth1
-    route add -net 10.2.128.0/28 gw 10.2.0.9 dev eth1
-    route add -net 192.168.0.2/31 gw 10.2.0.9 dev eth1
-    route add -net 192.168.0.4/31 gw 10.2.0.9 dev eth1
+    ifconfig eth1 up 10.2.128.3 netmask 255.255.255.248
+    route add -net 10.1.0.0/16 gw 10.2.128.1 dev eth1
+    route add -net 10.2.0.0/16 gw 10.2.128.1 dev eth1
+    route add -net 10.0.0.0/16 gw 10.2.128.1 dev eth1
+    route add -net 192.168.0.32/28 gw 10.2.128.1 dev eth1
+    route add -net 192.168.0.48/28 gw 10.2.128.1 dev eth1
+    route add -net 192.168.0.0/27 gw 10.2.128.1 dev eth1
     exit 0
 </entry>
             <entry key="AutoNetkit.ASN" type="Integer">300</entry>
             <entry key="AutoNetkit.IGP" type="String">eigrp</entry>
         </extensions>
-        <interface id="0" name="eth1" ipv4="10.2.0.11" netPrefixLenV4="29">
+        <interface id="0" name="eth1" ipv4="10.2.128.3" netPrefixLenV4="29">
             <extensions>
                 <entry key="AutoNetkit.vlan" type="Integer">70</entry>
             </extensions>
@@ -6036,42 +5578,19 @@ write_files:
   permissions: '0755'
   content: |-
     #!/bin/sh
-    ifconfig eth1 up 10.2.128.2 netmask 255.255.255.248
-    route add -host 192.168.0.65 gw 10.2.128.1 dev eth1
-    route add -host 192.168.0.67 gw 10.2.128.1 dev eth1
-    route add -host 192.168.0.71 gw 10.2.128.1 dev eth1
-    route add -host 192.168.0.72 gw 10.2.128.1 dev eth1
-    route add -host 192.168.0.1 gw 10.2.128.1 dev eth1
-    route add -host 192.168.0.6 gw 10.2.128.1 dev eth1
-    route add -host 192.168.0.15 gw 10.2.128.1 dev eth1
-    route add -host 192.168.0.16 gw 10.2.128.1 dev eth1
-    route add -host 192.168.0.33 gw 10.2.128.1 dev eth1
-    route add -host 192.168.0.34 gw 10.2.128.1 dev eth1
-    route add -host 192.168.0.49 gw 10.2.128.1 dev eth1
-    route add -host 192.168.0.50 gw 10.2.128.1 dev eth1
-    route add -net 10.0.0.0/29 gw 10.2.128.1 dev eth1
-    route add -net 10.0.0.8/30 gw 10.2.128.1 dev eth1
-    route add -net 10.0.0.16/28 gw 10.2.128.1 dev eth1
-    route add -net 10.0.128.0/30 gw 10.2.128.1 dev eth1
-    route add -net 10.0.128.4/30 gw 10.2.128.1 dev eth1
-    route add -net 10.1.128.0/30 gw 10.2.128.1 dev eth1
-    route add -net 10.1.128.8/30 gw 10.2.128.1 dev eth1
-    route add -net 10.3.0.0/28 gw 10.2.128.1 dev eth1
-    route add -net 10.3.0.16/30 gw 10.2.128.1 dev eth1
-    route add -net 10.3.0.32/27 gw 10.2.128.1 dev eth1
-    route add -net 10.3.128.0/27 gw 10.2.128.1 dev eth1
-    route add -net 10.1.0.0/28 gw 10.2.128.1 dev eth1
-    route add -net 10.1.128.4/30 gw 10.2.128.1 dev eth1
-    route add -net 10.2.0.0/28 gw 10.2.128.1 dev eth1
-    route add -net 10.2.128.0/28 gw 10.2.128.1 dev eth1
-    route add -net 192.168.0.2/31 gw 10.2.128.1 dev eth1
-    route add -net 192.168.0.4/31 gw 10.2.128.1 dev eth1
+    ifconfig eth1 up 10.2.128.10 netmask 255.255.255.248
+    route add -net 10.1.0.0/16 gw 10.2.128.9 dev eth1
+    route add -net 10.2.0.0/16 gw 10.2.128.9 dev eth1
+    route add -net 10.0.0.0/16 gw 10.2.128.9 dev eth1
+    route add -net 192.168.0.32/28 gw 10.2.128.9 dev eth1
+    route add -net 192.168.0.48/28 gw 10.2.128.9 dev eth1
+    route add -net 192.168.0.0/27 gw 10.2.128.9 dev eth1
     exit 0
 </entry>
             <entry key="AutoNetkit.ASN" type="Integer">300</entry>
             <entry key="AutoNetkit.IGP" type="String">eigrp</entry>
         </extensions>
-        <interface id="0" name="eth1" ipv4="10.2.128.2" netPrefixLenV4="29">
+        <interface id="0" name="eth1" ipv4="10.2.128.10" netPrefixLenV4="29">
             <extensions>
                 <entry key="AutoNetkit.vlan" type="Integer">60</entry>
             </extensions>
@@ -6117,42 +5636,19 @@ write_files:
   permissions: '0755'
   content: |-
     #!/bin/sh
-    ifconfig eth1 up 10.2.128.3 netmask 255.255.255.248
-    route add -host 192.168.0.65 gw 10.2.128.1 dev eth1
-    route add -host 192.168.0.67 gw 10.2.128.1 dev eth1
-    route add -host 192.168.0.71 gw 10.2.128.1 dev eth1
-    route add -host 192.168.0.72 gw 10.2.128.1 dev eth1
-    route add -host 192.168.0.1 gw 10.2.128.1 dev eth1
-    route add -host 192.168.0.6 gw 10.2.128.1 dev eth1
-    route add -host 192.168.0.15 gw 10.2.128.1 dev eth1
-    route add -host 192.168.0.16 gw 10.2.128.1 dev eth1
-    route add -host 192.168.0.33 gw 10.2.128.1 dev eth1
-    route add -host 192.168.0.34 gw 10.2.128.1 dev eth1
-    route add -host 192.168.0.49 gw 10.2.128.1 dev eth1
-    route add -host 192.168.0.50 gw 10.2.128.1 dev eth1
-    route add -net 10.0.0.0/29 gw 10.2.128.1 dev eth1
-    route add -net 10.0.0.8/30 gw 10.2.128.1 dev eth1
-    route add -net 10.0.0.16/28 gw 10.2.128.1 dev eth1
-    route add -net 10.0.128.0/30 gw 10.2.128.1 dev eth1
-    route add -net 10.0.128.4/30 gw 10.2.128.1 dev eth1
-    route add -net 10.1.128.0/30 gw 10.2.128.1 dev eth1
-    route add -net 10.1.128.8/30 gw 10.2.128.1 dev eth1
-    route add -net 10.3.0.0/28 gw 10.2.128.1 dev eth1
-    route add -net 10.3.0.16/30 gw 10.2.128.1 dev eth1
-    route add -net 10.3.0.32/27 gw 10.2.128.1 dev eth1
-    route add -net 10.3.128.0/27 gw 10.2.128.1 dev eth1
-    route add -net 10.1.0.0/28 gw 10.2.128.1 dev eth1
-    route add -net 10.1.128.4/30 gw 10.2.128.1 dev eth1
-    route add -net 10.2.0.0/28 gw 10.2.128.1 dev eth1
-    route add -net 10.2.128.0/28 gw 10.2.128.1 dev eth1
-    route add -net 192.168.0.2/31 gw 10.2.128.1 dev eth1
-    route add -net 192.168.0.4/31 gw 10.2.128.1 dev eth1
+    ifconfig eth1 up 10.2.128.11 netmask 255.255.255.248
+    route add -net 10.1.0.0/16 gw 10.2.128.9 dev eth1
+    route add -net 10.2.0.0/16 gw 10.2.128.9 dev eth1
+    route add -net 10.0.0.0/16 gw 10.2.128.9 dev eth1
+    route add -net 192.168.0.32/28 gw 10.2.128.9 dev eth1
+    route add -net 192.168.0.48/28 gw 10.2.128.9 dev eth1
+    route add -net 192.168.0.0/27 gw 10.2.128.9 dev eth1
     exit 0
 </entry>
             <entry key="AutoNetkit.ASN" type="Integer">300</entry>
             <entry key="AutoNetkit.IGP" type="String">eigrp</entry>
         </extensions>
-        <interface id="0" name="eth1" ipv4="10.2.128.3" netPrefixLenV4="29">
+        <interface id="0" name="eth1" ipv4="10.2.128.11" netPrefixLenV4="29">
             <extensions>
                 <entry key="AutoNetkit.vlan" type="Integer">60</entry>
             </extensions>
@@ -6198,42 +5694,19 @@ write_files:
   permissions: '0755'
   content: |-
     #!/bin/sh
-    ifconfig eth1 up 10.2.128.10 netmask 255.255.255.248
-    route add -host 192.168.0.65 gw 10.2.128.9 dev eth1
-    route add -host 192.168.0.67 gw 10.2.128.9 dev eth1
-    route add -host 192.168.0.71 gw 10.2.128.9 dev eth1
-    route add -host 192.168.0.72 gw 10.2.128.9 dev eth1
-    route add -host 192.168.0.1 gw 10.2.128.9 dev eth1
-    route add -host 192.168.0.6 gw 10.2.128.9 dev eth1
-    route add -host 192.168.0.15 gw 10.2.128.9 dev eth1
-    route add -host 192.168.0.16 gw 10.2.128.9 dev eth1
-    route add -host 192.168.0.33 gw 10.2.128.9 dev eth1
-    route add -host 192.168.0.34 gw 10.2.128.9 dev eth1
-    route add -host 192.168.0.49 gw 10.2.128.9 dev eth1
-    route add -host 192.168.0.50 gw 10.2.128.9 dev eth1
-    route add -net 10.0.0.0/29 gw 10.2.128.9 dev eth1
-    route add -net 10.0.0.8/30 gw 10.2.128.9 dev eth1
-    route add -net 10.0.0.16/28 gw 10.2.128.9 dev eth1
-    route add -net 10.0.128.0/30 gw 10.2.128.9 dev eth1
-    route add -net 10.0.128.4/30 gw 10.2.128.9 dev eth1
-    route add -net 10.1.128.0/30 gw 10.2.128.9 dev eth1
-    route add -net 10.1.128.8/30 gw 10.2.128.9 dev eth1
-    route add -net 10.3.0.0/28 gw 10.2.128.9 dev eth1
-    route add -net 10.3.0.16/30 gw 10.2.128.9 dev eth1
-    route add -net 10.3.0.32/27 gw 10.2.128.9 dev eth1
-    route add -net 10.3.128.0/27 gw 10.2.128.9 dev eth1
-    route add -net 10.1.0.0/28 gw 10.2.128.9 dev eth1
-    route add -net 10.1.128.4/30 gw 10.2.128.9 dev eth1
-    route add -net 10.2.0.0/28 gw 10.2.128.9 dev eth1
-    route add -net 10.2.128.0/28 gw 10.2.128.9 dev eth1
-    route add -net 192.168.0.2/31 gw 10.2.128.9 dev eth1
-    route add -net 192.168.0.4/31 gw 10.2.128.9 dev eth1
+    ifconfig eth1 up 10.2.128.18 netmask 255.255.255.248
+    route add -net 10.1.0.0/16 gw 10.2.128.17 dev eth1
+    route add -net 10.2.0.0/16 gw 10.2.128.17 dev eth1
+    route add -net 10.0.0.0/16 gw 10.2.128.17 dev eth1
+    route add -net 192.168.0.32/28 gw 10.2.128.17 dev eth1
+    route add -net 192.168.0.48/28 gw 10.2.128.17 dev eth1
+    route add -net 192.168.0.0/27 gw 10.2.128.17 dev eth1
     exit 0
 </entry>
             <entry key="AutoNetkit.ASN" type="Integer">300</entry>
             <entry key="AutoNetkit.IGP" type="String">eigrp</entry>
         </extensions>
-        <interface id="0" name="eth1" ipv4="10.2.128.10" netPrefixLenV4="29">
+        <interface id="0" name="eth1" ipv4="10.2.128.18" netPrefixLenV4="29">
             <extensions>
                 <entry key="AutoNetkit.vlan" type="Integer">70</entry>
             </extensions>
@@ -6279,42 +5752,19 @@ write_files:
   permissions: '0755'
   content: |-
     #!/bin/sh
-    ifconfig eth1 up 10.2.128.11 netmask 255.255.255.248
-    route add -host 192.168.0.65 gw 10.2.128.9 dev eth1
-    route add -host 192.168.0.67 gw 10.2.128.9 dev eth1
-    route add -host 192.168.0.71 gw 10.2.128.9 dev eth1
-    route add -host 192.168.0.72 gw 10.2.128.9 dev eth1
-    route add -host 192.168.0.1 gw 10.2.128.9 dev eth1
-    route add -host 192.168.0.6 gw 10.2.128.9 dev eth1
-    route add -host 192.168.0.15 gw 10.2.128.9 dev eth1
-    route add -host 192.168.0.16 gw 10.2.128.9 dev eth1
-    route add -host 192.168.0.33 gw 10.2.128.9 dev eth1
-    route add -host 192.168.0.34 gw 10.2.128.9 dev eth1
-    route add -host 192.168.0.49 gw 10.2.128.9 dev eth1
-    route add -host 192.168.0.50 gw 10.2.128.9 dev eth1
-    route add -net 10.0.0.0/29 gw 10.2.128.9 dev eth1
-    route add -net 10.0.0.8/30 gw 10.2.128.9 dev eth1
-    route add -net 10.0.0.16/28 gw 10.2.128.9 dev eth1
-    route add -net 10.0.128.0/30 gw 10.2.128.9 dev eth1
-    route add -net 10.0.128.4/30 gw 10.2.128.9 dev eth1
-    route add -net 10.1.128.0/30 gw 10.2.128.9 dev eth1
-    route add -net 10.1.128.8/30 gw 10.2.128.9 dev eth1
-    route add -net 10.3.0.0/28 gw 10.2.128.9 dev eth1
-    route add -net 10.3.0.16/30 gw 10.2.128.9 dev eth1
-    route add -net 10.3.0.32/27 gw 10.2.128.9 dev eth1
-    route add -net 10.3.128.0/27 gw 10.2.128.9 dev eth1
-    route add -net 10.1.0.0/28 gw 10.2.128.9 dev eth1
-    route add -net 10.1.128.4/30 gw 10.2.128.9 dev eth1
-    route add -net 10.2.0.0/28 gw 10.2.128.9 dev eth1
-    route add -net 10.2.128.0/28 gw 10.2.128.9 dev eth1
-    route add -net 192.168.0.2/31 gw 10.2.128.9 dev eth1
-    route add -net 192.168.0.4/31 gw 10.2.128.9 dev eth1
+    ifconfig eth1 up 10.2.128.19 netmask 255.255.255.248
+    route add -net 10.1.0.0/16 gw 10.2.128.17 dev eth1
+    route add -net 10.2.0.0/16 gw 10.2.128.17 dev eth1
+    route add -net 10.0.0.0/16 gw 10.2.128.17 dev eth1
+    route add -net 192.168.0.32/28 gw 10.2.128.17 dev eth1
+    route add -net 192.168.0.48/28 gw 10.2.128.17 dev eth1
+    route add -net 192.168.0.0/27 gw 10.2.128.17 dev eth1
     exit 0
 </entry>
             <entry key="AutoNetkit.ASN" type="Integer">300</entry>
             <entry key="AutoNetkit.IGP" type="String">eigrp</entry>
         </extensions>
-        <interface id="0" name="eth1" ipv4="10.2.128.11" netPrefixLenV4="29">
+        <interface id="0" name="eth1" ipv4="10.2.128.19" netPrefixLenV4="29">
             <extensions>
                 <entry key="AutoNetkit.vlan" type="Integer">70</entry>
             </extensions>

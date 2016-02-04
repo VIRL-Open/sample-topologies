@@ -1,6 +1,6 @@
 Topology description
 --------------------
-50 nodes - 8 IOS XRv routers, 4 CSR1000v routers, 2 NXOSv routers, 2 IOSv routers, 14 IOSvL2 switches, 20 9 iPerf LXCs
+50 nodes - 8 IOS XRv routers, 4 CSR1000v routers, 2 NXOSv routers, 4 IOSv routers, 12 IOSvL2 switches, 20 9 iPerf LXCs
 
 This simulation requires the use of VIRL 1.0.x or later.
 
