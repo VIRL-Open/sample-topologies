@@ -1,0 +1,3 @@
+[submodule "INE/ine-virl"]
+	path = INE/ine-virl
+	url = https://github.com/Internetworkexpert/ine-virl
