@@ -1,0 +1,50 @@
+Topology description
+--------------------
+13 nodes - 4 IOSv routers, 2 IOSvL2 switches, 1 Server LXC, 4 Docker Apache instances, 1 Docker Nagios instance.
+
+This simulation requires the use of VIRL 1.2.x or later.
+
+In this webinar, we demonstrate the use of Docker instances running inside of VIRL. The Apache webserver and Nagios Docker files can be obtained from:
+
+https://hub.docker.com/r/coreos/apache/ - docker pull coreos/apache
+
+https://hub.docker.com/r/jasonrivers/nagios/ - docker pull jasonrivers/nagios
+
+In order to run this, you must the 'coreos' VM installed on VIRL and the correct version of VIRL (including Docker support).
+
+The Docker subtypes must be defined and the Docker images pulled before starting the topology. The JSON configuration below can be imported into the UWM/Node resources/Subtypes' page:
+
+{
+  "dynamic-subtypes": [
+    {
+      "hw_ram": 32, 
+      "command": "/usr/sbin/apache2ctl -D FOREGROUND", 
+      "deprecated_use": "", 
+      "baseline_image": "docker-apache", 
+      "plugin_name": "docker-apache", 
+      "hw_vcpus": 1, 
+      "plugin_base": "docker", 
+      "hw_disk_bus": "ide", 
+      "plugin_desc": "Docker container with Apache", 
+      "hw_vm_extra": ""
+    }, 
+    {
+      "deprecated_use": "", 
+      "baseline_image": "docker-nagios", 
+      "plugin_name": "docker-nagios", 
+      "hw_vcpus": 1, 
+      "plugin_base": "docker", 
+      "hw_disk_bus": "ide", 
+      "hw_vm_extra": ""
+    }
+  ]
+}
+
+
+Note that the Nagios instance is connected to the FLAT network and will receive an IP address on that subnet. If you have direct connectivity (or via OpenVPN) you can connect using a web-browser. Log in as 'nagiosadmin', password 'nagios'.
+
+When starting up the topology, you may see the Nagios instance go from BUILDING to ACTIVE to ABSENT state. This can occur when the Coreos instance temporarily runs of memory. If this happens, wait a few minutes and then restart the Nagios instance.
+
+NOTE - you cannot log in to the Docker Apache instances as they do not run a shell.
+
+If you are having trouble running this simulation on your server, use the 'Ram overcommit value' control that can be found at http://<your virl server IP address>:19400/admin/sysconfig/ under 'Resources'.

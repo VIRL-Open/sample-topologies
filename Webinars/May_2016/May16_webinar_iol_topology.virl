@@ -1,0 +1,4641 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<topology xmlns="http://www.cisco.com/VIRL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" schemaVersion="0.9" xsi:schemaLocation="http://www.cisco.com/VIRL https://raw.github.com/CiscoVIRL/schema/v0.9/virl.xsd">
+    <node name="iol-1" type="SIMPLE" subtype="IOL" location="943,314" ipv4="192.168.0.1">
+        <extensions>
+            <entry key="AutoNetkit.mgmt_ip" type="string"></entry>
+            <entry key="config" type="String">!
+! Last configuration change at 11:49:18 UTC Tue May 24 2016
+!
+version 15.2
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+service compress-config
+!
+hostname iol-1
+!
+boot-start-marker
+boot-end-marker
+!
+!
+vrf definition Mgmt-intf
+ !
+ address-family ipv4
+ exit-address-family
+ !
+ address-family ipv6
+ exit-address-family
+!
+enable password cisco
+!
+username cisco privilege 15 secret 5 $1$gOyZ$qajBaLACOco0pOGjjDc300
+no aaa new-model
+!
+!
+!
+!
+!
+!
+!
+!
+no ip domain-lookup
+ip domain-name virl.info
+ip cef
+ipv6 unicast-routing
+ipv6 cef
+!
+!
+!
+no cdp run
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ description Loopback
+ ip address 192.168.0.1 255.255.255.255
+!
+interface Ethernet0/0
+ description OOB Management
+ vrf forwarding Mgmt-intf
+ ip address 10.255.1.110 255.255.0.0
+!
+interface Ethernet0/1
+ description to iol-8
+ ip address 10.0.0.5 255.255.255.252
+ ip ospf cost 1
+!
+interface Ethernet0/2
+ description to iol-2
+ ip address 10.0.0.1 255.255.255.252
+ ip ospf cost 1
+!
+interface Ethernet0/3
+ description to iol-l2-2
+ ip address 10.0.128.9 255.255.255.248
+ ip ospf cost 1
+!
+interface Ethernet1/0
+ no ip address
+ shutdown
+!
+interface Ethernet1/1
+ no ip address
+ shutdown
+!
+interface Ethernet1/2
+ no ip address
+ shutdown
+!
+interface Ethernet1/3
+ no ip address
+ shutdown
+!
+interface Ethernet2/0
+ no ip address
+ shutdown
+!
+interface Ethernet2/1
+ no ip address
+ shutdown
+!
+interface Ethernet2/2
+ no ip address
+ shutdown
+!
+interface Ethernet2/3
+ no ip address
+ shutdown
+!
+interface Ethernet3/0
+ no ip address
+ shutdown
+!
+interface Ethernet3/1
+ no ip address
+ shutdown
+!
+interface Ethernet3/2
+ no ip address
+ shutdown
+!
+interface Ethernet3/3
+ no ip address
+ shutdown
+!
+router ospf 1
+ passive-interface Loopback0
+ network 10.0.0.0 0.0.0.3 area 0
+ network 10.0.0.4 0.0.0.3 area 0
+ network 10.0.128.8 0.0.0.7 area 0
+ network 192.168.0.1 0.0.0.0 area 0
+!
+router bgp 1
+ bgp router-id 192.168.0.1
+ bgp log-neighbor-changes
+ neighbor 192.168.0.2 remote-as 1
+ neighbor 192.168.0.2 description iBGP peer iol-2
+ neighbor 192.168.0.2 update-source Loopback0
+ neighbor 192.168.0.3 remote-as 1
+ neighbor 192.168.0.3 description iBGP peer iol-3
+ neighbor 192.168.0.3 update-source Loopback0
+ neighbor 192.168.0.4 remote-as 1
+ neighbor 192.168.0.4 description iBGP peer iol-4
+ neighbor 192.168.0.4 update-source Loopback0
+ neighbor 192.168.0.5 remote-as 1
+ neighbor 192.168.0.5 description iBGP peer iol-5
+ neighbor 192.168.0.5 update-source Loopback0
+ neighbor 192.168.0.6 remote-as 1
+ neighbor 192.168.0.6 description iBGP peer iol-6
+ neighbor 192.168.0.6 update-source Loopback0
+ neighbor 192.168.0.7 remote-as 1
+ neighbor 192.168.0.7 description iBGP peer iol-7
+ neighbor 192.168.0.7 update-source Loopback0
+ neighbor 192.168.0.8 remote-as 1
+ neighbor 192.168.0.8 description iBGP peer iol-8
+ neighbor 192.168.0.8 update-source Loopback0
+ neighbor 192.168.0.9 remote-as 1
+ neighbor 192.168.0.9 description iBGP peer iol-9
+ neighbor 192.168.0.9 update-source Loopback0
+ neighbor 192.168.0.10 remote-as 1
+ neighbor 192.168.0.10 description iBGP peer iol-10
+ neighbor 192.168.0.10 update-source Loopback0
+ neighbor 192.168.0.11 remote-as 1
+ neighbor 192.168.0.11 description iBGP peer iol-11
+ neighbor 192.168.0.11 update-source Loopback0
+ neighbor 192.168.0.12 remote-as 1
+ neighbor 192.168.0.12 description iBGP peer iol-12
+ neighbor 192.168.0.12 update-source Loopback0
+ neighbor 192.168.0.13 remote-as 1
+ neighbor 192.168.0.13 description iBGP peer iol-13
+ neighbor 192.168.0.13 update-source Loopback0
+ neighbor 192.168.0.14 remote-as 1
+ neighbor 192.168.0.14 description iBGP peer iol-14
+ neighbor 192.168.0.14 update-source Loopback0
+ neighbor 192.168.0.15 remote-as 1
+ neighbor 192.168.0.15 description iBGP peer iol-15
+ neighbor 192.168.0.15 update-source Loopback0
+ neighbor 192.168.0.16 remote-as 1
+ neighbor 192.168.0.16 description iBGP peer iol-16
+ neighbor 192.168.0.16 update-source Loopback0
+ !
+ address-family ipv4
+  network 192.168.0.1 mask 255.255.255.255
+  neighbor 192.168.0.2 activate
+  neighbor 192.168.0.3 activate
+  neighbor 192.168.0.4 activate
+  neighbor 192.168.0.5 activate
+  neighbor 192.168.0.6 activate
+  neighbor 192.168.0.7 activate
+  neighbor 192.168.0.8 activate
+  neighbor 192.168.0.9 activate
+  neighbor 192.168.0.10 activate
+  neighbor 192.168.0.11 activate
+  neighbor 192.168.0.12 activate
+  neighbor 192.168.0.13 activate
+  neighbor 192.168.0.14 activate
+  neighbor 192.168.0.15 activate
+  neighbor 192.168.0.16 activate
+ exit-address-family
+!
+ip forward-protocol nd
+!
+no ip http server
+no ip http secure-server
+!
+!
+!
+!
+!
+!
+control-plane
+!
+!
+line con 0
+ password cisco
+ logging synchronous
+line aux 0
+line vty 0 4
+ exec-timeout 720 0
+ password cisco
+ login local
+ transport input telnet ssh
+!
+!
+end</entry>
+        </extensions>
+        <interface id="0" name="Ethernet0/1" ipv4="10.0.0.5" netPrefixLenV4="30"/>
+        <interface id="1" name="Ethernet0/2" ipv4="10.0.0.1" netPrefixLenV4="30"/>
+        <interface id="2" name="Ethernet0/3" ipv4="10.0.128.9" netPrefixLenV4="29"/>
+    </node>
+    <node name="iol-2" type="SIMPLE" subtype="IOL" location="1063,314" ipv4="192.168.0.2">
+        <extensions>
+            <entry key="AutoNetkit.mgmt_ip" type="string"></entry>
+            <entry key="config" type="String">!
+! Last configuration change at 11:49:20 UTC Tue May 24 2016
+!
+version 15.2
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+service compress-config
+!
+hostname iol-2
+!
+boot-start-marker
+boot-end-marker
+!
+!
+vrf definition Mgmt-intf
+ !
+ address-family ipv4
+ exit-address-family
+ !
+ address-family ipv6
+ exit-address-family
+!
+enable password cisco
+!
+username cisco privilege 15 secret 5 $1$zlAu$3JJnOClJTP3DjYPdBodo8.
+no aaa new-model
+!
+!
+!
+!
+!
+!
+!
+!
+no ip domain-lookup
+ip domain-name virl.info
+ip cef
+ipv6 unicast-routing
+ipv6 cef
+!
+!
+!
+no cdp run
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ description Loopback
+ ip address 192.168.0.2 255.255.255.255
+!
+interface Ethernet0/0
+ description OOB Management
+ vrf forwarding Mgmt-intf
+ ip address 10.255.1.111 255.255.0.0
+!
+interface Ethernet0/1
+ description to iol-1
+ ip address 10.0.0.2 255.255.255.252
+ ip ospf cost 1
+!
+interface Ethernet0/2
+ description to iol-3
+ ip address 10.0.0.13 255.255.255.252
+ ip ospf cost 1
+!
+interface Ethernet0/3
+ description to iol-l2-2
+ ip address 10.0.128.10 255.255.255.248
+ ip ospf cost 1
+!
+interface Ethernet1/0
+ no ip address
+ shutdown
+!
+interface Ethernet1/1
+ no ip address
+ shutdown
+!
+interface Ethernet1/2
+ no ip address
+ shutdown
+!
+interface Ethernet1/3
+ no ip address
+ shutdown
+!
+interface Ethernet2/0
+ no ip address
+ shutdown
+!
+interface Ethernet2/1
+ no ip address
+ shutdown
+!
+interface Ethernet2/2
+ no ip address
+ shutdown
+!
+interface Ethernet2/3
+ no ip address
+ shutdown
+!
+interface Ethernet3/0
+ no ip address
+ shutdown
+!
+interface Ethernet3/1
+ no ip address
+ shutdown
+!
+interface Ethernet3/2
+ no ip address
+ shutdown
+!
+interface Ethernet3/3
+ no ip address
+ shutdown
+!
+router ospf 1
+ passive-interface Loopback0
+ network 10.0.0.0 0.0.0.3 area 0
+ network 10.0.0.12 0.0.0.3 area 0
+ network 10.0.128.8 0.0.0.7 area 0
+ network 192.168.0.2 0.0.0.0 area 0
+!
+router bgp 1
+ bgp router-id 192.168.0.2
+ bgp log-neighbor-changes
+ neighbor 192.168.0.1 remote-as 1
+ neighbor 192.168.0.1 description iBGP peer iol-1
+ neighbor 192.168.0.1 update-source Loopback0
+ neighbor 192.168.0.3 remote-as 1
+ neighbor 192.168.0.3 description iBGP peer iol-3
+ neighbor 192.168.0.3 update-source Loopback0
+ neighbor 192.168.0.4 remote-as 1
+ neighbor 192.168.0.4 description iBGP peer iol-4
+ neighbor 192.168.0.4 update-source Loopback0
+ neighbor 192.168.0.5 remote-as 1
+ neighbor 192.168.0.5 description iBGP peer iol-5
+ neighbor 192.168.0.5 update-source Loopback0
+ neighbor 192.168.0.6 remote-as 1
+ neighbor 192.168.0.6 description iBGP peer iol-6
+ neighbor 192.168.0.6 update-source Loopback0
+ neighbor 192.168.0.7 remote-as 1
+ neighbor 192.168.0.7 description iBGP peer iol-7
+ neighbor 192.168.0.7 update-source Loopback0
+ neighbor 192.168.0.8 remote-as 1
+ neighbor 192.168.0.8 description iBGP peer iol-8
+ neighbor 192.168.0.8 update-source Loopback0
+ neighbor 192.168.0.9 remote-as 1
+ neighbor 192.168.0.9 description iBGP peer iol-9
+ neighbor 192.168.0.9 update-source Loopback0
+ neighbor 192.168.0.10 remote-as 1
+ neighbor 192.168.0.10 description iBGP peer iol-10
+ neighbor 192.168.0.10 update-source Loopback0
+ neighbor 192.168.0.11 remote-as 1
+ neighbor 192.168.0.11 description iBGP peer iol-11
+ neighbor 192.168.0.11 update-source Loopback0
+ neighbor 192.168.0.12 remote-as 1
+ neighbor 192.168.0.12 description iBGP peer iol-12
+ neighbor 192.168.0.12 update-source Loopback0
+ neighbor 192.168.0.13 remote-as 1
+ neighbor 192.168.0.13 description iBGP peer iol-13
+ neighbor 192.168.0.13 update-source Loopback0
+ neighbor 192.168.0.14 remote-as 1
+ neighbor 192.168.0.14 description iBGP peer iol-14
+ neighbor 192.168.0.14 update-source Loopback0
+ neighbor 192.168.0.15 remote-as 1
+ neighbor 192.168.0.15 description iBGP peer iol-15
+ neighbor 192.168.0.15 update-source Loopback0
+ neighbor 192.168.0.16 remote-as 1
+ neighbor 192.168.0.16 description iBGP peer iol-16
+ neighbor 192.168.0.16 update-source Loopback0
+ !
+ address-family ipv4
+  network 192.168.0.2 mask 255.255.255.255
+  neighbor 192.168.0.1 activate
+  neighbor 192.168.0.3 activate
+  neighbor 192.168.0.4 activate
+  neighbor 192.168.0.5 activate
+  neighbor 192.168.0.6 activate
+  neighbor 192.168.0.7 activate
+  neighbor 192.168.0.8 activate
+  neighbor 192.168.0.9 activate
+  neighbor 192.168.0.10 activate
+  neighbor 192.168.0.11 activate
+  neighbor 192.168.0.12 activate
+  neighbor 192.168.0.13 activate
+  neighbor 192.168.0.14 activate
+  neighbor 192.168.0.15 activate
+  neighbor 192.168.0.16 activate
+ exit-address-family
+!
+ip forward-protocol nd
+!
+no ip http server
+no ip http secure-server
+!
+!
+!
+!
+!
+!
+control-plane
+!
+!
+line con 0
+ password cisco
+ logging synchronous
+line aux 0
+line vty 0 4
+ exec-timeout 720 0
+ password cisco
+ login local
+ transport input telnet ssh
+!
+!
+end</entry>
+        </extensions>
+        <interface id="0" name="Ethernet0/1" ipv4="10.0.0.2" netPrefixLenV4="30"/>
+        <interface id="1" name="Ethernet0/2" ipv4="10.0.0.13" netPrefixLenV4="30"/>
+        <interface id="2" name="Ethernet0/3" ipv4="10.0.128.10" netPrefixLenV4="29"/>
+    </node>
+    <node name="iol-3" type="SIMPLE" subtype="IOL" location="1159,398" ipv4="192.168.0.3">
+        <extensions>
+            <entry key="AutoNetkit.mgmt_ip" type="string"></entry>
+            <entry key="config" type="String">!
+! Last configuration change at 11:49:22 UTC Tue May 24 2016
+!
+version 15.2
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+service compress-config
+!
+hostname iol-3
+!
+boot-start-marker
+boot-end-marker
+!
+!
+vrf definition Mgmt-intf
+ !
+ address-family ipv4
+ exit-address-family
+ !
+ address-family ipv6
+ exit-address-family
+!
+enable password cisco
+!
+username cisco privilege 15 secret 5 $1$WZAm$iQTIk60C1W/itlqkWSHwc1
+no aaa new-model
+!
+!
+!
+!
+!
+!
+!
+!
+no ip domain-lookup
+ip domain-name virl.info
+ip cef
+ipv6 unicast-routing
+ipv6 cef
+!
+!
+!
+no cdp run
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ description Loopback
+ ip address 192.168.0.3 255.255.255.255
+!
+interface Ethernet0/0
+ description OOB Management
+ vrf forwarding Mgmt-intf
+ ip address 10.255.1.112 255.255.0.0
+!
+interface Ethernet0/1
+ description to iol-2
+ ip address 10.0.0.14 255.255.255.252
+ ip ospf cost 1
+!
+interface Ethernet0/2
+ description to iol-4
+ ip address 10.0.0.17 255.255.255.252
+ ip ospf cost 1
+!
+interface Ethernet0/3
+ description to iol-l2-3
+ ip address 10.0.128.1 255.255.255.248
+ ip ospf cost 1
+!
+interface Ethernet1/0
+ no ip address
+ shutdown
+!
+interface Ethernet1/1
+ no ip address
+ shutdown
+!
+interface Ethernet1/2
+ no ip address
+ shutdown
+!
+interface Ethernet1/3
+ no ip address
+ shutdown
+!
+interface Ethernet2/0
+ no ip address
+ shutdown
+!
+interface Ethernet2/1
+ no ip address
+ shutdown
+!
+interface Ethernet2/2
+ no ip address
+ shutdown
+!
+interface Ethernet2/3
+ no ip address
+ shutdown
+!
+interface Ethernet3/0
+ no ip address
+ shutdown
+!
+interface Ethernet3/1
+ no ip address
+ shutdown
+!
+interface Ethernet3/2
+ no ip address
+ shutdown
+!
+interface Ethernet3/3
+ no ip address
+ shutdown
+!
+router ospf 1
+ passive-interface Loopback0
+ network 10.0.0.12 0.0.0.3 area 0
+ network 10.0.0.16 0.0.0.3 area 0
+ network 10.0.128.0 0.0.0.7 area 0
+ network 192.168.0.3 0.0.0.0 area 0
+!
+router bgp 1
+ bgp router-id 192.168.0.3
+ bgp log-neighbor-changes
+ neighbor 192.168.0.1 remote-as 1
+ neighbor 192.168.0.1 description iBGP peer iol-1
+ neighbor 192.168.0.1 update-source Loopback0
+ neighbor 192.168.0.2 remote-as 1
+ neighbor 192.168.0.2 description iBGP peer iol-2
+ neighbor 192.168.0.2 update-source Loopback0
+ neighbor 192.168.0.4 remote-as 1
+ neighbor 192.168.0.4 description iBGP peer iol-4
+ neighbor 192.168.0.4 update-source Loopback0
+ neighbor 192.168.0.5 remote-as 1
+ neighbor 192.168.0.5 description iBGP peer iol-5
+ neighbor 192.168.0.5 update-source Loopback0
+ neighbor 192.168.0.6 remote-as 1
+ neighbor 192.168.0.6 description iBGP peer iol-6
+ neighbor 192.168.0.6 update-source Loopback0
+ neighbor 192.168.0.7 remote-as 1
+ neighbor 192.168.0.7 description iBGP peer iol-7
+ neighbor 192.168.0.7 update-source Loopback0
+ neighbor 192.168.0.8 remote-as 1
+ neighbor 192.168.0.8 description iBGP peer iol-8
+ neighbor 192.168.0.8 update-source Loopback0
+ neighbor 192.168.0.9 remote-as 1
+ neighbor 192.168.0.9 description iBGP peer iol-9
+ neighbor 192.168.0.9 update-source Loopback0
+ neighbor 192.168.0.10 remote-as 1
+ neighbor 192.168.0.10 description iBGP peer iol-10
+ neighbor 192.168.0.10 update-source Loopback0
+ neighbor 192.168.0.11 remote-as 1
+ neighbor 192.168.0.11 description iBGP peer iol-11
+ neighbor 192.168.0.11 update-source Loopback0
+ neighbor 192.168.0.12 remote-as 1
+ neighbor 192.168.0.12 description iBGP peer iol-12
+ neighbor 192.168.0.12 update-source Loopback0
+ neighbor 192.168.0.13 remote-as 1
+ neighbor 192.168.0.13 description iBGP peer iol-13
+ neighbor 192.168.0.13 update-source Loopback0
+ neighbor 192.168.0.14 remote-as 1
+ neighbor 192.168.0.14 description iBGP peer iol-14
+ neighbor 192.168.0.14 update-source Loopback0
+ neighbor 192.168.0.15 remote-as 1
+ neighbor 192.168.0.15 description iBGP peer iol-15
+ neighbor 192.168.0.15 update-source Loopback0
+ neighbor 192.168.0.16 remote-as 1
+ neighbor 192.168.0.16 description iBGP peer iol-16
+ neighbor 192.168.0.16 update-source Loopback0
+ !
+ address-family ipv4
+  network 192.168.0.3 mask 255.255.255.255
+  neighbor 192.168.0.1 activate
+  neighbor 192.168.0.2 activate
+  neighbor 192.168.0.4 activate
+  neighbor 192.168.0.5 activate
+  neighbor 192.168.0.6 activate
+  neighbor 192.168.0.7 activate
+  neighbor 192.168.0.8 activate
+  neighbor 192.168.0.9 activate
+  neighbor 192.168.0.10 activate
+  neighbor 192.168.0.11 activate
+  neighbor 192.168.0.12 activate
+  neighbor 192.168.0.13 activate
+  neighbor 192.168.0.14 activate
+  neighbor 192.168.0.15 activate
+  neighbor 192.168.0.16 activate
+ exit-address-family
+!
+ip forward-protocol nd
+!
+no ip http server
+no ip http secure-server
+!
+!
+!
+!
+!
+!
+control-plane
+!
+!
+line con 0
+ password cisco
+ logging synchronous
+line aux 0
+line vty 0 4
+ exec-timeout 720 0
+ password cisco
+ login local
+ transport input telnet ssh
+!
+!
+end</entry>
+        </extensions>
+        <interface id="0" name="Ethernet0/1" ipv4="10.0.0.14" netPrefixLenV4="30"/>
+        <interface id="1" name="Ethernet0/2" ipv4="10.0.0.17" netPrefixLenV4="30"/>
+        <interface id="2" name="Ethernet0/3" ipv4="10.0.128.1" netPrefixLenV4="29"/>
+    </node>
+    <node name="iol-4" type="SIMPLE" subtype="IOL" location="1159,506" ipv4="192.168.0.4">
+        <extensions>
+            <entry key="AutoNetkit.mgmt_ip" type="string"></entry>
+            <entry key="config" type="String">!
+! Last configuration change at 11:49:09 UTC Tue May 24 2016
+!
+version 15.2
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+service compress-config
+!
+hostname iol-4
+!
+boot-start-marker
+boot-end-marker
+!
+!
+vrf definition Mgmt-intf
+ !
+ address-family ipv4
+ exit-address-family
+ !
+ address-family ipv6
+ exit-address-family
+!
+enable password cisco
+!
+username cisco privilege 15 secret 5 $1$zCbz$WE6cJpWs5MdFyLG5Ke.Ul/
+no aaa new-model
+!
+!
+!
+!
+!
+!
+!
+!
+no ip domain-lookup
+ip domain-name virl.info
+ip cef
+ipv6 unicast-routing
+ipv6 cef
+!
+!
+!
+no cdp run
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ description Loopback
+ ip address 192.168.0.4 255.255.255.255
+!
+interface Ethernet0/0
+ description OOB Management
+ vrf forwarding Mgmt-intf
+ ip address 10.255.1.106 255.255.0.0
+!
+interface Ethernet0/1
+ description to iol-3
+ ip address 10.0.0.18 255.255.255.252
+ ip ospf cost 1
+!
+interface Ethernet0/2
+ description to iol-5
+ ip address 10.0.0.21 255.255.255.252
+ ip ospf cost 1
+!
+interface Ethernet0/3
+ description to iol-l2-3
+ ip address 10.0.128.2 255.255.255.248
+ ip ospf cost 1
+!
+interface Ethernet1/0
+ no ip address
+ shutdown
+!
+interface Ethernet1/1
+ no ip address
+ shutdown
+!
+interface Ethernet1/2
+ no ip address
+ shutdown
+!
+interface Ethernet1/3
+ no ip address
+ shutdown
+!
+interface Ethernet2/0
+ no ip address
+ shutdown
+!
+interface Ethernet2/1
+ no ip address
+ shutdown
+!
+interface Ethernet2/2
+ no ip address
+ shutdown
+!
+interface Ethernet2/3
+ no ip address
+ shutdown
+!
+interface Ethernet3/0
+ no ip address
+ shutdown
+!
+interface Ethernet3/1
+ no ip address
+ shutdown
+!
+interface Ethernet3/2
+ no ip address
+ shutdown
+!
+interface Ethernet3/3
+ no ip address
+ shutdown
+!
+router ospf 1
+ passive-interface Loopback0
+ network 10.0.0.16 0.0.0.3 area 0
+ network 10.0.0.20 0.0.0.3 area 0
+ network 10.0.128.0 0.0.0.7 area 0
+ network 192.168.0.4 0.0.0.0 area 0
+!
+router bgp 1
+ bgp router-id 192.168.0.4
+ bgp log-neighbor-changes
+ neighbor 192.168.0.1 remote-as 1
+ neighbor 192.168.0.1 description iBGP peer iol-1
+ neighbor 192.168.0.1 update-source Loopback0
+ neighbor 192.168.0.2 remote-as 1
+ neighbor 192.168.0.2 description iBGP peer iol-2
+ neighbor 192.168.0.2 update-source Loopback0
+ neighbor 192.168.0.3 remote-as 1
+ neighbor 192.168.0.3 description iBGP peer iol-3
+ neighbor 192.168.0.3 update-source Loopback0
+ neighbor 192.168.0.5 remote-as 1
+ neighbor 192.168.0.5 description iBGP peer iol-5
+ neighbor 192.168.0.5 update-source Loopback0
+ neighbor 192.168.0.6 remote-as 1
+ neighbor 192.168.0.6 description iBGP peer iol-6
+ neighbor 192.168.0.6 update-source Loopback0
+ neighbor 192.168.0.7 remote-as 1
+ neighbor 192.168.0.7 description iBGP peer iol-7
+ neighbor 192.168.0.7 update-source Loopback0
+ neighbor 192.168.0.8 remote-as 1
+ neighbor 192.168.0.8 description iBGP peer iol-8
+ neighbor 192.168.0.8 update-source Loopback0
+ neighbor 192.168.0.9 remote-as 1
+ neighbor 192.168.0.9 description iBGP peer iol-9
+ neighbor 192.168.0.9 update-source Loopback0
+ neighbor 192.168.0.10 remote-as 1
+ neighbor 192.168.0.10 description iBGP peer iol-10
+ neighbor 192.168.0.10 update-source Loopback0
+ neighbor 192.168.0.11 remote-as 1
+ neighbor 192.168.0.11 description iBGP peer iol-11
+ neighbor 192.168.0.11 update-source Loopback0
+ neighbor 192.168.0.12 remote-as 1
+ neighbor 192.168.0.12 description iBGP peer iol-12
+ neighbor 192.168.0.12 update-source Loopback0
+ neighbor 192.168.0.13 remote-as 1
+ neighbor 192.168.0.13 description iBGP peer iol-13
+ neighbor 192.168.0.13 update-source Loopback0
+ neighbor 192.168.0.14 remote-as 1
+ neighbor 192.168.0.14 description iBGP peer iol-14
+ neighbor 192.168.0.14 update-source Loopback0
+ neighbor 192.168.0.15 remote-as 1
+ neighbor 192.168.0.15 description iBGP peer iol-15
+ neighbor 192.168.0.15 update-source Loopback0
+ neighbor 192.168.0.16 remote-as 1
+ neighbor 192.168.0.16 description iBGP peer iol-16
+ neighbor 192.168.0.16 update-source Loopback0
+ !
+ address-family ipv4
+  network 192.168.0.4 mask 255.255.255.255
+  neighbor 192.168.0.1 activate
+  neighbor 192.168.0.2 activate
+  neighbor 192.168.0.3 activate
+  neighbor 192.168.0.5 activate
+  neighbor 192.168.0.6 activate
+  neighbor 192.168.0.7 activate
+  neighbor 192.168.0.8 activate
+  neighbor 192.168.0.9 activate
+  neighbor 192.168.0.10 activate
+  neighbor 192.168.0.11 activate
+  neighbor 192.168.0.12 activate
+  neighbor 192.168.0.13 activate
+  neighbor 192.168.0.14 activate
+  neighbor 192.168.0.15 activate
+  neighbor 192.168.0.16 activate
+ exit-address-family
+!
+ip forward-protocol nd
+!
+no ip http server
+no ip http secure-server
+!
+!
+!
+!
+!
+!
+control-plane
+!
+!
+line con 0
+ password cisco
+ logging synchronous
+line aux 0
+line vty 0 4
+ exec-timeout 720 0
+ password cisco
+ login local
+ transport input telnet ssh
+!
+!
+end</entry>
+        </extensions>
+        <interface id="0" name="Ethernet0/1" ipv4="10.0.0.18" netPrefixLenV4="30"/>
+        <interface id="1" name="Ethernet0/2" ipv4="10.0.0.21" netPrefixLenV4="30"/>
+        <interface id="2" name="Ethernet0/3" ipv4="10.0.128.2" netPrefixLenV4="29"/>
+    </node>
+    <node name="iol-5" type="SIMPLE" subtype="IOL" location="1075,554" ipv4="192.168.0.5">
+        <extensions>
+            <entry key="AutoNetkit.mgmt_ip" type="string"></entry>
+            <entry key="config" type="String">!
+! Last configuration change at 11:49:11 UTC Tue May 24 2016
+!
+version 15.2
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+service compress-config
+!
+hostname iol-5
+!
+boot-start-marker
+boot-end-marker
+!
+!
+vrf definition Mgmt-intf
+ !
+ address-family ipv4
+ exit-address-family
+ !
+ address-family ipv6
+ exit-address-family
+!
+enable password cisco
+!
+username cisco privilege 15 secret 5 $1$W0cr$mOlsBpUTDPbyC07K3twhY/
+no aaa new-model
+!
+!
+!
+!
+!
+!
+!
+!
+no ip domain-lookup
+ip domain-name virl.info
+ip cef
+ipv6 unicast-routing
+ipv6 cef
+!
+!
+!
+no cdp run
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ description Loopback
+ ip address 192.168.0.5 255.255.255.255
+!
+interface Ethernet0/0
+ description OOB Management
+ vrf forwarding Mgmt-intf
+ ip address 10.255.1.107 255.255.0.0
+!
+interface Ethernet0/1
+ description to iol-4
+ ip address 10.0.0.22 255.255.255.252
+ ip ospf cost 1
+!
+interface Ethernet0/2
+ description to iol-6
+ ip address 10.0.0.25 255.255.255.252
+ ip ospf cost 1
+!
+interface Ethernet0/3
+ description to iol-l2-4
+ ip address 10.0.0.33 255.255.255.248
+ ip ospf cost 1
+!
+interface Ethernet1/0
+ no ip address
+ shutdown
+!
+interface Ethernet1/1
+ no ip address
+ shutdown
+!
+interface Ethernet1/2
+ no ip address
+ shutdown
+!
+interface Ethernet1/3
+ no ip address
+ shutdown
+!
+interface Ethernet2/0
+ no ip address
+ shutdown
+!
+interface Ethernet2/1
+ no ip address
+ shutdown
+!
+interface Ethernet2/2
+ no ip address
+ shutdown
+!
+interface Ethernet2/3
+ no ip address
+ shutdown
+!
+interface Ethernet3/0
+ no ip address
+ shutdown
+!
+interface Ethernet3/1
+ no ip address
+ shutdown
+!
+interface Ethernet3/2
+ no ip address
+ shutdown
+!
+interface Ethernet3/3
+ no ip address
+ shutdown
+!
+router ospf 1
+ passive-interface Loopback0
+ network 10.0.0.20 0.0.0.3 area 0
+ network 10.0.0.24 0.0.0.3 area 0
+ network 10.0.0.32 0.0.0.7 area 0
+ network 192.168.0.5 0.0.0.0 area 0
+!
+router bgp 1
+ bgp router-id 192.168.0.5
+ bgp log-neighbor-changes
+ neighbor 192.168.0.1 remote-as 1
+ neighbor 192.168.0.1 description iBGP peer iol-1
+ neighbor 192.168.0.1 update-source Loopback0
+ neighbor 192.168.0.2 remote-as 1
+ neighbor 192.168.0.2 description iBGP peer iol-2
+ neighbor 192.168.0.2 update-source Loopback0
+ neighbor 192.168.0.3 remote-as 1
+ neighbor 192.168.0.3 description iBGP peer iol-3
+ neighbor 192.168.0.3 update-source Loopback0
+ neighbor 192.168.0.4 remote-as 1
+ neighbor 192.168.0.4 description iBGP peer iol-4
+ neighbor 192.168.0.4 update-source Loopback0
+ neighbor 192.168.0.6 remote-as 1
+ neighbor 192.168.0.6 description iBGP peer iol-6
+ neighbor 192.168.0.6 update-source Loopback0
+ neighbor 192.168.0.7 remote-as 1
+ neighbor 192.168.0.7 description iBGP peer iol-7
+ neighbor 192.168.0.7 update-source Loopback0
+ neighbor 192.168.0.8 remote-as 1
+ neighbor 192.168.0.8 description iBGP peer iol-8
+ neighbor 192.168.0.8 update-source Loopback0
+ neighbor 192.168.0.9 remote-as 1
+ neighbor 192.168.0.9 description iBGP peer iol-9
+ neighbor 192.168.0.9 update-source Loopback0
+ neighbor 192.168.0.10 remote-as 1
+ neighbor 192.168.0.10 description iBGP peer iol-10
+ neighbor 192.168.0.10 update-source Loopback0
+ neighbor 192.168.0.11 remote-as 1
+ neighbor 192.168.0.11 description iBGP peer iol-11
+ neighbor 192.168.0.11 update-source Loopback0
+ neighbor 192.168.0.12 remote-as 1
+ neighbor 192.168.0.12 description iBGP peer iol-12
+ neighbor 192.168.0.12 update-source Loopback0
+ neighbor 192.168.0.13 remote-as 1
+ neighbor 192.168.0.13 description iBGP peer iol-13
+ neighbor 192.168.0.13 update-source Loopback0
+ neighbor 192.168.0.14 remote-as 1
+ neighbor 192.168.0.14 description iBGP peer iol-14
+ neighbor 192.168.0.14 update-source Loopback0
+ neighbor 192.168.0.15 remote-as 1
+ neighbor 192.168.0.15 description iBGP peer iol-15
+ neighbor 192.168.0.15 update-source Loopback0
+ neighbor 192.168.0.16 remote-as 1
+ neighbor 192.168.0.16 description iBGP peer iol-16
+ neighbor 192.168.0.16 update-source Loopback0
+ !
+ address-family ipv4
+  network 192.168.0.5 mask 255.255.255.255
+  neighbor 192.168.0.1 activate
+  neighbor 192.168.0.2 activate
+  neighbor 192.168.0.3 activate
+  neighbor 192.168.0.4 activate
+  neighbor 192.168.0.6 activate
+  neighbor 192.168.0.7 activate
+  neighbor 192.168.0.8 activate
+  neighbor 192.168.0.9 activate
+  neighbor 192.168.0.10 activate
+  neighbor 192.168.0.11 activate
+  neighbor 192.168.0.12 activate
+  neighbor 192.168.0.13 activate
+  neighbor 192.168.0.14 activate
+  neighbor 192.168.0.15 activate
+  neighbor 192.168.0.16 activate
+ exit-address-family
+!
+ip forward-protocol nd
+!
+no ip http server
+no ip http secure-server
+!
+!
+!
+!
+!
+!
+control-plane
+!
+!
+line con 0
+ password cisco
+ logging synchronous
+line aux 0
+line vty 0 4
+ exec-timeout 720 0
+ password cisco
+ login local
+ transport input telnet ssh
+!
+!
+end</entry>
+        </extensions>
+        <interface id="0" name="Ethernet0/1" ipv4="10.0.0.22" netPrefixLenV4="30"/>
+        <interface id="1" name="Ethernet0/2" ipv4="10.0.0.25" netPrefixLenV4="30"/>
+        <interface id="2" name="Ethernet0/3" ipv4="10.0.0.33" netPrefixLenV4="29"/>
+    </node>
+    <node name="iol-6" type="SIMPLE" subtype="IOL" location="955,554" ipv4="192.168.0.6">
+        <extensions>
+            <entry key="AutoNetkit.mgmt_ip" type="string"></entry>
+            <entry key="config" type="String">!
+! Last configuration change at 11:49:12 UTC Tue May 24 2016
+!
+version 15.2
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+service compress-config
+!
+hostname iol-6
+!
+boot-start-marker
+boot-end-marker
+!
+!
+vrf definition Mgmt-intf
+ !
+ address-family ipv4
+ exit-address-family
+ !
+ address-family ipv6
+ exit-address-family
+!
+enable password cisco
+!
+username cisco privilege 15 secret 5 $1$pNp9$Egc15Gq3a6EUFDE6PSuGI.
+no aaa new-model
+!
+!
+!
+!
+!
+!
+!
+!
+no ip domain-lookup
+ip domain-name virl.info
+ip cef
+ipv6 unicast-routing
+ipv6 cef
+!
+!
+!
+no cdp run
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ description Loopback
+ ip address 192.168.0.6 255.255.255.255
+!
+interface Ethernet0/0
+ description OOB Management
+ vrf forwarding Mgmt-intf
+ ip address 10.255.1.108 255.255.0.0
+!
+interface Ethernet0/1
+ description to iol-5
+ ip address 10.0.0.26 255.255.255.252
+ ip ospf cost 1
+!
+interface Ethernet0/2
+ description to iol-7
+ ip address 10.0.0.29 255.255.255.252
+ ip ospf cost 1
+!
+interface Ethernet0/3
+ description to iol-l2-4
+ ip address 10.0.0.34 255.255.255.248
+ ip ospf cost 1
+!
+interface Ethernet1/0
+ no ip address
+ shutdown
+!
+interface Ethernet1/1
+ no ip address
+ shutdown
+!
+interface Ethernet1/2
+ no ip address
+ shutdown
+!
+interface Ethernet1/3
+ no ip address
+ shutdown
+!
+interface Ethernet2/0
+ no ip address
+ shutdown
+!
+interface Ethernet2/1
+ no ip address
+ shutdown
+!
+interface Ethernet2/2
+ no ip address
+ shutdown
+!
+interface Ethernet2/3
+ no ip address
+ shutdown
+!
+interface Ethernet3/0
+ no ip address
+ shutdown
+!
+interface Ethernet3/1
+ no ip address
+ shutdown
+!
+interface Ethernet3/2
+ no ip address
+ shutdown
+!
+interface Ethernet3/3
+ no ip address
+ shutdown
+!
+router ospf 1
+ passive-interface Loopback0
+ network 10.0.0.24 0.0.0.3 area 0
+ network 10.0.0.28 0.0.0.3 area 0
+ network 10.0.0.32 0.0.0.7 area 0
+ network 192.168.0.6 0.0.0.0 area 0
+!
+router bgp 1
+ bgp router-id 192.168.0.6
+ bgp log-neighbor-changes
+ neighbor 192.168.0.1 remote-as 1
+ neighbor 192.168.0.1 description iBGP peer iol-1
+ neighbor 192.168.0.1 update-source Loopback0
+ neighbor 192.168.0.2 remote-as 1
+ neighbor 192.168.0.2 description iBGP peer iol-2
+ neighbor 192.168.0.2 update-source Loopback0
+ neighbor 192.168.0.3 remote-as 1
+ neighbor 192.168.0.3 description iBGP peer iol-3
+ neighbor 192.168.0.3 update-source Loopback0
+ neighbor 192.168.0.4 remote-as 1
+ neighbor 192.168.0.4 description iBGP peer iol-4
+ neighbor 192.168.0.4 update-source Loopback0
+ neighbor 192.168.0.5 remote-as 1
+ neighbor 192.168.0.5 description iBGP peer iol-5
+ neighbor 192.168.0.5 update-source Loopback0
+ neighbor 192.168.0.7 remote-as 1
+ neighbor 192.168.0.7 description iBGP peer iol-7
+ neighbor 192.168.0.7 update-source Loopback0
+ neighbor 192.168.0.8 remote-as 1
+ neighbor 192.168.0.8 description iBGP peer iol-8
+ neighbor 192.168.0.8 update-source Loopback0
+ neighbor 192.168.0.9 remote-as 1
+ neighbor 192.168.0.9 description iBGP peer iol-9
+ neighbor 192.168.0.9 update-source Loopback0
+ neighbor 192.168.0.10 remote-as 1
+ neighbor 192.168.0.10 description iBGP peer iol-10
+ neighbor 192.168.0.10 update-source Loopback0
+ neighbor 192.168.0.11 remote-as 1
+ neighbor 192.168.0.11 description iBGP peer iol-11
+ neighbor 192.168.0.11 update-source Loopback0
+ neighbor 192.168.0.12 remote-as 1
+ neighbor 192.168.0.12 description iBGP peer iol-12
+ neighbor 192.168.0.12 update-source Loopback0
+ neighbor 192.168.0.13 remote-as 1
+ neighbor 192.168.0.13 description iBGP peer iol-13
+ neighbor 192.168.0.13 update-source Loopback0
+ neighbor 192.168.0.14 remote-as 1
+ neighbor 192.168.0.14 description iBGP peer iol-14
+ neighbor 192.168.0.14 update-source Loopback0
+ neighbor 192.168.0.15 remote-as 1
+ neighbor 192.168.0.15 description iBGP peer iol-15
+ neighbor 192.168.0.15 update-source Loopback0
+ neighbor 192.168.0.16 remote-as 1
+ neighbor 192.168.0.16 description iBGP peer iol-16
+ neighbor 192.168.0.16 update-source Loopback0
+ !
+ address-family ipv4
+  network 192.168.0.6 mask 255.255.255.255
+  neighbor 192.168.0.1 activate
+  neighbor 192.168.0.2 activate
+  neighbor 192.168.0.3 activate
+  neighbor 192.168.0.4 activate
+  neighbor 192.168.0.5 activate
+  neighbor 192.168.0.7 activate
+  neighbor 192.168.0.8 activate
+  neighbor 192.168.0.9 activate
+  neighbor 192.168.0.10 activate
+  neighbor 192.168.0.11 activate
+  neighbor 192.168.0.12 activate
+  neighbor 192.168.0.13 activate
+  neighbor 192.168.0.14 activate
+  neighbor 192.168.0.15 activate
+  neighbor 192.168.0.16 activate
+ exit-address-family
+!
+ip forward-protocol nd
+!
+no ip http server
+no ip http secure-server
+!
+!
+!
+!
+!
+!
+control-plane
+!
+!
+line con 0
+ password cisco
+ logging synchronous
+line aux 0
+line vty 0 4
+ exec-timeout 720 0
+ password cisco
+ login local
+ transport input telnet ssh
+!
+!
+end</entry>
+        </extensions>
+        <interface id="0" name="Ethernet0/1" ipv4="10.0.0.26" netPrefixLenV4="30"/>
+        <interface id="1" name="Ethernet0/2" ipv4="10.0.0.29" netPrefixLenV4="30"/>
+        <interface id="2" name="Ethernet0/3" ipv4="10.0.0.34" netPrefixLenV4="29"/>
+    </node>
+    <node name="iol-7" type="SIMPLE" subtype="IOL" location="859,506" ipv4="192.168.0.7">
+        <extensions>
+            <entry key="AutoNetkit.mgmt_ip" type="string"></entry>
+            <entry key="config" type="String">!
+! Last configuration change at 11:49:16 UTC Tue May 24 2016
+!
+version 15.2
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+service compress-config
+!
+hostname iol-7
+!
+boot-start-marker
+boot-end-marker
+!
+!
+vrf definition Mgmt-intf
+ !
+ address-family ipv4
+ exit-address-family
+ !
+ address-family ipv6
+ exit-address-family
+!
+enable password cisco
+!
+username cisco privilege 15 secret 5 $1$v.4M$NHig7w0RBtWjQy3H9ZyCm/
+no aaa new-model
+!
+!
+!
+!
+!
+!
+!
+!
+no ip domain-lookup
+ip domain-name virl.info
+ip cef
+ipv6 unicast-routing
+ipv6 cef
+!
+!
+!
+no cdp run
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ description Loopback
+ ip address 192.168.0.7 255.255.255.255
+!
+interface Ethernet0/0
+ description OOB Management
+ vrf forwarding Mgmt-intf
+ ip address 10.255.1.109 255.255.0.0
+!
+interface Ethernet0/1
+ description to iol-6
+ ip address 10.0.0.30 255.255.255.252
+ ip ospf cost 1
+!
+interface Ethernet0/2
+ description to iol-8
+ ip address 10.0.0.49 255.255.255.252
+ ip ospf cost 1
+!
+interface Ethernet0/3
+ description to iol-l2-1
+ ip address 10.0.0.41 255.255.255.248
+ ip ospf cost 1
+!
+interface Ethernet1/0
+ no ip address
+ shutdown
+!
+interface Ethernet1/1
+ no ip address
+ shutdown
+!
+interface Ethernet1/2
+ no ip address
+ shutdown
+!
+interface Ethernet1/3
+ no ip address
+ shutdown
+!
+interface Ethernet2/0
+ no ip address
+ shutdown
+!
+interface Ethernet2/1
+ no ip address
+ shutdown
+!
+interface Ethernet2/2
+ no ip address
+ shutdown
+!
+interface Ethernet2/3
+ no ip address
+ shutdown
+!
+interface Ethernet3/0
+ no ip address
+ shutdown
+!
+interface Ethernet3/1
+ no ip address
+ shutdown
+!
+interface Ethernet3/2
+ no ip address
+ shutdown
+!
+interface Ethernet3/3
+ no ip address
+ shutdown
+!
+router ospf 1
+ passive-interface Loopback0
+ network 10.0.0.28 0.0.0.3 area 0
+ network 10.0.0.40 0.0.0.7 area 0
+ network 10.0.0.48 0.0.0.3 area 0
+ network 192.168.0.7 0.0.0.0 area 0
+!
+router bgp 1
+ bgp router-id 192.168.0.7
+ bgp log-neighbor-changes
+ neighbor 192.168.0.1 remote-as 1
+ neighbor 192.168.0.1 description iBGP peer iol-1
+ neighbor 192.168.0.1 update-source Loopback0
+ neighbor 192.168.0.2 remote-as 1
+ neighbor 192.168.0.2 description iBGP peer iol-2
+ neighbor 192.168.0.2 update-source Loopback0
+ neighbor 192.168.0.3 remote-as 1
+ neighbor 192.168.0.3 description iBGP peer iol-3
+ neighbor 192.168.0.3 update-source Loopback0
+ neighbor 192.168.0.4 remote-as 1
+ neighbor 192.168.0.4 description iBGP peer iol-4
+ neighbor 192.168.0.4 update-source Loopback0
+ neighbor 192.168.0.5 remote-as 1
+ neighbor 192.168.0.5 description iBGP peer iol-5
+ neighbor 192.168.0.5 update-source Loopback0
+ neighbor 192.168.0.6 remote-as 1
+ neighbor 192.168.0.6 description iBGP peer iol-6
+ neighbor 192.168.0.6 update-source Loopback0
+ neighbor 192.168.0.8 remote-as 1
+ neighbor 192.168.0.8 description iBGP peer iol-8
+ neighbor 192.168.0.8 update-source Loopback0
+ neighbor 192.168.0.9 remote-as 1
+ neighbor 192.168.0.9 description iBGP peer iol-9
+ neighbor 192.168.0.9 update-source Loopback0
+ neighbor 192.168.0.10 remote-as 1
+ neighbor 192.168.0.10 description iBGP peer iol-10
+ neighbor 192.168.0.10 update-source Loopback0
+ neighbor 192.168.0.11 remote-as 1
+ neighbor 192.168.0.11 description iBGP peer iol-11
+ neighbor 192.168.0.11 update-source Loopback0
+ neighbor 192.168.0.12 remote-as 1
+ neighbor 192.168.0.12 description iBGP peer iol-12
+ neighbor 192.168.0.12 update-source Loopback0
+ neighbor 192.168.0.13 remote-as 1
+ neighbor 192.168.0.13 description iBGP peer iol-13
+ neighbor 192.168.0.13 update-source Loopback0
+ neighbor 192.168.0.14 remote-as 1
+ neighbor 192.168.0.14 description iBGP peer iol-14
+ neighbor 192.168.0.14 update-source Loopback0
+ neighbor 192.168.0.15 remote-as 1
+ neighbor 192.168.0.15 description iBGP peer iol-15
+ neighbor 192.168.0.15 update-source Loopback0
+ neighbor 192.168.0.16 remote-as 1
+ neighbor 192.168.0.16 description iBGP peer iol-16
+ neighbor 192.168.0.16 update-source Loopback0
+ !
+ address-family ipv4
+  network 192.168.0.7 mask 255.255.255.255
+  neighbor 192.168.0.1 activate
+  neighbor 192.168.0.2 activate
+  neighbor 192.168.0.3 activate
+  neighbor 192.168.0.4 activate
+  neighbor 192.168.0.5 activate
+  neighbor 192.168.0.6 activate
+  neighbor 192.168.0.8 activate
+  neighbor 192.168.0.9 activate
+  neighbor 192.168.0.10 activate
+  neighbor 192.168.0.11 activate
+  neighbor 192.168.0.12 activate
+  neighbor 192.168.0.13 activate
+  neighbor 192.168.0.14 activate
+  neighbor 192.168.0.15 activate
+  neighbor 192.168.0.16 activate
+ exit-address-family
+!
+ip forward-protocol nd
+!
+no ip http server
+no ip http secure-server
+!
+!
+!
+!
+!
+!
+control-plane
+!
+!
+line con 0
+ password cisco
+ logging synchronous
+line aux 0
+line vty 0 4
+ exec-timeout 720 0
+ password cisco
+ login local
+ transport input telnet ssh
+!
+!
+end</entry>
+        </extensions>
+        <interface id="0" name="Ethernet0/1" ipv4="10.0.0.30" netPrefixLenV4="30"/>
+        <interface id="1" name="Ethernet0/2" ipv4="10.0.0.49" netPrefixLenV4="30"/>
+        <interface id="2" name="Ethernet0/3" ipv4="10.0.0.41" netPrefixLenV4="29"/>
+    </node>
+    <node name="iol-8" type="SIMPLE" subtype="IOL" location="859,386" ipv4="192.168.0.8">
+        <extensions>
+            <entry key="AutoNetkit.mgmt_ip" type="string"></entry>
+            <entry key="config" type="String">!
+! Last configuration change at 11:49:06 UTC Tue May 24 2016
+!
+version 15.2
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+service compress-config
+!
+hostname iol-8
+!
+boot-start-marker
+boot-end-marker
+!
+!
+vrf definition Mgmt-intf
+ !
+ address-family ipv4
+ exit-address-family
+ !
+ address-family ipv6
+ exit-address-family
+!
+enable password cisco
+!
+username cisco privilege 15 secret 5 $1$f/D/$s1TIe0lCivQQCBPDoSn3V.
+no aaa new-model
+!
+!
+!
+!
+!
+!
+!
+!
+no ip domain-lookup
+ip domain-name virl.info
+ip cef
+ipv6 unicast-routing
+ipv6 cef
+!
+!
+!
+no cdp run
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ description Loopback
+ ip address 192.168.0.8 255.255.255.255
+!
+interface Ethernet0/0
+ description OOB Management
+ vrf forwarding Mgmt-intf
+ ip address 10.255.1.104 255.255.0.0
+!
+interface Ethernet0/1
+ description to iol-1
+ ip address 10.0.0.6 255.255.255.252
+ ip ospf cost 1
+!
+interface Ethernet0/2
+ description to iol-7
+ ip address 10.0.0.50 255.255.255.252
+ ip ospf cost 1
+!
+interface Ethernet0/3
+ description to iol-l2-1
+ ip address 10.0.0.42 255.255.255.248
+ ip ospf cost 1
+!
+interface Ethernet1/0
+ no ip address
+ shutdown
+!
+interface Ethernet1/1
+ no ip address
+ shutdown
+!
+interface Ethernet1/2
+ no ip address
+ shutdown
+!
+interface Ethernet1/3
+ no ip address
+ shutdown
+!
+interface Ethernet2/0
+ no ip address
+ shutdown
+!
+interface Ethernet2/1
+ no ip address
+ shutdown
+!
+interface Ethernet2/2
+ no ip address
+ shutdown
+!
+interface Ethernet2/3
+ no ip address
+ shutdown
+!
+interface Ethernet3/0
+ no ip address
+ shutdown
+!
+interface Ethernet3/1
+ no ip address
+ shutdown
+!
+interface Ethernet3/2
+ no ip address
+ shutdown
+!
+interface Ethernet3/3
+ no ip address
+ shutdown
+!
+router ospf 1
+ passive-interface Loopback0
+ network 10.0.0.4 0.0.0.3 area 0
+ network 10.0.0.40 0.0.0.7 area 0
+ network 10.0.0.48 0.0.0.3 area 0
+ network 192.168.0.8 0.0.0.0 area 0
+!
+router bgp 1
+ bgp router-id 192.168.0.8
+ bgp log-neighbor-changes
+ neighbor 192.168.0.1 remote-as 1
+ neighbor 192.168.0.1 description iBGP peer iol-1
+ neighbor 192.168.0.1 update-source Loopback0
+ neighbor 192.168.0.2 remote-as 1
+ neighbor 192.168.0.2 description iBGP peer iol-2
+ neighbor 192.168.0.2 update-source Loopback0
+ neighbor 192.168.0.3 remote-as 1
+ neighbor 192.168.0.3 description iBGP peer iol-3
+ neighbor 192.168.0.3 update-source Loopback0
+ neighbor 192.168.0.4 remote-as 1
+ neighbor 192.168.0.4 description iBGP peer iol-4
+ neighbor 192.168.0.4 update-source Loopback0
+ neighbor 192.168.0.5 remote-as 1
+ neighbor 192.168.0.5 description iBGP peer iol-5
+ neighbor 192.168.0.5 update-source Loopback0
+ neighbor 192.168.0.6 remote-as 1
+ neighbor 192.168.0.6 description iBGP peer iol-6
+ neighbor 192.168.0.6 update-source Loopback0
+ neighbor 192.168.0.7 remote-as 1
+ neighbor 192.168.0.7 description iBGP peer iol-7
+ neighbor 192.168.0.7 update-source Loopback0
+ neighbor 192.168.0.9 remote-as 1
+ neighbor 192.168.0.9 description iBGP peer iol-9
+ neighbor 192.168.0.9 update-source Loopback0
+ neighbor 192.168.0.10 remote-as 1
+ neighbor 192.168.0.10 description iBGP peer iol-10
+ neighbor 192.168.0.10 update-source Loopback0
+ neighbor 192.168.0.11 remote-as 1
+ neighbor 192.168.0.11 description iBGP peer iol-11
+ neighbor 192.168.0.11 update-source Loopback0
+ neighbor 192.168.0.12 remote-as 1
+ neighbor 192.168.0.12 description iBGP peer iol-12
+ neighbor 192.168.0.12 update-source Loopback0
+ neighbor 192.168.0.13 remote-as 1
+ neighbor 192.168.0.13 description iBGP peer iol-13
+ neighbor 192.168.0.13 update-source Loopback0
+ neighbor 192.168.0.14 remote-as 1
+ neighbor 192.168.0.14 description iBGP peer iol-14
+ neighbor 192.168.0.14 update-source Loopback0
+ neighbor 192.168.0.15 remote-as 1
+ neighbor 192.168.0.15 description iBGP peer iol-15
+ neighbor 192.168.0.15 update-source Loopback0
+ neighbor 192.168.0.16 remote-as 1
+ neighbor 192.168.0.16 description iBGP peer iol-16
+ neighbor 192.168.0.16 update-source Loopback0
+ !
+ address-family ipv4
+  network 192.168.0.8 mask 255.255.255.255
+  neighbor 192.168.0.1 activate
+  neighbor 192.168.0.2 activate
+  neighbor 192.168.0.3 activate
+  neighbor 192.168.0.4 activate
+  neighbor 192.168.0.5 activate
+  neighbor 192.168.0.6 activate
+  neighbor 192.168.0.7 activate
+  neighbor 192.168.0.9 activate
+  neighbor 192.168.0.10 activate
+  neighbor 192.168.0.11 activate
+  neighbor 192.168.0.12 activate
+  neighbor 192.168.0.13 activate
+  neighbor 192.168.0.14 activate
+  neighbor 192.168.0.15 activate
+  neighbor 192.168.0.16 activate
+ exit-address-family
+!
+ip forward-protocol nd
+!
+no ip http server
+no ip http secure-server
+!
+!
+!
+!
+!
+!
+control-plane
+!
+!
+line con 0
+ password cisco
+ logging synchronous
+line aux 0
+line vty 0 4
+ exec-timeout 720 0
+ password cisco
+ login local
+ transport input telnet ssh
+!
+!
+end</entry>
+        </extensions>
+        <interface id="0" name="Ethernet0/1" ipv4="10.0.0.6" netPrefixLenV4="30"/>
+        <interface id="1" name="Ethernet0/2" ipv4="10.0.0.50" netPrefixLenV4="30"/>
+        <interface id="2" name="Ethernet0/3" ipv4="10.0.0.42" netPrefixLenV4="29"/>
+    </node>
+    <node name="iol-l2-1" type="SIMPLE" subtype="IOL-L2" location="752,449">
+        <extensions>
+            <entry key="AutoNetkit.mgmt_ip" type="string"></entry>
+            <entry key="config" type="String">!
+! Last configuration change at 11:49:08 UTC Tue May 24 2016
+!
+version 15.2
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+service compress-config
+!
+hostname iol-l2-1
+!
+boot-start-marker
+boot-end-marker
+!
+!
+vrf definition Mgmt-intf
+ !
+ address-family ipv4
+ exit-address-family
+ !
+ address-family ipv6
+ exit-address-family
+!
+enable password cisco
+!
+no aaa new-model
+!
+!
+!
+!
+!
+vtp domain virl.lab
+vtp mode transparent
+!
+!
+!
+no ip domain-lookup
+ip cef
+no ipv6 cef
+!
+!
+!
+spanning-tree mode pvst
+spanning-tree extend system-id
+!
+vlan internal allocation policy ascending
+!
+vlan 2
+ name ank_vlan2
+no cdp run
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ description Loopback
+ no ip address
+!
+interface Ethernet0/0
+ description OOB management
+ no switchport
+ vrf forwarding Mgmt-intf
+ ip address 10.255.1.114 255.255.0.0
+ duplex auto
+!
+interface Ethernet0/1
+ description to iol-9
+ switchport access vlan 2
+ switchport mode access
+!
+interface Ethernet0/2
+ description to iol-10
+ switchport access vlan 2
+ switchport mode access
+!
+interface Ethernet0/3
+ description to iol-8
+ switchport access vlan 2
+ switchport mode access
+!
+interface Ethernet1/0
+ description to iol-7
+ switchport access vlan 2
+ switchport mode access
+!
+interface Ethernet1/1
+!
+interface Ethernet1/2
+!
+interface Ethernet1/3
+!
+interface Ethernet2/0
+!
+interface Ethernet2/1
+!
+interface Ethernet2/2
+!
+interface Ethernet2/3
+!
+interface Ethernet3/0
+!
+interface Ethernet3/1
+!
+interface Ethernet3/2
+!
+interface Ethernet3/3
+!
+ip forward-protocol nd
+!
+no ip http server
+no ip http secure-server
+!
+!
+!
+!
+!
+!
+control-plane
+!
+!
+line con 0
+ password cisco
+ logging synchronous
+line aux 0
+line vty 0 4
+ exec-timeout 720 0
+ password cisco
+ login
+ transport input telnet ssh
+!
+!
+end</entry>
+        </extensions>
+        <interface id="0" name="Ethernet0/1"/>
+        <interface id="1" name="Ethernet0/2"/>
+        <interface id="2" name="Ethernet0/3"/>
+        <interface id="3" name="Ethernet1/0"/>
+    </node>
+    <node name="iol-l2-2" type="SIMPLE" subtype="IOL-L2" location="1004,239">
+        <extensions>
+            <entry key="AutoNetkit.mgmt_ip" type="string"></entry>
+            <entry key="config" type="String">!
+! Last configuration change at 11:49:10 UTC Tue May 24 2016
+!
+version 15.2
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+service compress-config
+!
+hostname iol-l2-2
+!
+boot-start-marker
+boot-end-marker
+!
+!
+vrf definition Mgmt-intf
+ !
+ address-family ipv4
+ exit-address-family
+ !
+ address-family ipv6
+ exit-address-family
+!
+enable password cisco
+!
+no aaa new-model
+!
+!
+!
+!
+!
+vtp domain virl.lab
+vtp mode transparent
+!
+!
+!
+no ip domain-lookup
+ip cef
+no ipv6 cef
+!
+!
+!
+spanning-tree mode pvst
+spanning-tree extend system-id
+!
+vlan internal allocation policy ascending
+!
+vlan 2
+ name ank_vlan2
+no cdp run
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ description Loopback
+ no ip address
+!
+interface Ethernet0/0
+ description OOB management
+ no switchport
+ vrf forwarding Mgmt-intf
+ ip address 10.255.1.115 255.255.0.0
+ duplex auto
+!
+interface Ethernet0/1
+ description to iol-11
+ switchport access vlan 2
+ switchport mode access
+!
+interface Ethernet0/2
+ description to iol-1
+ switchport access vlan 2
+ switchport mode access
+!
+interface Ethernet0/3
+ description to iol-12
+ switchport access vlan 2
+ switchport mode access
+!
+interface Ethernet1/0
+ description to iol-2
+ switchport access vlan 2
+ switchport mode access
+!
+interface Ethernet1/1
+!
+interface Ethernet1/2
+!
+interface Ethernet1/3
+!
+interface Ethernet2/0
+!
+interface Ethernet2/1
+!
+interface Ethernet2/2
+!
+interface Ethernet2/3
+!
+interface Ethernet3/0
+!
+interface Ethernet3/1
+!
+interface Ethernet3/2
+!
+interface Ethernet3/3
+!
+ip forward-protocol nd
+!
+no ip http server
+no ip http secure-server
+!
+!
+!
+!
+!
+!
+control-plane
+!
+!
+line con 0
+ password cisco
+ logging synchronous
+line aux 0
+line vty 0 4
+ exec-timeout 720 0
+ password cisco
+ login
+ transport input telnet ssh
+!
+!
+end</entry>
+        </extensions>
+        <interface id="0" name="Ethernet0/1"/>
+        <interface id="1" name="Ethernet0/2"/>
+        <interface id="2" name="Ethernet0/3"/>
+        <interface id="3" name="Ethernet1/0"/>
+    </node>
+    <node name="iol-l2-3" type="SIMPLE" subtype="IOL-L2" location="1250,457">
+        <extensions>
+            <entry key="AutoNetkit.mgmt_ip" type="string"></entry>
+            <entry key="config" type="String">!
+! Last configuration change at 11:49:18 UTC Tue May 24 2016
+!
+version 15.2
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+service compress-config
+!
+hostname iol-l2-3
+!
+boot-start-marker
+boot-end-marker
+!
+!
+vrf definition Mgmt-intf
+ !
+ address-family ipv4
+ exit-address-family
+ !
+ address-family ipv6
+ exit-address-family
+!
+enable password cisco
+!
+no aaa new-model
+!
+!
+!
+!
+!
+vtp domain virl.lab
+vtp mode transparent
+!
+!
+!
+no ip domain-lookup
+ip cef
+no ipv6 cef
+!
+!
+!
+spanning-tree mode pvst
+spanning-tree extend system-id
+!
+vlan internal allocation policy ascending
+!
+vlan 2
+ name ank_vlan2
+no cdp run
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ description Loopback
+ no ip address
+!
+interface Ethernet0/0
+ description OOB management
+ no switchport
+ vrf forwarding Mgmt-intf
+ ip address 10.255.1.119 255.255.0.0
+ duplex auto
+!
+interface Ethernet0/1
+ description to iol-3
+ switchport access vlan 2
+ switchport mode access
+!
+interface Ethernet0/2
+ description to iol-4
+ switchport access vlan 2
+ switchport mode access
+!
+interface Ethernet0/3
+ description to iol-13
+ switchport access vlan 2
+ switchport mode access
+!
+interface Ethernet1/0
+ description to iol-14
+ switchport access vlan 2
+ switchport mode access
+!
+interface Ethernet1/1
+!
+interface Ethernet1/2
+!
+interface Ethernet1/3
+!
+interface Ethernet2/0
+!
+interface Ethernet2/1
+!
+interface Ethernet2/2
+!
+interface Ethernet2/3
+!
+interface Ethernet3/0
+!
+interface Ethernet3/1
+!
+interface Ethernet3/2
+!
+interface Ethernet3/3
+!
+ip forward-protocol nd
+!
+no ip http server
+no ip http secure-server
+!
+!
+!
+!
+!
+!
+control-plane
+!
+!
+line con 0
+ password cisco
+ logging synchronous
+line aux 0
+line vty 0 4
+ exec-timeout 720 0
+ password cisco
+ login
+ transport input telnet ssh
+!
+!
+end</entry>
+        </extensions>
+        <interface id="0" name="Ethernet0/1"/>
+        <interface id="1" name="Ethernet0/2"/>
+        <interface id="2" name="Ethernet0/3"/>
+        <interface id="3" name="Ethernet1/0"/>
+    </node>
+    <node name="iol-l2-4" type="SIMPLE" subtype="IOL-L2" location="1011,620">
+        <extensions>
+            <entry key="AutoNetkit.mgmt_ip" type="string"></entry>
+            <entry key="config" type="String">!
+! Last configuration change at 11:49:04 UTC Tue May 24 2016
+!
+version 15.2
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+service compress-config
+!
+hostname iol-l2-4
+!
+boot-start-marker
+boot-end-marker
+!
+!
+vrf definition Mgmt-intf
+ !
+ address-family ipv4
+ exit-address-family
+ !
+ address-family ipv6
+ exit-address-family
+!
+enable password cisco
+!
+no aaa new-model
+!
+!
+!
+!
+!
+vtp domain virl.lab
+vtp mode transparent
+!
+!
+!
+no ip domain-lookup
+ip cef
+no ipv6 cef
+!
+!
+!
+spanning-tree mode pvst
+spanning-tree extend system-id
+!
+vlan internal allocation policy ascending
+!
+vlan 2
+ name ank_vlan2
+no cdp run
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ description Loopback
+ no ip address
+!
+interface Ethernet0/0
+ description OOB management
+ no switchport
+ vrf forwarding Mgmt-intf
+ ip address 10.255.1.113 255.255.0.0
+ duplex auto
+!
+interface Ethernet0/1
+ description to iol-6
+ switchport access vlan 2
+ switchport mode access
+!
+interface Ethernet0/2
+ description to iol-15
+ switchport access vlan 2
+ switchport mode access
+!
+interface Ethernet0/3
+ description to iol-16
+ switchport access vlan 2
+ switchport mode access
+!
+interface Ethernet1/0
+ description to iol-5
+ switchport access vlan 2
+ switchport mode access
+!
+interface Ethernet1/1
+!
+interface Ethernet1/2
+!
+interface Ethernet1/3
+!
+interface Ethernet2/0
+!
+interface Ethernet2/1
+!
+interface Ethernet2/2
+!
+interface Ethernet2/3
+!
+interface Ethernet3/0
+!
+interface Ethernet3/1
+!
+interface Ethernet3/2
+!
+interface Ethernet3/3
+!
+ip forward-protocol nd
+!
+no ip http server
+no ip http secure-server
+!
+!
+!
+!
+!
+!
+control-plane
+!
+!
+line con 0
+ password cisco
+ logging synchronous
+line aux 0
+line vty 0 4
+ exec-timeout 720 0
+ password cisco
+ login
+ transport input telnet ssh
+!
+!
+end</entry>
+        </extensions>
+        <interface id="0" name="Ethernet0/1"/>
+        <interface id="1" name="Ethernet0/2"/>
+        <interface id="2" name="Ethernet0/3"/>
+        <interface id="3" name="Ethernet1/0"/>
+    </node>
+    <node name="iol-9" type="SIMPLE" subtype="IOL" location="675,403" ipv4="192.168.0.9">
+        <extensions>
+            <entry key="AutoNetkit.mgmt_ip" type="string"></entry>
+            <entry key="config" type="String">!
+! Last configuration change at 11:49:07 UTC Tue May 24 2016
+!
+version 15.2
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+service compress-config
+!
+hostname iol-9
+!
+boot-start-marker
+boot-end-marker
+!
+!
+vrf definition Mgmt-intf
+ !
+ address-family ipv4
+ exit-address-family
+ !
+ address-family ipv6
+ exit-address-family
+!
+enable password cisco
+!
+username cisco privilege 15 secret 5 $1$RPKf$oCI5ILfV2rdZlBVh8hzCM.
+no aaa new-model
+!
+!
+!
+!
+!
+!
+!
+!
+no ip domain-lookup
+ip domain-name virl.info
+ip cef
+ipv6 unicast-routing
+ipv6 cef
+!
+!
+!
+no cdp run
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ description Loopback
+ ip address 192.168.0.9 255.255.255.255
+!
+interface Ethernet0/0
+ description OOB Management
+ vrf forwarding Mgmt-intf
+ ip address 10.255.1.105 255.255.0.0
+!
+interface Ethernet0/1
+ description to iol-l2-1
+ ip address 10.0.0.43 255.255.255.248
+ ip ospf cost 1
+!
+interface Ethernet0/2
+ description to lxc-routem-1
+ ip address 10.0.0.10 255.255.255.252
+ ip ospf cost 1
+!
+interface Ethernet0/3
+ no ip address
+ shutdown
+!
+interface Ethernet1/0
+ no ip address
+ shutdown
+!
+interface Ethernet1/1
+ no ip address
+ shutdown
+!
+interface Ethernet1/2
+ no ip address
+ shutdown
+!
+interface Ethernet1/3
+ no ip address
+ shutdown
+!
+interface Ethernet2/0
+ no ip address
+ shutdown
+!
+interface Ethernet2/1
+ no ip address
+ shutdown
+!
+interface Ethernet2/2
+ no ip address
+ shutdown
+!
+interface Ethernet2/3
+ no ip address
+ shutdown
+!
+interface Ethernet3/0
+ no ip address
+ shutdown
+!
+interface Ethernet3/1
+ no ip address
+ shutdown
+!
+interface Ethernet3/2
+ no ip address
+ shutdown
+!
+interface Ethernet3/3
+ no ip address
+ shutdown
+!
+router ospf 1
+ passive-interface Loopback0
+ network 10.0.0.8 0.0.0.3 area 0
+ network 10.0.0.40 0.0.0.7 area 0
+ network 192.168.0.9 0.0.0.0 area 0
+!
+router bgp 1
+ bgp router-id 192.168.0.9
+ bgp log-neighbor-changes
+ neighbor 192.168.0.1 remote-as 1
+ neighbor 192.168.0.1 description iBGP peer iol-1
+ neighbor 192.168.0.1 update-source Loopback0
+ neighbor 192.168.0.2 remote-as 1
+ neighbor 192.168.0.2 description iBGP peer iol-2
+ neighbor 192.168.0.2 update-source Loopback0
+ neighbor 192.168.0.3 remote-as 1
+ neighbor 192.168.0.3 description iBGP peer iol-3
+ neighbor 192.168.0.3 update-source Loopback0
+ neighbor 192.168.0.4 remote-as 1
+ neighbor 192.168.0.4 description iBGP peer iol-4
+ neighbor 192.168.0.4 update-source Loopback0
+ neighbor 192.168.0.5 remote-as 1
+ neighbor 192.168.0.5 description iBGP peer iol-5
+ neighbor 192.168.0.5 update-source Loopback0
+ neighbor 192.168.0.6 remote-as 1
+ neighbor 192.168.0.6 description iBGP peer iol-6
+ neighbor 192.168.0.6 update-source Loopback0
+ neighbor 192.168.0.7 remote-as 1
+ neighbor 192.168.0.7 description iBGP peer iol-7
+ neighbor 192.168.0.7 update-source Loopback0
+ neighbor 192.168.0.8 remote-as 1
+ neighbor 192.168.0.8 description iBGP peer iol-8
+ neighbor 192.168.0.8 update-source Loopback0
+ neighbor 192.168.0.10 remote-as 1
+ neighbor 192.168.0.10 description iBGP peer iol-10
+ neighbor 192.168.0.10 update-source Loopback0
+ neighbor 192.168.0.11 remote-as 1
+ neighbor 192.168.0.11 description iBGP peer iol-11
+ neighbor 192.168.0.11 update-source Loopback0
+ neighbor 192.168.0.12 remote-as 1
+ neighbor 192.168.0.12 description iBGP peer iol-12
+ neighbor 192.168.0.12 update-source Loopback0
+ neighbor 192.168.0.13 remote-as 1
+ neighbor 192.168.0.13 description iBGP peer iol-13
+ neighbor 192.168.0.13 update-source Loopback0
+ neighbor 192.168.0.14 remote-as 1
+ neighbor 192.168.0.14 description iBGP peer iol-14
+ neighbor 192.168.0.14 update-source Loopback0
+ neighbor 192.168.0.15 remote-as 1
+ neighbor 192.168.0.15 description iBGP peer iol-15
+ neighbor 192.168.0.15 update-source Loopback0
+ neighbor 192.168.0.16 remote-as 1
+ neighbor 192.168.0.16 description iBGP peer iol-16
+ neighbor 192.168.0.16 update-source Loopback0
+ !
+ address-family ipv4
+  network 192.168.0.9 mask 255.255.255.255
+  neighbor 192.168.0.1 activate
+  neighbor 192.168.0.2 activate
+  neighbor 192.168.0.3 activate
+  neighbor 192.168.0.4 activate
+  neighbor 192.168.0.5 activate
+  neighbor 192.168.0.6 activate
+  neighbor 192.168.0.7 activate
+  neighbor 192.168.0.8 activate
+  neighbor 192.168.0.10 activate
+  neighbor 192.168.0.11 activate
+  neighbor 192.168.0.12 activate
+  neighbor 192.168.0.13 activate
+  neighbor 192.168.0.14 activate
+  neighbor 192.168.0.15 activate
+  neighbor 192.168.0.16 activate
+ exit-address-family
+!
+ip forward-protocol nd
+!
+no ip http server
+no ip http secure-server
+!
+!
+!
+!
+!
+!
+control-plane
+!
+!
+line con 0
+ password cisco
+ logging synchronous
+line aux 0
+line vty 0 4
+ exec-timeout 720 0
+ password cisco
+ login local
+ transport input telnet ssh
+!
+!
+end</entry>
+        </extensions>
+        <interface id="0" name="Ethernet0/1" ipv4="10.0.0.43" netPrefixLenV4="29"/>
+        <interface id="1" name="Ethernet0/2" ipv4="10.0.0.10" netPrefixLenV4="30"/>
+    </node>
+    <node name="iol-10" type="SIMPLE" subtype="IOL" location="669,507" ipv4="192.168.0.10">
+        <extensions>
+            <entry key="AutoNetkit.mgmt_ip" type="string"></entry>
+            <entry key="config" type="String">!
+! Last configuration change at 11:49:39 UTC Tue May 24 2016
+!
+version 15.2
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+service compress-config
+!
+hostname iol-10
+!
+boot-start-marker
+boot-end-marker
+!
+!
+vrf definition Mgmt-intf
+ !
+ address-family ipv4
+ exit-address-family
+ !
+ address-family ipv6
+ exit-address-family
+!
+enable password cisco
+!
+username cisco privilege 15 secret 5 $1$t4EB$MRKwuKk7JuOlelg79bNmn0
+no aaa new-model
+!
+!
+!
+!
+!
+!
+!
+!
+no ip domain-lookup
+ip domain-name virl.info
+ip cef
+ipv6 unicast-routing
+ipv6 cef
+!
+!
+!
+no cdp run
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ description Loopback
+ ip address 192.168.0.10 255.255.255.255
+!
+interface Ethernet0/0
+ description OOB Management
+ vrf forwarding Mgmt-intf
+ ip address 10.255.1.120 255.255.0.0
+!
+interface Ethernet0/1
+ description to iol-l2-1
+ ip address 10.0.0.44 255.255.255.248
+ ip ospf cost 1
+!
+interface Ethernet0/2
+ no ip address
+ shutdown
+!
+interface Ethernet0/3
+ no ip address
+ shutdown
+!
+interface Ethernet1/0
+ no ip address
+ shutdown
+!
+interface Ethernet1/1
+ no ip address
+ shutdown
+!
+interface Ethernet1/2
+ no ip address
+ shutdown
+!
+interface Ethernet1/3
+ no ip address
+ shutdown
+!
+interface Ethernet2/0
+ no ip address
+ shutdown
+!
+interface Ethernet2/1
+ no ip address
+ shutdown
+!
+interface Ethernet2/2
+ no ip address
+ shutdown
+!
+interface Ethernet2/3
+ no ip address
+ shutdown
+!
+interface Ethernet3/0
+ no ip address
+ shutdown
+!
+interface Ethernet3/1
+ no ip address
+ shutdown
+!
+interface Ethernet3/2
+ no ip address
+ shutdown
+!
+interface Ethernet3/3
+ no ip address
+ shutdown
+!
+router ospf 1
+ passive-interface Loopback0
+ network 10.0.0.40 0.0.0.7 area 0
+ network 192.168.0.10 0.0.0.0 area 0
+!
+router bgp 1
+ bgp router-id 192.168.0.10
+ bgp log-neighbor-changes
+ neighbor 192.168.0.1 remote-as 1
+ neighbor 192.168.0.1 description iBGP peer iol-1
+ neighbor 192.168.0.1 update-source Loopback0
+ neighbor 192.168.0.2 remote-as 1
+ neighbor 192.168.0.2 description iBGP peer iol-2
+ neighbor 192.168.0.2 update-source Loopback0
+ neighbor 192.168.0.3 remote-as 1
+ neighbor 192.168.0.3 description iBGP peer iol-3
+ neighbor 192.168.0.3 update-source Loopback0
+ neighbor 192.168.0.4 remote-as 1
+ neighbor 192.168.0.4 description iBGP peer iol-4
+ neighbor 192.168.0.4 update-source Loopback0
+ neighbor 192.168.0.5 remote-as 1
+ neighbor 192.168.0.5 description iBGP peer iol-5
+ neighbor 192.168.0.5 update-source Loopback0
+ neighbor 192.168.0.6 remote-as 1
+ neighbor 192.168.0.6 description iBGP peer iol-6
+ neighbor 192.168.0.6 update-source Loopback0
+ neighbor 192.168.0.7 remote-as 1
+ neighbor 192.168.0.7 description iBGP peer iol-7
+ neighbor 192.168.0.7 update-source Loopback0
+ neighbor 192.168.0.8 remote-as 1
+ neighbor 192.168.0.8 description iBGP peer iol-8
+ neighbor 192.168.0.8 update-source Loopback0
+ neighbor 192.168.0.9 remote-as 1
+ neighbor 192.168.0.9 description iBGP peer iol-9
+ neighbor 192.168.0.9 update-source Loopback0
+ neighbor 192.168.0.11 remote-as 1
+ neighbor 192.168.0.11 description iBGP peer iol-11
+ neighbor 192.168.0.11 update-source Loopback0
+ neighbor 192.168.0.12 remote-as 1
+ neighbor 192.168.0.12 description iBGP peer iol-12
+ neighbor 192.168.0.12 update-source Loopback0
+ neighbor 192.168.0.13 remote-as 1
+ neighbor 192.168.0.13 description iBGP peer iol-13
+ neighbor 192.168.0.13 update-source Loopback0
+ neighbor 192.168.0.14 remote-as 1
+ neighbor 192.168.0.14 description iBGP peer iol-14
+ neighbor 192.168.0.14 update-source Loopback0
+ neighbor 192.168.0.15 remote-as 1
+ neighbor 192.168.0.15 description iBGP peer iol-15
+ neighbor 192.168.0.15 update-source Loopback0
+ neighbor 192.168.0.16 remote-as 1
+ neighbor 192.168.0.16 description iBGP peer iol-16
+ neighbor 192.168.0.16 update-source Loopback0
+ !
+ address-family ipv4
+  network 192.168.0.10 mask 255.255.255.255
+  neighbor 192.168.0.1 activate
+  neighbor 192.168.0.2 activate
+  neighbor 192.168.0.3 activate
+  neighbor 192.168.0.4 activate
+  neighbor 192.168.0.5 activate
+  neighbor 192.168.0.6 activate
+  neighbor 192.168.0.7 activate
+  neighbor 192.168.0.8 activate
+  neighbor 192.168.0.9 activate
+  neighbor 192.168.0.11 activate
+  neighbor 192.168.0.12 activate
+  neighbor 192.168.0.13 activate
+  neighbor 192.168.0.14 activate
+  neighbor 192.168.0.15 activate
+  neighbor 192.168.0.16 activate
+ exit-address-family
+!
+ip forward-protocol nd
+!
+no ip http server
+no ip http secure-server
+!
+!
+!
+!
+!
+!
+control-plane
+!
+!
+line con 0
+ password cisco
+ logging synchronous
+line aux 0
+line vty 0 4
+ exec-timeout 720 0
+ password cisco
+ login local
+ transport input telnet ssh
+!
+!
+end</entry>
+        </extensions>
+        <interface id="0" name="Ethernet0/1" ipv4="10.0.0.44" netPrefixLenV4="29"/>
+    </node>
+    <node name="iol-11" type="SIMPLE" subtype="IOL" location="942,174" ipv4="192.168.0.11">
+        <extensions>
+            <entry key="AutoNetkit.mgmt_ip" type="string"></entry>
+            <entry key="config" type="String">!
+! Last configuration change at 11:49:40 UTC Tue May 24 2016
+!
+version 15.2
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+service compress-config
+!
+hostname iol-11
+!
+boot-start-marker
+boot-end-marker
+!
+!
+vrf definition Mgmt-intf
+ !
+ address-family ipv4
+ exit-address-family
+ !
+ address-family ipv6
+ exit-address-family
+!
+enable password cisco
+!
+username cisco privilege 15 secret 5 $1$fU6P$jHFHV.3TNkKY06Zyuz.at/
+no aaa new-model
+!
+!
+!
+!
+!
+!
+!
+!
+no ip domain-lookup
+ip domain-name virl.info
+ip cef
+ipv6 unicast-routing
+ipv6 cef
+!
+!
+!
+no cdp run
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ description Loopback
+ ip address 192.168.0.11 255.255.255.255
+!
+interface Ethernet0/0
+ description OOB Management
+ vrf forwarding Mgmt-intf
+ ip address 10.255.1.121 255.255.0.0
+!
+interface Ethernet0/1
+ description to iol-l2-2
+ ip address 10.0.128.11 255.255.255.248
+ ip ospf cost 1
+!
+interface Ethernet0/2
+ no ip address
+ shutdown
+!
+interface Ethernet0/3
+ no ip address
+ shutdown
+!
+interface Ethernet1/0
+ no ip address
+ shutdown
+!
+interface Ethernet1/1
+ no ip address
+ shutdown
+!
+interface Ethernet1/2
+ no ip address
+ shutdown
+!
+interface Ethernet1/3
+ no ip address
+ shutdown
+!
+interface Ethernet2/0
+ no ip address
+ shutdown
+!
+interface Ethernet2/1
+ no ip address
+ shutdown
+!
+interface Ethernet2/2
+ no ip address
+ shutdown
+!
+interface Ethernet2/3
+ no ip address
+ shutdown
+!
+interface Ethernet3/0
+ no ip address
+ shutdown
+!
+interface Ethernet3/1
+ no ip address
+ shutdown
+!
+interface Ethernet3/2
+ no ip address
+ shutdown
+!
+interface Ethernet3/3
+ no ip address
+ shutdown
+!
+router ospf 1
+ passive-interface Loopback0
+ network 10.0.128.8 0.0.0.7 area 0
+ network 192.168.0.11 0.0.0.0 area 0
+!
+router bgp 1
+ bgp router-id 192.168.0.11
+ bgp log-neighbor-changes
+ neighbor 192.168.0.1 remote-as 1
+ neighbor 192.168.0.1 description iBGP peer iol-1
+ neighbor 192.168.0.1 update-source Loopback0
+ neighbor 192.168.0.2 remote-as 1
+ neighbor 192.168.0.2 description iBGP peer iol-2
+ neighbor 192.168.0.2 update-source Loopback0
+ neighbor 192.168.0.3 remote-as 1
+ neighbor 192.168.0.3 description iBGP peer iol-3
+ neighbor 192.168.0.3 update-source Loopback0
+ neighbor 192.168.0.4 remote-as 1
+ neighbor 192.168.0.4 description iBGP peer iol-4
+ neighbor 192.168.0.4 update-source Loopback0
+ neighbor 192.168.0.5 remote-as 1
+ neighbor 192.168.0.5 description iBGP peer iol-5
+ neighbor 192.168.0.5 update-source Loopback0
+ neighbor 192.168.0.6 remote-as 1
+ neighbor 192.168.0.6 description iBGP peer iol-6
+ neighbor 192.168.0.6 update-source Loopback0
+ neighbor 192.168.0.7 remote-as 1
+ neighbor 192.168.0.7 description iBGP peer iol-7
+ neighbor 192.168.0.7 update-source Loopback0
+ neighbor 192.168.0.8 remote-as 1
+ neighbor 192.168.0.8 description iBGP peer iol-8
+ neighbor 192.168.0.8 update-source Loopback0
+ neighbor 192.168.0.9 remote-as 1
+ neighbor 192.168.0.9 description iBGP peer iol-9
+ neighbor 192.168.0.9 update-source Loopback0
+ neighbor 192.168.0.10 remote-as 1
+ neighbor 192.168.0.10 description iBGP peer iol-10
+ neighbor 192.168.0.10 update-source Loopback0
+ neighbor 192.168.0.12 remote-as 1
+ neighbor 192.168.0.12 description iBGP peer iol-12
+ neighbor 192.168.0.12 update-source Loopback0
+ neighbor 192.168.0.13 remote-as 1
+ neighbor 192.168.0.13 description iBGP peer iol-13
+ neighbor 192.168.0.13 update-source Loopback0
+ neighbor 192.168.0.14 remote-as 1
+ neighbor 192.168.0.14 description iBGP peer iol-14
+ neighbor 192.168.0.14 update-source Loopback0
+ neighbor 192.168.0.15 remote-as 1
+ neighbor 192.168.0.15 description iBGP peer iol-15
+ neighbor 192.168.0.15 update-source Loopback0
+ neighbor 192.168.0.16 remote-as 1
+ neighbor 192.168.0.16 description iBGP peer iol-16
+ neighbor 192.168.0.16 update-source Loopback0
+ !
+ address-family ipv4
+  network 192.168.0.11 mask 255.255.255.255
+  neighbor 192.168.0.1 activate
+  neighbor 192.168.0.2 activate
+  neighbor 192.168.0.3 activate
+  neighbor 192.168.0.4 activate
+  neighbor 192.168.0.5 activate
+  neighbor 192.168.0.6 activate
+  neighbor 192.168.0.7 activate
+  neighbor 192.168.0.8 activate
+  neighbor 192.168.0.9 activate
+  neighbor 192.168.0.10 activate
+  neighbor 192.168.0.12 activate
+  neighbor 192.168.0.13 activate
+  neighbor 192.168.0.14 activate
+  neighbor 192.168.0.15 activate
+  neighbor 192.168.0.16 activate
+ exit-address-family
+!
+ip forward-protocol nd
+!
+no ip http server
+no ip http secure-server
+!
+!
+!
+!
+!
+!
+control-plane
+!
+!
+line con 0
+ password cisco
+ logging synchronous
+line aux 0
+line vty 0 4
+ exec-timeout 720 0
+ password cisco
+ login local
+ transport input telnet ssh
+!
+!
+end</entry>
+        </extensions>
+        <interface id="0" name="Ethernet0/1" ipv4="10.0.128.11" netPrefixLenV4="29"/>
+    </node>
+    <node name="iol-12" type="SIMPLE" subtype="IOL" location="1065,172" ipv4="192.168.0.12">
+        <extensions>
+            <entry key="AutoNetkit.mgmt_ip" type="string"></entry>
+            <entry key="config" type="String">!
+! Last configuration change at 11:49:42 UTC Tue May 24 2016
+!
+version 15.2
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+service compress-config
+!
+hostname iol-12
+!
+boot-start-marker
+boot-end-marker
+!
+!
+vrf definition Mgmt-intf
+ !
+ address-family ipv4
+ exit-address-family
+ !
+ address-family ipv6
+ exit-address-family
+!
+enable password cisco
+!
+username cisco privilege 15 secret 5 $1$BINj$OFzKo.SKdPcpHDbeHe3U2/
+no aaa new-model
+!
+!
+!
+!
+!
+!
+!
+!
+no ip domain-lookup
+ip domain-name virl.info
+ip cef
+ipv6 unicast-routing
+ipv6 cef
+!
+!
+!
+no cdp run
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ description Loopback
+ ip address 192.168.0.12 255.255.255.255
+!
+interface Ethernet0/0
+ description OOB Management
+ vrf forwarding Mgmt-intf
+ ip address 10.255.1.122 255.255.0.0
+!
+interface Ethernet0/1
+ description to iol-l2-2
+ ip address 10.0.128.12 255.255.255.248
+ ip ospf cost 1
+!
+interface Ethernet0/2
+ description to lxc-routem-2
+ ip address 10.0.0.54 255.255.255.252
+ ip ospf cost 1
+!
+interface Ethernet0/3
+ no ip address
+ shutdown
+!
+interface Ethernet1/0
+ no ip address
+ shutdown
+!
+interface Ethernet1/1
+ no ip address
+ shutdown
+!
+interface Ethernet1/2
+ no ip address
+ shutdown
+!
+interface Ethernet1/3
+ no ip address
+ shutdown
+!
+interface Ethernet2/0
+ no ip address
+ shutdown
+!
+interface Ethernet2/1
+ no ip address
+ shutdown
+!
+interface Ethernet2/2
+ no ip address
+ shutdown
+!
+interface Ethernet2/3
+ no ip address
+ shutdown
+!
+interface Ethernet3/0
+ no ip address
+ shutdown
+!
+interface Ethernet3/1
+ no ip address
+ shutdown
+!
+interface Ethernet3/2
+ no ip address
+ shutdown
+!
+interface Ethernet3/3
+ no ip address
+ shutdown
+!
+router ospf 1
+ passive-interface Loopback0
+ network 10.0.0.52 0.0.0.3 area 0
+ network 10.0.128.8 0.0.0.7 area 0
+ network 192.168.0.12 0.0.0.0 area 0
+!
+router bgp 1
+ bgp router-id 192.168.0.12
+ bgp log-neighbor-changes
+ neighbor 10.0.0.53 remote-as 1
+ neighbor 10.0.0.53 description iBGP peer lxc-routem-2
+ neighbor 192.168.0.1 remote-as 1
+ neighbor 192.168.0.1 description iBGP peer iol-1
+ neighbor 192.168.0.1 update-source Loopback0
+ neighbor 192.168.0.2 remote-as 1
+ neighbor 192.168.0.2 description iBGP peer iol-2
+ neighbor 192.168.0.2 update-source Loopback0
+ neighbor 192.168.0.3 remote-as 1
+ neighbor 192.168.0.3 description iBGP peer iol-3
+ neighbor 192.168.0.3 update-source Loopback0
+ neighbor 192.168.0.4 remote-as 1
+ neighbor 192.168.0.4 description iBGP peer iol-4
+ neighbor 192.168.0.4 update-source Loopback0
+ neighbor 192.168.0.5 remote-as 1
+ neighbor 192.168.0.5 description iBGP peer iol-5
+ neighbor 192.168.0.5 update-source Loopback0
+ neighbor 192.168.0.6 remote-as 1
+ neighbor 192.168.0.6 description iBGP peer iol-6
+ neighbor 192.168.0.6 update-source Loopback0
+ neighbor 192.168.0.7 remote-as 1
+ neighbor 192.168.0.7 description iBGP peer iol-7
+ neighbor 192.168.0.7 update-source Loopback0
+ neighbor 192.168.0.8 remote-as 1
+ neighbor 192.168.0.8 description iBGP peer iol-8
+ neighbor 192.168.0.8 update-source Loopback0
+ neighbor 192.168.0.9 remote-as 1
+ neighbor 192.168.0.9 description iBGP peer iol-9
+ neighbor 192.168.0.9 update-source Loopback0
+ neighbor 192.168.0.10 remote-as 1
+ neighbor 192.168.0.10 description iBGP peer iol-10
+ neighbor 192.168.0.10 update-source Loopback0
+ neighbor 192.168.0.11 remote-as 1
+ neighbor 192.168.0.11 description iBGP peer iol-11
+ neighbor 192.168.0.11 update-source Loopback0
+ neighbor 192.168.0.13 remote-as 1
+ neighbor 192.168.0.13 description iBGP peer iol-13
+ neighbor 192.168.0.13 update-source Loopback0
+ neighbor 192.168.0.14 remote-as 1
+ neighbor 192.168.0.14 description iBGP peer iol-14
+ neighbor 192.168.0.14 update-source Loopback0
+ neighbor 192.168.0.15 remote-as 1
+ neighbor 192.168.0.15 description iBGP peer iol-15
+ neighbor 192.168.0.15 update-source Loopback0
+ neighbor 192.168.0.16 remote-as 1
+ neighbor 192.168.0.16 description iBGP peer iol-16
+ neighbor 192.168.0.16 update-source Loopback0
+ !
+ address-family ipv4
+  network 192.168.0.12 mask 255.255.255.255
+  neighbor 10.0.0.53 activate
+  neighbor 192.168.0.1 activate
+  neighbor 192.168.0.2 activate
+  neighbor 192.168.0.3 activate
+  neighbor 192.168.0.4 activate
+  neighbor 192.168.0.5 activate
+  neighbor 192.168.0.6 activate
+  neighbor 192.168.0.7 activate
+  neighbor 192.168.0.8 activate
+  neighbor 192.168.0.9 activate
+  neighbor 192.168.0.10 activate
+  neighbor 192.168.0.11 activate
+  neighbor 192.168.0.13 activate
+  neighbor 192.168.0.14 activate
+  neighbor 192.168.0.15 activate
+  neighbor 192.168.0.16 activate
+ exit-address-family
+!
+ip forward-protocol nd
+!
+no ip http server
+no ip http secure-server
+!
+!
+!
+!
+!
+!
+control-plane
+!
+!
+line con 0
+ password cisco
+ logging synchronous
+line aux 0
+line vty 0 4
+ exec-timeout 720 0
+ password cisco
+ login local
+ transport input telnet ssh
+!
+!
+end</entry>
+        </extensions>
+        <interface id="0" name="Ethernet0/1" ipv4="10.0.128.12" netPrefixLenV4="29"/>
+        <interface id="1" name="Ethernet0/2" ipv4="10.0.0.54" netPrefixLenV4="30"/>
+    </node>
+    <node name="iol-13" type="SIMPLE" subtype="IOL" location="1311,396" ipv4="192.168.0.13">
+        <extensions>
+            <entry key="AutoNetkit.mgmt_ip" type="string"></entry>
+            <entry key="config" type="String">!
+! Last configuration change at 11:49:42 UTC Tue May 24 2016
+!
+version 15.2
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+service compress-config
+!
+hostname iol-13
+!
+boot-start-marker
+boot-end-marker
+!
+!
+vrf definition Mgmt-intf
+ !
+ address-family ipv4
+ exit-address-family
+ !
+ address-family ipv6
+ exit-address-family
+!
+enable password cisco
+!
+username cisco privilege 15 secret 5 $1$jFTN$QNGMFidzmyF2ad6TWXBo3.
+no aaa new-model
+!
+!
+!
+!
+!
+!
+!
+!
+no ip domain-lookup
+ip domain-name virl.info
+ip cef
+ipv6 unicast-routing
+ipv6 cef
+!
+!
+!
+no cdp run
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ description Loopback
+ ip address 192.168.0.13 255.255.255.255
+!
+interface Ethernet0/0
+ description OOB Management
+ vrf forwarding Mgmt-intf
+ ip address 10.255.1.123 255.255.0.0
+!
+interface Ethernet0/1
+ description to iol-l2-3
+ ip address 10.0.128.3 255.255.255.248
+ ip ospf cost 1
+!
+interface Ethernet0/2
+ no ip address
+ shutdown
+!
+interface Ethernet0/3
+ no ip address
+ shutdown
+!
+interface Ethernet1/0
+ no ip address
+ shutdown
+!
+interface Ethernet1/1
+ no ip address
+ shutdown
+!
+interface Ethernet1/2
+ no ip address
+ shutdown
+!
+interface Ethernet1/3
+ no ip address
+ shutdown
+!
+interface Ethernet2/0
+ no ip address
+ shutdown
+!
+interface Ethernet2/1
+ no ip address
+ shutdown
+!
+interface Ethernet2/2
+ no ip address
+ shutdown
+!
+interface Ethernet2/3
+ no ip address
+ shutdown
+!
+interface Ethernet3/0
+ no ip address
+ shutdown
+!
+interface Ethernet3/1
+ no ip address
+ shutdown
+!
+interface Ethernet3/2
+ no ip address
+ shutdown
+!
+interface Ethernet3/3
+ no ip address
+ shutdown
+!
+router ospf 1
+ passive-interface Loopback0
+ network 10.0.128.0 0.0.0.7 area 0
+ network 192.168.0.13 0.0.0.0 area 0
+!
+router bgp 1
+ bgp router-id 192.168.0.13
+ bgp log-neighbor-changes
+ neighbor 192.168.0.1 remote-as 1
+ neighbor 192.168.0.1 description iBGP peer iol-1
+ neighbor 192.168.0.1 update-source Loopback0
+ neighbor 192.168.0.2 remote-as 1
+ neighbor 192.168.0.2 description iBGP peer iol-2
+ neighbor 192.168.0.2 update-source Loopback0
+ neighbor 192.168.0.3 remote-as 1
+ neighbor 192.168.0.3 description iBGP peer iol-3
+ neighbor 192.168.0.3 update-source Loopback0
+ neighbor 192.168.0.4 remote-as 1
+ neighbor 192.168.0.4 description iBGP peer iol-4
+ neighbor 192.168.0.4 update-source Loopback0
+ neighbor 192.168.0.5 remote-as 1
+ neighbor 192.168.0.5 description iBGP peer iol-5
+ neighbor 192.168.0.5 update-source Loopback0
+ neighbor 192.168.0.6 remote-as 1
+ neighbor 192.168.0.6 description iBGP peer iol-6
+ neighbor 192.168.0.6 update-source Loopback0
+ neighbor 192.168.0.7 remote-as 1
+ neighbor 192.168.0.7 description iBGP peer iol-7
+ neighbor 192.168.0.7 update-source Loopback0
+ neighbor 192.168.0.8 remote-as 1
+ neighbor 192.168.0.8 description iBGP peer iol-8
+ neighbor 192.168.0.8 update-source Loopback0
+ neighbor 192.168.0.9 remote-as 1
+ neighbor 192.168.0.9 description iBGP peer iol-9
+ neighbor 192.168.0.9 update-source Loopback0
+ neighbor 192.168.0.10 remote-as 1
+ neighbor 192.168.0.10 description iBGP peer iol-10
+ neighbor 192.168.0.10 update-source Loopback0
+ neighbor 192.168.0.11 remote-as 1
+ neighbor 192.168.0.11 description iBGP peer iol-11
+ neighbor 192.168.0.11 update-source Loopback0
+ neighbor 192.168.0.12 remote-as 1
+ neighbor 192.168.0.12 description iBGP peer iol-12
+ neighbor 192.168.0.12 update-source Loopback0
+ neighbor 192.168.0.14 remote-as 1
+ neighbor 192.168.0.14 description iBGP peer iol-14
+ neighbor 192.168.0.14 update-source Loopback0
+ neighbor 192.168.0.15 remote-as 1
+ neighbor 192.168.0.15 description iBGP peer iol-15
+ neighbor 192.168.0.15 update-source Loopback0
+ neighbor 192.168.0.16 remote-as 1
+ neighbor 192.168.0.16 description iBGP peer iol-16
+ neighbor 192.168.0.16 update-source Loopback0
+ !
+ address-family ipv4
+  network 192.168.0.13 mask 255.255.255.255
+  neighbor 192.168.0.1 activate
+  neighbor 192.168.0.2 activate
+  neighbor 192.168.0.3 activate
+  neighbor 192.168.0.4 activate
+  neighbor 192.168.0.5 activate
+  neighbor 192.168.0.6 activate
+  neighbor 192.168.0.7 activate
+  neighbor 192.168.0.8 activate
+  neighbor 192.168.0.9 activate
+  neighbor 192.168.0.10 activate
+  neighbor 192.168.0.11 activate
+  neighbor 192.168.0.12 activate
+  neighbor 192.168.0.14 activate
+  neighbor 192.168.0.15 activate
+  neighbor 192.168.0.16 activate
+ exit-address-family
+!
+ip forward-protocol nd
+!
+no ip http server
+no ip http secure-server
+!
+!
+!
+!
+!
+!
+control-plane
+!
+!
+line con 0
+ password cisco
+ logging synchronous
+line aux 0
+line vty 0 4
+ exec-timeout 720 0
+ password cisco
+ login local
+ transport input telnet ssh
+!
+!
+end</entry>
+        </extensions>
+        <interface id="0" name="Ethernet0/1" ipv4="10.0.128.3" netPrefixLenV4="29"/>
+    </node>
+    <node name="iol-14" type="SIMPLE" subtype="IOL" location="1314,504" ipv4="192.168.0.14">
+        <extensions>
+            <entry key="AutoNetkit.mgmt_ip" type="string"></entry>
+            <entry key="config" type="String">!
+! Last configuration change at 11:49:31 UTC Tue May 24 2016
+!
+version 15.2
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+service compress-config
+!
+hostname iol-14
+!
+boot-start-marker
+boot-end-marker
+!
+!
+vrf definition Mgmt-intf
+ !
+ address-family ipv4
+ exit-address-family
+ !
+ address-family ipv6
+ exit-address-family
+!
+enable password cisco
+!
+username cisco privilege 15 secret 5 $1$yIlo$qoVcfT5Luk18QhHaPUFBD.
+no aaa new-model
+!
+!
+!
+!
+!
+!
+!
+!
+no ip domain-lookup
+ip domain-name virl.info
+ip cef
+ipv6 unicast-routing
+ipv6 cef
+!
+!
+!
+no cdp run
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ description Loopback
+ ip address 192.168.0.14 255.255.255.255
+!
+interface Ethernet0/0
+ description OOB Management
+ vrf forwarding Mgmt-intf
+ ip address 10.255.1.116 255.255.0.0
+!
+interface Ethernet0/1
+ description to iol-l2-3
+ ip address 10.0.128.4 255.255.255.248
+ ip ospf cost 1
+!
+interface Ethernet0/2
+ description to lxc-routem-4
+ ip address 10.0.0.62 255.255.255.252
+ ip ospf cost 1
+!
+interface Ethernet0/3
+ no ip address
+ shutdown
+!
+interface Ethernet1/0
+ no ip address
+ shutdown
+!
+interface Ethernet1/1
+ no ip address
+ shutdown
+!
+interface Ethernet1/2
+ no ip address
+ shutdown
+!
+interface Ethernet1/3
+ no ip address
+ shutdown
+!
+interface Ethernet2/0
+ no ip address
+ shutdown
+!
+interface Ethernet2/1
+ no ip address
+ shutdown
+!
+interface Ethernet2/2
+ no ip address
+ shutdown
+!
+interface Ethernet2/3
+ no ip address
+ shutdown
+!
+interface Ethernet3/0
+ no ip address
+ shutdown
+!
+interface Ethernet3/1
+ no ip address
+ shutdown
+!
+interface Ethernet3/2
+ no ip address
+ shutdown
+!
+interface Ethernet3/3
+ no ip address
+ shutdown
+!
+router ospf 1
+ passive-interface Loopback0
+ network 10.0.0.60 0.0.0.3 area 0
+ network 10.0.128.0 0.0.0.7 area 0
+ network 192.168.0.14 0.0.0.0 area 0
+!
+router bgp 1
+ bgp router-id 192.168.0.14
+ bgp log-neighbor-changes
+ neighbor 192.168.0.1 remote-as 1
+ neighbor 192.168.0.1 description iBGP peer iol-1
+ neighbor 192.168.0.1 update-source Loopback0
+ neighbor 192.168.0.2 remote-as 1
+ neighbor 192.168.0.2 description iBGP peer iol-2
+ neighbor 192.168.0.2 update-source Loopback0
+ neighbor 192.168.0.3 remote-as 1
+ neighbor 192.168.0.3 description iBGP peer iol-3
+ neighbor 192.168.0.3 update-source Loopback0
+ neighbor 192.168.0.4 remote-as 1
+ neighbor 192.168.0.4 description iBGP peer iol-4
+ neighbor 192.168.0.4 update-source Loopback0
+ neighbor 192.168.0.5 remote-as 1
+ neighbor 192.168.0.5 description iBGP peer iol-5
+ neighbor 192.168.0.5 update-source Loopback0
+ neighbor 192.168.0.6 remote-as 1
+ neighbor 192.168.0.6 description iBGP peer iol-6
+ neighbor 192.168.0.6 update-source Loopback0
+ neighbor 192.168.0.7 remote-as 1
+ neighbor 192.168.0.7 description iBGP peer iol-7
+ neighbor 192.168.0.7 update-source Loopback0
+ neighbor 192.168.0.8 remote-as 1
+ neighbor 192.168.0.8 description iBGP peer iol-8
+ neighbor 192.168.0.8 update-source Loopback0
+ neighbor 192.168.0.9 remote-as 1
+ neighbor 192.168.0.9 description iBGP peer iol-9
+ neighbor 192.168.0.9 update-source Loopback0
+ neighbor 192.168.0.10 remote-as 1
+ neighbor 192.168.0.10 description iBGP peer iol-10
+ neighbor 192.168.0.10 update-source Loopback0
+ neighbor 192.168.0.11 remote-as 1
+ neighbor 192.168.0.11 description iBGP peer iol-11
+ neighbor 192.168.0.11 update-source Loopback0
+ neighbor 192.168.0.12 remote-as 1
+ neighbor 192.168.0.12 description iBGP peer iol-12
+ neighbor 192.168.0.12 update-source Loopback0
+ neighbor 192.168.0.13 remote-as 1
+ neighbor 192.168.0.13 description iBGP peer iol-13
+ neighbor 192.168.0.13 update-source Loopback0
+ neighbor 192.168.0.15 remote-as 1
+ neighbor 192.168.0.15 description iBGP peer iol-15
+ neighbor 192.168.0.15 update-source Loopback0
+ neighbor 192.168.0.16 remote-as 1
+ neighbor 192.168.0.16 description iBGP peer iol-16
+ neighbor 192.168.0.16 update-source Loopback0
+ !
+ address-family ipv4
+  network 192.168.0.14 mask 255.255.255.255
+  neighbor 192.168.0.1 activate
+  neighbor 192.168.0.2 activate
+  neighbor 192.168.0.3 activate
+  neighbor 192.168.0.4 activate
+  neighbor 192.168.0.5 activate
+  neighbor 192.168.0.6 activate
+  neighbor 192.168.0.7 activate
+  neighbor 192.168.0.8 activate
+  neighbor 192.168.0.9 activate
+  neighbor 192.168.0.10 activate
+  neighbor 192.168.0.11 activate
+  neighbor 192.168.0.12 activate
+  neighbor 192.168.0.13 activate
+  neighbor 192.168.0.15 activate
+  neighbor 192.168.0.16 activate
+ exit-address-family
+!
+ip forward-protocol nd
+!
+no ip http server
+no ip http secure-server
+!
+!
+!
+!
+!
+!
+control-plane
+!
+!
+line con 0
+ password cisco
+ logging synchronous
+line aux 0
+line vty 0 4
+ exec-timeout 720 0
+ password cisco
+ login local
+ transport input telnet ssh
+!
+!
+end</entry>
+        </extensions>
+        <interface id="0" name="Ethernet0/1" ipv4="10.0.128.4" netPrefixLenV4="29"/>
+        <interface id="1" name="Ethernet0/2" ipv4="10.0.0.62" netPrefixLenV4="30"/>
+    </node>
+    <node name="iol-15" type="SIMPLE" subtype="IOL" location="953,652" ipv4="192.168.0.15">
+        <extensions>
+            <entry key="AutoNetkit.mgmt_ip" type="string"></entry>
+            <entry key="config" type="String">!
+! Last configuration change at 11:49:32 UTC Tue May 24 2016
+!
+version 15.2
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+service compress-config
+!
+hostname iol-15
+!
+boot-start-marker
+boot-end-marker
+!
+!
+vrf definition Mgmt-intf
+ !
+ address-family ipv4
+ exit-address-family
+ !
+ address-family ipv6
+ exit-address-family
+!
+enable password cisco
+!
+username cisco privilege 15 secret 5 $1$V6mg$ZOXcmQuMpN6WqDYB53V27/
+no aaa new-model
+!
+!
+!
+!
+!
+!
+!
+!
+no ip domain-lookup
+ip domain-name virl.info
+ip cef
+ipv6 unicast-routing
+ipv6 cef
+!
+!
+!
+no cdp run
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ description Loopback
+ ip address 192.168.0.15 255.255.255.255
+!
+interface Ethernet0/0
+ description OOB Management
+ vrf forwarding Mgmt-intf
+ ip address 10.255.1.117 255.255.0.0
+!
+interface Ethernet0/1
+ description to iol-l2-4
+ ip address 10.0.0.35 255.255.255.248
+ ip ospf cost 1
+!
+interface Ethernet0/2
+ description to lxc-routem-3
+ ip address 10.0.0.58 255.255.255.252
+ ip ospf cost 1
+!
+interface Ethernet0/3
+ no ip address
+ shutdown
+!
+interface Ethernet1/0
+ no ip address
+ shutdown
+!
+interface Ethernet1/1
+ no ip address
+ shutdown
+!
+interface Ethernet1/2
+ no ip address
+ shutdown
+!
+interface Ethernet1/3
+ no ip address
+ shutdown
+!
+interface Ethernet2/0
+ no ip address
+ shutdown
+!
+interface Ethernet2/1
+ no ip address
+ shutdown
+!
+interface Ethernet2/2
+ no ip address
+ shutdown
+!
+interface Ethernet2/3
+ no ip address
+ shutdown
+!
+interface Ethernet3/0
+ no ip address
+ shutdown
+!
+interface Ethernet3/1
+ no ip address
+ shutdown
+!
+interface Ethernet3/2
+ no ip address
+ shutdown
+!
+interface Ethernet3/3
+ no ip address
+ shutdown
+!
+router ospf 1
+ passive-interface Loopback0
+ network 10.0.0.32 0.0.0.7 area 0
+ network 10.0.0.56 0.0.0.3 area 0
+ network 192.168.0.15 0.0.0.0 area 0
+!
+router bgp 1
+ bgp router-id 192.168.0.15
+ bgp log-neighbor-changes
+ neighbor 192.168.0.1 remote-as 1
+ neighbor 192.168.0.1 description iBGP peer iol-1
+ neighbor 192.168.0.1 update-source Loopback0
+ neighbor 192.168.0.2 remote-as 1
+ neighbor 192.168.0.2 description iBGP peer iol-2
+ neighbor 192.168.0.2 update-source Loopback0
+ neighbor 192.168.0.3 remote-as 1
+ neighbor 192.168.0.3 description iBGP peer iol-3
+ neighbor 192.168.0.3 update-source Loopback0
+ neighbor 192.168.0.4 remote-as 1
+ neighbor 192.168.0.4 description iBGP peer iol-4
+ neighbor 192.168.0.4 update-source Loopback0
+ neighbor 192.168.0.5 remote-as 1
+ neighbor 192.168.0.5 description iBGP peer iol-5
+ neighbor 192.168.0.5 update-source Loopback0
+ neighbor 192.168.0.6 remote-as 1
+ neighbor 192.168.0.6 description iBGP peer iol-6
+ neighbor 192.168.0.6 update-source Loopback0
+ neighbor 192.168.0.7 remote-as 1
+ neighbor 192.168.0.7 description iBGP peer iol-7
+ neighbor 192.168.0.7 update-source Loopback0
+ neighbor 192.168.0.8 remote-as 1
+ neighbor 192.168.0.8 description iBGP peer iol-8
+ neighbor 192.168.0.8 update-source Loopback0
+ neighbor 192.168.0.9 remote-as 1
+ neighbor 192.168.0.9 description iBGP peer iol-9
+ neighbor 192.168.0.9 update-source Loopback0
+ neighbor 192.168.0.10 remote-as 1
+ neighbor 192.168.0.10 description iBGP peer iol-10
+ neighbor 192.168.0.10 update-source Loopback0
+ neighbor 192.168.0.11 remote-as 1
+ neighbor 192.168.0.11 description iBGP peer iol-11
+ neighbor 192.168.0.11 update-source Loopback0
+ neighbor 192.168.0.12 remote-as 1
+ neighbor 192.168.0.12 description iBGP peer iol-12
+ neighbor 192.168.0.12 update-source Loopback0
+ neighbor 192.168.0.13 remote-as 1
+ neighbor 192.168.0.13 description iBGP peer iol-13
+ neighbor 192.168.0.13 update-source Loopback0
+ neighbor 192.168.0.14 remote-as 1
+ neighbor 192.168.0.14 description iBGP peer iol-14
+ neighbor 192.168.0.14 update-source Loopback0
+ neighbor 192.168.0.16 remote-as 1
+ neighbor 192.168.0.16 description iBGP peer iol-16
+ neighbor 192.168.0.16 update-source Loopback0
+ !
+ address-family ipv4
+  network 192.168.0.15 mask 255.255.255.255
+  neighbor 192.168.0.1 activate
+  neighbor 192.168.0.2 activate
+  neighbor 192.168.0.3 activate
+  neighbor 192.168.0.4 activate
+  neighbor 192.168.0.5 activate
+  neighbor 192.168.0.6 activate
+  neighbor 192.168.0.7 activate
+  neighbor 192.168.0.8 activate
+  neighbor 192.168.0.9 activate
+  neighbor 192.168.0.10 activate
+  neighbor 192.168.0.11 activate
+  neighbor 192.168.0.12 activate
+  neighbor 192.168.0.13 activate
+  neighbor 192.168.0.14 activate
+  neighbor 192.168.0.16 activate
+ exit-address-family
+!
+ip forward-protocol nd
+!
+no ip http server
+no ip http secure-server
+!
+!
+!
+!
+!
+!
+control-plane
+!
+!
+line con 0
+ password cisco
+ logging synchronous
+line aux 0
+line vty 0 4
+ exec-timeout 720 0
+ password cisco
+ login local
+ transport input telnet ssh
+!
+!
+end</entry>
+        </extensions>
+        <interface id="0" name="Ethernet0/1" ipv4="10.0.0.35" netPrefixLenV4="29"/>
+        <interface id="1" name="Ethernet0/2" ipv4="10.0.0.58" netPrefixLenV4="30"/>
+    </node>
+    <node name="iol-16" type="SIMPLE" subtype="IOL" location="1073,658" ipv4="192.168.0.16">
+        <extensions>
+            <entry key="AutoNetkit.mgmt_ip" type="string"></entry>
+            <entry key="config" type="String">!
+! Last configuration change at 11:49:34 UTC Tue May 24 2016
+!
+version 15.2
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+service compress-config
+!
+hostname iol-16
+!
+boot-start-marker
+boot-end-marker
+!
+!
+vrf definition Mgmt-intf
+ !
+ address-family ipv4
+ exit-address-family
+ !
+ address-family ipv6
+ exit-address-family
+!
+enable password cisco
+!
+username cisco privilege 15 secret 5 $1$GWuK$NoHLI8VGVw2Hj6bvVCK5s.
+no aaa new-model
+!
+!
+!
+!
+!
+!
+!
+!
+no ip domain-lookup
+ip domain-name virl.info
+ip cef
+ipv6 unicast-routing
+ipv6 cef
+!
+!
+!
+no cdp run
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ description Loopback
+ ip address 192.168.0.16 255.255.255.255
+!
+interface Ethernet0/0
+ description OOB Management
+ vrf forwarding Mgmt-intf
+ ip address 10.255.1.118 255.255.0.0
+!
+interface Ethernet0/1
+ description to iol-l2-4
+ ip address 10.0.0.36 255.255.255.248
+ ip ospf cost 1
+!
+interface Ethernet0/2
+ no ip address
+ shutdown
+!
+interface Ethernet0/3
+ no ip address
+ shutdown
+!
+interface Ethernet1/0
+ no ip address
+ shutdown
+!
+interface Ethernet1/1
+ no ip address
+ shutdown
+!
+interface Ethernet1/2
+ no ip address
+ shutdown
+!
+interface Ethernet1/3
+ no ip address
+ shutdown
+!
+interface Ethernet2/0
+ no ip address
+ shutdown
+!
+interface Ethernet2/1
+ no ip address
+ shutdown
+!
+interface Ethernet2/2
+ no ip address
+ shutdown
+!
+interface Ethernet2/3
+ no ip address
+ shutdown
+!
+interface Ethernet3/0
+ no ip address
+ shutdown
+!
+interface Ethernet3/1
+ no ip address
+ shutdown
+!
+interface Ethernet3/2
+ no ip address
+ shutdown
+!
+interface Ethernet3/3
+ no ip address
+ shutdown
+!
+router ospf 1
+ passive-interface Loopback0
+ network 10.0.0.32 0.0.0.7 area 0
+ network 192.168.0.16 0.0.0.0 area 0
+!
+router bgp 1
+ bgp router-id 192.168.0.16
+ bgp log-neighbor-changes
+ neighbor 192.168.0.1 remote-as 1
+ neighbor 192.168.0.1 description iBGP peer iol-1
+ neighbor 192.168.0.1 update-source Loopback0
+ neighbor 192.168.0.2 remote-as 1
+ neighbor 192.168.0.2 description iBGP peer iol-2
+ neighbor 192.168.0.2 update-source Loopback0
+ neighbor 192.168.0.3 remote-as 1
+ neighbor 192.168.0.3 description iBGP peer iol-3
+ neighbor 192.168.0.3 update-source Loopback0
+ neighbor 192.168.0.4 remote-as 1
+ neighbor 192.168.0.4 description iBGP peer iol-4
+ neighbor 192.168.0.4 update-source Loopback0
+ neighbor 192.168.0.5 remote-as 1
+ neighbor 192.168.0.5 description iBGP peer iol-5
+ neighbor 192.168.0.5 update-source Loopback0
+ neighbor 192.168.0.6 remote-as 1
+ neighbor 192.168.0.6 description iBGP peer iol-6
+ neighbor 192.168.0.6 update-source Loopback0
+ neighbor 192.168.0.7 remote-as 1
+ neighbor 192.168.0.7 description iBGP peer iol-7
+ neighbor 192.168.0.7 update-source Loopback0
+ neighbor 192.168.0.8 remote-as 1
+ neighbor 192.168.0.8 description iBGP peer iol-8
+ neighbor 192.168.0.8 update-source Loopback0
+ neighbor 192.168.0.9 remote-as 1
+ neighbor 192.168.0.9 description iBGP peer iol-9
+ neighbor 192.168.0.9 update-source Loopback0
+ neighbor 192.168.0.10 remote-as 1
+ neighbor 192.168.0.10 description iBGP peer iol-10
+ neighbor 192.168.0.10 update-source Loopback0
+ neighbor 192.168.0.11 remote-as 1
+ neighbor 192.168.0.11 description iBGP peer iol-11
+ neighbor 192.168.0.11 update-source Loopback0
+ neighbor 192.168.0.12 remote-as 1
+ neighbor 192.168.0.12 description iBGP peer iol-12
+ neighbor 192.168.0.12 update-source Loopback0
+ neighbor 192.168.0.13 remote-as 1
+ neighbor 192.168.0.13 description iBGP peer iol-13
+ neighbor 192.168.0.13 update-source Loopback0
+ neighbor 192.168.0.14 remote-as 1
+ neighbor 192.168.0.14 description iBGP peer iol-14
+ neighbor 192.168.0.14 update-source Loopback0
+ neighbor 192.168.0.15 remote-as 1
+ neighbor 192.168.0.15 description iBGP peer iol-15
+ neighbor 192.168.0.15 update-source Loopback0
+ !
+ address-family ipv4
+  network 192.168.0.16 mask 255.255.255.255
+  neighbor 192.168.0.1 activate
+  neighbor 192.168.0.2 activate
+  neighbor 192.168.0.3 activate
+  neighbor 192.168.0.4 activate
+  neighbor 192.168.0.5 activate
+  neighbor 192.168.0.6 activate
+  neighbor 192.168.0.7 activate
+  neighbor 192.168.0.8 activate
+  neighbor 192.168.0.9 activate
+  neighbor 192.168.0.10 activate
+  neighbor 192.168.0.11 activate
+  neighbor 192.168.0.12 activate
+  neighbor 192.168.0.13 activate
+  neighbor 192.168.0.14 activate
+  neighbor 192.168.0.15 activate
+ exit-address-family
+!
+ip forward-protocol nd
+!
+no ip http server
+no ip http secure-server
+!
+!
+!
+!
+!
+!
+control-plane
+!
+!
+line con 0
+ password cisco
+ logging synchronous
+line aux 0
+line vty 0 4
+ exec-timeout 720 0
+ password cisco
+ login local
+ transport input telnet ssh
+!
+!
+end</entry>
+        </extensions>
+        <interface id="0" name="Ethernet0/1" ipv4="10.0.0.36" netPrefixLenV4="29"/>
+    </node>
+    <node name="lxc-routem-1" type="SIMPLE" subtype="lxc-routem" location="588,449">
+        <extensions>
+            <entry key="config" type="String">#cloud-config
+bootcmd:
+- ln -s -t /etc/rc.d /etc/rc.local
+hostname: lxc-routem-1
+manage_etc_hosts: true
+runcmd:
+- systemctl start rc-local
+- sed -i '/^\s*PasswordAuthentication\s\+no/d' /etc/ssh/sshd_config
+- echo "UseDNS no" &gt;&gt; /etc/ssh/sshd_config
+- service ssh restart
+- service sshd restart
+users:
+- default
+- gecos: User configured by VIRL Configuration Engine 0.22.7
+  lock-passwd: false
+  name: cisco
+  plain-text-passwd: cisco
+  shell: /bin/bash
+  ssh-authorized-keys:
+  - VIRL-USER-SSH-PUBLIC-KEY
+  sudo: ALL=(ALL) ALL
+write_files:
+- path: /etc/systemd/system/dhclient@.service
+  content: |
+    [Unit]
+    Description=Run dhclient on %i interface
+    After=network.target
+    [Service]
+    Type=oneshot
+    ExecStart=/sbin/dhclient %i -pf /var/run/dhclient.%i.pid -lf /var/lib/dhclient/dhclient.%i.lease
+    RemainAfterExit=yes
+  owner: root:root
+  permissions: '0644'
+- path: /etc/rc.local
+  owner: root:root
+  permissions: '0755'
+  content: |-
+    #!/bin/sh
+    ifconfig eth1 up 10.0.0.9 netmask 255.255.255.252
+    route add -host 192.168.0.1 gw 10.0.0.10 dev eth1
+    route add -host 192.168.0.16 gw 10.0.0.10 dev eth1
+    route add -net 10.0.0.0/16 gw 10.0.0.10 dev eth1
+    route add -net 192.168.0.2/31 gw 10.0.0.10 dev eth1
+    route add -net 192.168.0.4/30 gw 10.0.0.10 dev eth1
+    route add -net 192.168.0.8/29 gw 10.0.0.10 dev eth1
+    exit 0
+</entry>
+        </extensions>
+        <interface id="0" name="eth1" ipv4="10.0.0.9" netPrefixLenV4="30"/>
+    </node>
+    <node name="lxc-routem-2" type="SIMPLE" subtype="lxc-routem" location="992,96">
+        <extensions>
+            <entry key="config" type="String">#cloud-config
+bootcmd:
+- ln -s -t /etc/rc.d /etc/rc.local
+hostname: lxc-routem-2
+manage_etc_hosts: true
+runcmd:
+- systemctl start rc-local
+- sed -i '/^\s*PasswordAuthentication\s\+no/d' /etc/ssh/sshd_config
+- echo "UseDNS no" &gt;&gt; /etc/ssh/sshd_config
+- service ssh restart
+- service sshd restart
+users:
+- default
+- gecos: User configured by VIRL Configuration Engine 0.22.7
+  lock-passwd: false
+  name: cisco
+  plain-text-passwd: cisco
+  shell: /bin/bash
+  ssh-authorized-keys:
+  - VIRL-USER-SSH-PUBLIC-KEY
+  sudo: ALL=(ALL) ALL
+write_files:
+- path: /etc/systemd/system/dhclient@.service
+  content: |
+    [Unit]
+    Description=Run dhclient on %i interface
+    After=network.target
+    [Service]
+    Type=oneshot
+    ExecStart=/sbin/dhclient %i -pf /var/run/dhclient.%i.pid -lf /var/lib/dhclient/dhclient.%i.lease
+    RemainAfterExit=yes
+  owner: root:root
+  permissions: '0644'
+- path: /etc/rc.local
+  owner: root:root
+  permissions: '0755'
+  content: |-
+    #!/bin/sh
+    ifconfig eth1 up 10.0.0.53 netmask 255.255.255.252
+    route add -host 192.168.0.1 gw 10.0.0.54 dev eth1
+    route add -host 192.168.0.16 gw 10.0.0.54 dev eth1
+    route add -net 10.0.0.0/16 gw 10.0.0.54 dev eth1
+    route add -net 192.168.0.2/31 gw 10.0.0.54 dev eth1
+    route add -net 192.168.0.4/30 gw 10.0.0.54 dev eth1
+    route add -net 192.168.0.8/29 gw 10.0.0.54 dev eth1
+    exit 0
+- path: /home/cisco/routem.cfg
+  owner: cisco:cisco
+  permissions: '0777'
+  content: |-
+    #ospf config
+    ospf_default_dbd_advertise
+    router ospf
+    neighbor 10.0.0.54 update-source 10.0.0.53
+    networkmask 255.255.255.252
+    router_id 10.0.0.53
+    area 0
+    link 1 201.0.1.0/32 20
+    ext-ip 1 201.0.2.0/32 20
+    ext-nexthop 1 10.0.0.53
+    #bgp config:
+    router bgp 1
+    neighbor 10.0.0.54 remote-as 1
+    neighbor 10.0.0.54 update-source 10.0.0.53
+    network 1 201.1.1.1/32 500
+    aspath 1 2016 2015 2014
+    network 2 201.2.1.1/32 500
+    aspath 2 random 7
+</entry>
+            <entry key="Auto-generate config" type="Boolean">false</entry>
+        </extensions>
+        <interface id="0" name="eth1" ipv4="10.0.0.53" netPrefixLenV4="30"/>
+    </node>
+    <node name="lxc-routem-3" type="SIMPLE" subtype="lxc-routem" location="1015,724">
+        <extensions>
+            <entry key="config" type="String">#cloud-config
+bootcmd:
+- ln -s -t /etc/rc.d /etc/rc.local
+hostname: lxc-routem-3
+manage_etc_hosts: true
+runcmd:
+- systemctl start rc-local
+- sed -i '/^\s*PasswordAuthentication\s\+no/d' /etc/ssh/sshd_config
+- echo "UseDNS no" &gt;&gt; /etc/ssh/sshd_config
+- service ssh restart
+- service sshd restart
+users:
+- default
+- gecos: User configured by VIRL Configuration Engine 0.22.7
+  lock-passwd: false
+  name: cisco
+  plain-text-passwd: cisco
+  shell: /bin/bash
+  ssh-authorized-keys:
+  - VIRL-USER-SSH-PUBLIC-KEY
+  sudo: ALL=(ALL) ALL
+write_files:
+- path: /etc/systemd/system/dhclient@.service
+  content: |
+    [Unit]
+    Description=Run dhclient on %i interface
+    After=network.target
+    [Service]
+    Type=oneshot
+    ExecStart=/sbin/dhclient %i -pf /var/run/dhclient.%i.pid -lf /var/lib/dhclient/dhclient.%i.lease
+    RemainAfterExit=yes
+  owner: root:root
+  permissions: '0644'
+- path: /etc/rc.local
+  owner: root:root
+  permissions: '0755'
+  content: |-
+    #!/bin/sh
+    ifconfig eth1 up 10.0.0.57 netmask 255.255.255.252
+    route add -host 192.168.0.1 gw 10.0.0.58 dev eth1
+    route add -host 192.168.0.16 gw 10.0.0.58 dev eth1
+    route add -net 10.0.0.0/16 gw 10.0.0.58 dev eth1
+    route add -net 192.168.0.2/31 gw 10.0.0.58 dev eth1
+    route add -net 192.168.0.4/30 gw 10.0.0.58 dev eth1
+    route add -net 192.168.0.8/29 gw 10.0.0.58 dev eth1
+    exit 0
+</entry>
+        </extensions>
+        <interface id="0" name="eth1" ipv4="10.0.0.57" netPrefixLenV4="30"/>
+    </node>
+    <node name="lxc-routem-4" type="SIMPLE" subtype="lxc-routem" location="1408,453">
+        <extensions>
+            <entry key="config" type="String">#cloud-config
+bootcmd:
+- ln -s -t /etc/rc.d /etc/rc.local
+hostname: lxc-routem-4
+manage_etc_hosts: true
+runcmd:
+- systemctl start rc-local
+- sed -i '/^\s*PasswordAuthentication\s\+no/d' /etc/ssh/sshd_config
+- echo "UseDNS no" &gt;&gt; /etc/ssh/sshd_config
+- service ssh restart
+- service sshd restart
+users:
+- default
+- gecos: User configured by VIRL Configuration Engine 0.22.7
+  lock-passwd: false
+  name: cisco
+  plain-text-passwd: cisco
+  shell: /bin/bash
+  ssh-authorized-keys:
+  - VIRL-USER-SSH-PUBLIC-KEY
+  sudo: ALL=(ALL) ALL
+write_files:
+- path: /etc/systemd/system/dhclient@.service
+  content: |
+    [Unit]
+    Description=Run dhclient on %i interface
+    After=network.target
+    [Service]
+    Type=oneshot
+    ExecStart=/sbin/dhclient %i -pf /var/run/dhclient.%i.pid -lf /var/lib/dhclient/dhclient.%i.lease
+    RemainAfterExit=yes
+  owner: root:root
+  permissions: '0644'
+- path: /etc/rc.local
+  owner: root:root
+  permissions: '0755'
+  content: |-
+    #!/bin/sh
+    ifconfig eth1 up 10.0.0.61 netmask 255.255.255.252
+    route add -host 192.168.0.1 gw 10.0.0.62 dev eth1
+    route add -host 192.168.0.16 gw 10.0.0.62 dev eth1
+    route add -net 10.0.0.0/16 gw 10.0.0.62 dev eth1
+    route add -net 192.168.0.2/31 gw 10.0.0.62 dev eth1
+    route add -net 192.168.0.4/30 gw 10.0.0.62 dev eth1
+    route add -net 192.168.0.8/29 gw 10.0.0.62 dev eth1
+    exit 0
+</entry>
+        </extensions>
+        <interface id="0" name="eth1" ipv4="10.0.0.61" netPrefixLenV4="30"/>
+    </node>
+    <connection dst="/virl:topology/virl:node[1]/virl:interface[1]" src="/virl:topology/virl:node[8]/virl:interface[1]"/>
+    <connection dst="/virl:topology/virl:node[2]/virl:interface[1]" src="/virl:topology/virl:node[1]/virl:interface[2]"/>
+    <connection dst="/virl:topology/virl:node[3]/virl:interface[1]" src="/virl:topology/virl:node[2]/virl:interface[2]"/>
+    <connection dst="/virl:topology/virl:node[4]/virl:interface[1]" src="/virl:topology/virl:node[3]/virl:interface[2]"/>
+    <connection dst="/virl:topology/virl:node[5]/virl:interface[1]" src="/virl:topology/virl:node[4]/virl:interface[2]"/>
+    <connection dst="/virl:topology/virl:node[6]/virl:interface[1]" src="/virl:topology/virl:node[5]/virl:interface[2]"/>
+    <connection dst="/virl:topology/virl:node[7]/virl:interface[1]" src="/virl:topology/virl:node[6]/virl:interface[2]"/>
+    <connection dst="/virl:topology/virl:node[7]/virl:interface[2]" src="/virl:topology/virl:node[8]/virl:interface[2]"/>
+    <connection dst="/virl:topology/virl:node[9]/virl:interface[1]" src="/virl:topology/virl:node[13]/virl:interface[1]"/>
+    <connection dst="/virl:topology/virl:node[9]/virl:interface[2]" src="/virl:topology/virl:node[14]/virl:interface[1]"/>
+    <connection dst="/virl:topology/virl:node[8]/virl:interface[3]" src="/virl:topology/virl:node[9]/virl:interface[3]"/>
+    <connection dst="/virl:topology/virl:node[7]/virl:interface[3]" src="/virl:topology/virl:node[9]/virl:interface[4]"/>
+    <connection dst="/virl:topology/virl:node[10]/virl:interface[1]" src="/virl:topology/virl:node[15]/virl:interface[1]"/>
+    <connection dst="/virl:topology/virl:node[10]/virl:interface[2]" src="/virl:topology/virl:node[1]/virl:interface[3]"/>
+    <connection dst="/virl:topology/virl:node[16]/virl:interface[1]" src="/virl:topology/virl:node[10]/virl:interface[3]"/>
+    <connection dst="/virl:topology/virl:node[2]/virl:interface[3]" src="/virl:topology/virl:node[10]/virl:interface[4]"/>
+    <connection dst="/virl:topology/virl:node[11]/virl:interface[1]" src="/virl:topology/virl:node[3]/virl:interface[3]"/>
+    <connection dst="/virl:topology/virl:node[11]/virl:interface[2]" src="/virl:topology/virl:node[4]/virl:interface[3]"/>
+    <connection dst="/virl:topology/virl:node[17]/virl:interface[1]" src="/virl:topology/virl:node[11]/virl:interface[3]"/>
+    <connection dst="/virl:topology/virl:node[18]/virl:interface[1]" src="/virl:topology/virl:node[11]/virl:interface[4]"/>
+    <connection dst="/virl:topology/virl:node[12]/virl:interface[1]" src="/virl:topology/virl:node[6]/virl:interface[3]"/>
+    <connection dst="/virl:topology/virl:node[12]/virl:interface[2]" src="/virl:topology/virl:node[19]/virl:interface[1]"/>
+    <connection dst="/virl:topology/virl:node[12]/virl:interface[3]" src="/virl:topology/virl:node[20]/virl:interface[1]"/>
+    <connection dst="/virl:topology/virl:node[5]/virl:interface[3]" src="/virl:topology/virl:node[12]/virl:interface[4]"/>
+    <connection dst="/virl:topology/virl:node[13]/virl:interface[2]" src="/virl:topology/virl:node[21]/virl:interface[1]"/>
+    <connection dst="/virl:topology/virl:node[16]/virl:interface[2]" src="/virl:topology/virl:node[22]/virl:interface[1]"/>
+    <connection dst="/virl:topology/virl:node[18]/virl:interface[2]" src="/virl:topology/virl:node[24]/virl:interface[1]"/>
+    <connection dst="/virl:topology/virl:node[19]/virl:interface[2]" src="/virl:topology/virl:node[23]/virl:interface[1]"/>
+</topology>

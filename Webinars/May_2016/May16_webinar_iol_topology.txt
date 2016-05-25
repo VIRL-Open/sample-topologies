@@ -1,0 +1,15 @@
+Topology description
+--------------------
+24 nodes - 16 IOL LXC routers, 4 IOL-L2 LXC switches, 4  Routem LXCs
+
+This simulation requires the use of VIRL 1.2.x or later.
+
+In this webinar, demonstrate the IOL and IOL-L2 LXC-based routers and switches, in conjunction with the Routem control-plane injector.
+
+This topology is fully configured with the Routem instance 'lxc-routem-2' including Routem configuration entries for BGP and OSPF prefix injection. To start the injection, log in to the Routem instance and run the command 'routem -f ./routem.cfg'.
+
+Each of the IOL and IOL-L2 nodes can be accessed using the 'ssh' connection method. Telnet will NOT work.
+
+Log in the node as username 'cisco', password 'cisco'.
+
+The topology will require ~2Gb to run.

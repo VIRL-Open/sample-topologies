@@ -1,0 +1,1079 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<topology xmlns="http://www.cisco.com/VIRL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" schemaVersion="0.9" xsi:schemaLocation="http://www.cisco.com/VIRL https://raw.github.com/CiscoVIRL/schema/v0.9/virl.xsd">
+    <node name="iosv-1" type="SIMPLE" subtype="IOSv" location="420,234" ipv4="192.168.0.2">
+        <extensions>
+            <entry key="config" type="string">! IOS Config generated on 2016-05-23 16:53
+! by autonetkit_0.22.4
+!
+hostname iosv-1
+boot-start-marker
+boot-end-marker
+!
+vrf definition Mgmt-intf
+!
+ address-family ipv4
+ exit-address-family
+ !
+ address-family ipv6
+ exit-address-family
+!
+!
+!
+no aaa new-model
+!
+!
+ip cef
+ipv6 unicast-routing
+ipv6 cef
+!
+!
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+no service config
+enable password cisco
+ip classless
+ip subnet-zero
+no ip domain lookup
+ip domain name virl.info
+crypto key generate rsa modulus 768
+ip ssh server algorithm authentication password
+username cisco privilege 15 secret cisco
+line vty 0 4
+ transport input ssh telnet
+ exec-timeout 720 0
+ password cisco
+ login local
+line con 0
+ password cisco
+!
+no cdp run
+!
+!
+interface Loopback0
+  description Loopback
+  ip address 192.168.0.2 255.255.255.255
+!
+interface GigabitEthernet0/0
+  description OOB Management
+  vrf forwarding Mgmt-intf
+  ! Configured on launch
+  no ip address
+  duplex full
+  speed auto
+  no shutdown
+!
+interface GigabitEthernet0/1
+  description to iosv-3
+  ip address 10.0.0.21 255.255.255.252
+  ip ospf cost 1
+  duplex full
+  speed auto
+  no shutdown
+!
+interface GigabitEthernet0/2
+  description to iosv-2
+  ip address 10.0.0.17 255.255.255.252
+  ip ospf cost 1
+  duplex full
+  speed auto
+  no shutdown
+!
+interface GigabitEthernet0/3
+  description to iosvl2-1
+  ip address 10.0.0.10 255.255.255.248
+  ip ospf cost 1
+  duplex full
+  speed auto
+  no shutdown
+!
+interface GigabitEthernet0/4
+  description to lxc-1
+  ip address 10.0.128.2 255.255.255.252
+  ip ospf cost 1
+  duplex full
+  speed auto
+  no shutdown
+!
+interface GigabitEthernet0/5
+  description to docker-nagios-1
+  ip address 10.0.128.6 255.255.255.252
+  ip ospf cost 1
+  duplex full
+  speed auto
+  no shutdown
+!
+!
+!
+router ospf 1
+  network 192.168.0.2 0.0.0.0 area 0
+  log-adjacency-changes
+  passive-interface Loopback0
+  network 10.0.0.20 0.0.0.3 area 0
+  network 10.0.0.16 0.0.0.3 area 0
+  network 10.0.0.8 0.0.0.7 area 0
+  network 10.0.128.0 0.0.0.3 area 0
+  network 10.0.128.4 0.0.0.3 area 0
+!
+!
+router bgp 1
+  bgp router-id 192.168.0.2
+  no synchronization
+! ibgp
+  ! ibgp peers
+  !
+  neighbor 192.168.0.4 remote-as 1
+  neighbor 192.168.0.4 description iBGP peer iosv-2
+  neighbor 192.168.0.4 update-source Loopback0
+  !
+  neighbor 192.168.0.5 remote-as 1
+  neighbor 192.168.0.5 description iBGP peer iosv-3
+  neighbor 192.168.0.5 update-source Loopback0
+  !
+  neighbor 192.168.0.6 remote-as 1
+  neighbor 192.168.0.6 description iBGP peer iosv-4
+  neighbor 192.168.0.6 update-source Loopback0
+!
+!
+ !
+ address-family ipv4
+  network 192.168.0.2 mask 255.255.255.255
+  neighbor 192.168.0.4 activate
+  neighbor 192.168.0.5 activate
+  neighbor 192.168.0.6 activate
+ exit-address-family
+!
+!
+!
+end</entry>
+            <entry key="AutoNetkit.mgmt_ip" type="string"></entry>
+        </extensions>
+        <interface id="0" name="GigabitEthernet0/1" ipv4="10.0.0.21" netPrefixLenV4="30"/>
+        <interface id="1" name="GigabitEthernet0/2" ipv4="10.0.0.17" netPrefixLenV4="30"/>
+        <interface id="2" name="GigabitEthernet0/3" ipv4="10.0.0.10" netPrefixLenV4="29"/>
+        <interface id="3" name="GigabitEthernet0/4" ipv4="10.0.128.2" netPrefixLenV4="30"/>
+        <interface id="4" name="GigabitEthernet0/5" ipv4="10.0.128.6" netPrefixLenV4="30"/>
+    </node>
+    <node name="iosv-2" type="SIMPLE" subtype="IOSv" location="621,234" ipv4="192.168.0.4">
+        <extensions>
+            <entry key="config" type="string">! IOS Config generated on 2016-05-23 16:53
+! by autonetkit_0.22.4
+!
+hostname iosv-2
+boot-start-marker
+boot-end-marker
+!
+vrf definition Mgmt-intf
+!
+ address-family ipv4
+ exit-address-family
+ !
+ address-family ipv6
+ exit-address-family
+!
+!
+!
+no aaa new-model
+!
+!
+ip cef
+ipv6 unicast-routing
+ipv6 cef
+!
+!
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+no service config
+enable password cisco
+ip classless
+ip subnet-zero
+no ip domain lookup
+ip domain name virl.info
+crypto key generate rsa modulus 768
+ip ssh server algorithm authentication password
+username cisco privilege 15 secret cisco
+line vty 0 4
+ transport input ssh telnet
+ exec-timeout 720 0
+ password cisco
+ login local
+line con 0
+ password cisco
+!
+no cdp run
+!
+!
+interface Loopback0
+  description Loopback
+  ip address 192.168.0.4 255.255.255.255
+!
+interface GigabitEthernet0/0
+  description OOB Management
+  vrf forwarding Mgmt-intf
+  ! Configured on launch
+  no ip address
+  duplex full
+  speed auto
+  no shutdown
+!
+interface GigabitEthernet0/1
+  description to iosv-1
+  ip address 10.0.0.18 255.255.255.252
+  ip ospf cost 1
+  duplex full
+  speed auto
+  no shutdown
+!
+interface GigabitEthernet0/2
+  description to iosv-4
+  ip address 10.0.0.25 255.255.255.252
+  ip ospf cost 1
+  duplex full
+  speed auto
+  no shutdown
+!
+interface GigabitEthernet0/3
+  description to iosvl2-2
+  ip address 10.0.0.2 255.255.255.248
+  ip ospf cost 1
+  duplex full
+  speed auto
+  no shutdown
+!
+interface GigabitEthernet0/4
+  description to lxc-1
+  ip address 10.0.128.14 255.255.255.252
+  ip ospf cost 1
+  duplex full
+  speed auto
+  no shutdown
+!
+interface GigabitEthernet0/5
+  description to docker-nagios-1
+  ip address 10.0.128.10 255.255.255.252
+  ip ospf cost 1
+  duplex full
+  speed auto
+  no shutdown
+!
+!
+!
+router ospf 1
+  network 192.168.0.4 0.0.0.0 area 0
+  log-adjacency-changes
+  passive-interface Loopback0
+  network 10.0.0.16 0.0.0.3 area 0
+  network 10.0.0.24 0.0.0.3 area 0
+  network 10.0.0.0 0.0.0.7 area 0
+  network 10.0.128.12 0.0.0.3 area 0
+  network 10.0.128.8 0.0.0.3 area 0
+!
+!
+router bgp 1
+  bgp router-id 192.168.0.4
+  no synchronization
+! ibgp
+  ! ibgp peers
+  !
+  neighbor 192.168.0.2 remote-as 1
+  neighbor 192.168.0.2 description iBGP peer iosv-1
+  neighbor 192.168.0.2 update-source Loopback0
+  !
+  neighbor 192.168.0.5 remote-as 1
+  neighbor 192.168.0.5 description iBGP peer iosv-3
+  neighbor 192.168.0.5 update-source Loopback0
+  !
+  neighbor 192.168.0.6 remote-as 1
+  neighbor 192.168.0.6 description iBGP peer iosv-4
+  neighbor 192.168.0.6 update-source Loopback0
+!
+!
+ !
+ address-family ipv4
+  network 192.168.0.4 mask 255.255.255.255
+  neighbor 192.168.0.2 activate
+  neighbor 192.168.0.5 activate
+  neighbor 192.168.0.6 activate
+ exit-address-family
+!
+!
+!
+end</entry>
+            <entry key="AutoNetkit.mgmt_ip" type="string"></entry>
+        </extensions>
+        <interface id="0" name="GigabitEthernet0/1" ipv4="10.0.0.18" netPrefixLenV4="30"/>
+        <interface id="1" name="GigabitEthernet0/2" ipv4="10.0.0.25" netPrefixLenV4="30"/>
+        <interface id="2" name="GigabitEthernet0/3" ipv4="10.0.0.2" netPrefixLenV4="29"/>
+        <interface id="3" name="GigabitEthernet0/4" ipv4="10.0.128.14" netPrefixLenV4="30"/>
+        <interface id="4" name="GigabitEthernet0/5" ipv4="10.0.128.10" netPrefixLenV4="30"/>
+    </node>
+    <node name="iosv-3" type="SIMPLE" subtype="IOSv" location="420,355" ipv4="192.168.0.5">
+        <extensions>
+            <entry key="config" type="string">! IOS Config generated on 2016-05-23 16:53
+! by autonetkit_0.22.4
+!
+hostname iosv-3
+boot-start-marker
+boot-end-marker
+!
+vrf definition Mgmt-intf
+!
+ address-family ipv4
+ exit-address-family
+ !
+ address-family ipv6
+ exit-address-family
+!
+!
+!
+no aaa new-model
+!
+!
+ip cef
+ipv6 unicast-routing
+ipv6 cef
+!
+!
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+no service config
+enable password cisco
+ip classless
+ip subnet-zero
+no ip domain lookup
+ip domain name virl.info
+crypto key generate rsa modulus 768
+ip ssh server algorithm authentication password
+username cisco privilege 15 secret cisco
+line vty 0 4
+ transport input ssh telnet
+ exec-timeout 720 0
+ password cisco
+ login local
+line con 0
+ password cisco
+!
+no cdp run
+!
+!
+interface Loopback0
+  description Loopback
+  ip address 192.168.0.5 255.255.255.255
+!
+interface GigabitEthernet0/0
+  description OOB Management
+  vrf forwarding Mgmt-intf
+  ! Configured on launch
+  no ip address
+  duplex full
+  speed auto
+  no shutdown
+!
+interface GigabitEthernet0/1
+  description to iosv-1
+  ip address 10.0.0.22 255.255.255.252
+  ip ospf cost 1
+  duplex full
+  speed auto
+  no shutdown
+!
+interface GigabitEthernet0/2
+  description to iosv-4
+  ip address 10.0.0.29 255.255.255.252
+  ip ospf cost 1
+  duplex full
+  speed auto
+  no shutdown
+!
+interface GigabitEthernet0/3
+  description to iosvl2-1
+  ip address 10.0.0.11 255.255.255.248
+  ip ospf cost 1
+  duplex full
+  speed auto
+  no shutdown
+!
+!
+!
+router ospf 1
+  network 192.168.0.5 0.0.0.0 area 0
+  log-adjacency-changes
+  passive-interface Loopback0
+  network 10.0.0.20 0.0.0.3 area 0
+  network 10.0.0.28 0.0.0.3 area 0
+  network 10.0.0.8 0.0.0.7 area 0
+!
+!
+router bgp 1
+  bgp router-id 192.168.0.5
+  no synchronization
+! ibgp
+  ! ibgp peers
+  !
+  neighbor 192.168.0.2 remote-as 1
+  neighbor 192.168.0.2 description iBGP peer iosv-1
+  neighbor 192.168.0.2 update-source Loopback0
+  !
+  neighbor 192.168.0.4 remote-as 1
+  neighbor 192.168.0.4 description iBGP peer iosv-2
+  neighbor 192.168.0.4 update-source Loopback0
+  !
+  neighbor 192.168.0.6 remote-as 1
+  neighbor 192.168.0.6 description iBGP peer iosv-4
+  neighbor 192.168.0.6 update-source Loopback0
+!
+!
+ !
+ address-family ipv4
+  network 192.168.0.5 mask 255.255.255.255
+  neighbor 192.168.0.2 activate
+  neighbor 192.168.0.4 activate
+  neighbor 192.168.0.6 activate
+ exit-address-family
+!
+!
+!
+end</entry>
+            <entry key="AutoNetkit.mgmt_ip" type="string"></entry>
+        </extensions>
+        <interface id="0" name="GigabitEthernet0/1" ipv4="10.0.0.22" netPrefixLenV4="30"/>
+        <interface id="1" name="GigabitEthernet0/2" ipv4="10.0.0.29" netPrefixLenV4="30"/>
+        <interface id="2" name="GigabitEthernet0/3" ipv4="10.0.0.11" netPrefixLenV4="29"/>
+    </node>
+    <node name="iosv-4" type="SIMPLE" subtype="IOSv" location="621,355" ipv4="192.168.0.6">
+        <extensions>
+            <entry key="config" type="string">! IOS Config generated on 2016-05-23 16:53
+! by autonetkit_0.22.4
+!
+hostname iosv-4
+boot-start-marker
+boot-end-marker
+!
+vrf definition Mgmt-intf
+!
+ address-family ipv4
+ exit-address-family
+ !
+ address-family ipv6
+ exit-address-family
+!
+!
+!
+no aaa new-model
+!
+!
+ip cef
+ipv6 unicast-routing
+ipv6 cef
+!
+!
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+no service config
+enable password cisco
+ip classless
+ip subnet-zero
+no ip domain lookup
+ip domain name virl.info
+crypto key generate rsa modulus 768
+ip ssh server algorithm authentication password
+username cisco privilege 15 secret cisco
+line vty 0 4
+ transport input ssh telnet
+ exec-timeout 720 0
+ password cisco
+ login local
+line con 0
+ password cisco
+!
+no cdp run
+!
+!
+interface Loopback0
+  description Loopback
+  ip address 192.168.0.6 255.255.255.255
+!
+interface GigabitEthernet0/0
+  description OOB Management
+  vrf forwarding Mgmt-intf
+  ! Configured on launch
+  no ip address
+  duplex full
+  speed auto
+  no shutdown
+!
+interface GigabitEthernet0/1
+  description to iosv-3
+  ip address 10.0.0.30 255.255.255.252
+  ip ospf cost 1
+  duplex full
+  speed auto
+  no shutdown
+!
+interface GigabitEthernet0/2
+  description to iosv-2
+  ip address 10.0.0.26 255.255.255.252
+  ip ospf cost 1
+  duplex full
+  speed auto
+  no shutdown
+!
+interface GigabitEthernet0/3
+  description to iosvl2-2
+  ip address 10.0.0.4 255.255.255.248
+  ip ospf cost 1
+  duplex full
+  speed auto
+  no shutdown
+!
+!
+!
+router ospf 1
+  network 192.168.0.6 0.0.0.0 area 0
+  log-adjacency-changes
+  passive-interface Loopback0
+  network 10.0.0.28 0.0.0.3 area 0
+  network 10.0.0.24 0.0.0.3 area 0
+  network 10.0.0.0 0.0.0.7 area 0
+!
+!
+router bgp 1
+  bgp router-id 192.168.0.6
+  no synchronization
+! ibgp
+  ! ibgp peers
+  !
+  neighbor 192.168.0.2 remote-as 1
+  neighbor 192.168.0.2 description iBGP peer iosv-1
+  neighbor 192.168.0.2 update-source Loopback0
+  !
+  neighbor 192.168.0.4 remote-as 1
+  neighbor 192.168.0.4 description iBGP peer iosv-2
+  neighbor 192.168.0.4 update-source Loopback0
+  !
+  neighbor 192.168.0.5 remote-as 1
+  neighbor 192.168.0.5 description iBGP peer iosv-3
+  neighbor 192.168.0.5 update-source Loopback0
+!
+!
+ !
+ address-family ipv4
+  network 192.168.0.6 mask 255.255.255.255
+  neighbor 192.168.0.2 activate
+  neighbor 192.168.0.4 activate
+  neighbor 192.168.0.5 activate
+ exit-address-family
+!
+!
+!
+end</entry>
+            <entry key="AutoNetkit.mgmt_ip" type="string"></entry>
+        </extensions>
+        <interface id="0" name="GigabitEthernet0/1" ipv4="10.0.0.30" netPrefixLenV4="30"/>
+        <interface id="1" name="GigabitEthernet0/2" ipv4="10.0.0.26" netPrefixLenV4="30"/>
+        <interface id="2" name="GigabitEthernet0/3" ipv4="10.0.0.4" netPrefixLenV4="29"/>
+    </node>
+    <node name="iosvl2-1" type="SIMPLE" subtype="IOSvL2" location="281,294">
+        <extensions>
+            <entry key="config" type="string">! IOSvL2 Config generated on 2016-05-23 16:53
+! by autonetkit_0.22.4
+!
+version 15.2
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+service compress-config
+no service config
+enable password cisco
+ip classless
+ip subnet-zero
+no ip domain lookup
+!
+line vty 0 4
+transport input ssh telnet
+exec-timeout 720 0
+password cisco
+login
+!
+line con 0
+password cisco
+!
+hostname iosvl2-1
+!
+boot-start-marker
+boot-end-marker
+!
+!
+!
+no aaa new-model
+!
+vtp domain virl.lab
+vtp mode transparent
+!
+vlan 2
+  name ank_vlan2
+!
+!
+!
+!
+no cdp run
+!
+!
+!
+ip cef
+no ipv6 cef
+!
+!
+spanning-tree mode pvst
+spanning-tree extend system-id
+!
+vlan internal allocation policy ascending
+!
+!
+!
+!
+vrf definition Mgmt-intf
+!
+ address-family ipv4
+ exit-address-family
+ !
+ address-family ipv6
+ exit-address-family
+!
+!
+!
+!
+!
+interface Loopback0
+  description Loopback
+!
+interface GigabitEthernet0/0
+  description OOB management
+  ! Configured on launch
+  no switchport
+  vrf forwarding Mgmt-intf
+  no ip address
+  no shutdown
+!
+interface GigabitEthernet0/1
+  description to iosv-1
+  switchport access vlan 2
+  switchport mode access
+  no shutdown
+!
+interface GigabitEthernet0/2
+  description to iosv-3
+  switchport access vlan 2
+  switchport mode access
+  no shutdown
+!
+interface GigabitEthernet0/3
+  description to docker-apache-1
+  switchport access vlan 2
+  switchport mode access
+  no shutdown
+!
+interface GigabitEthernet1/0
+  description to docker-apache-3
+  switchport access vlan 2
+  switchport mode access
+  no shutdown
+!
+interface GigabitEthernet1/1
+  description to docker-apache-5
+  switchport access vlan 2
+  switchport mode access
+  no shutdown
+!
+interface GigabitEthernet1/2
+  description GigabitEthernet1/2
+  no shutdown
+!
+!
+ip forward-protocol nd
+!
+no ip http server
+no ip http secure-server
+!
+!
+!
+!
+!
+!
+control-plane
+!
+!
+!
+end
+        </entry>
+            <entry key="AutoNetkit.mgmt_ip" type="string"></entry>
+        </extensions>
+        <interface id="0" name="GigabitEthernet0/1"/>
+        <interface id="1" name="GigabitEthernet0/2"/>
+        <interface id="2" name="GigabitEthernet0/3"/>
+        <interface id="3" name="GigabitEthernet1/0"/>
+        <interface id="4" name="GigabitEthernet1/1"/>
+        <interface id="5" name="GigabitEthernet1/2"/>
+    </node>
+    <node name="iosvl2-2" type="SIMPLE" subtype="IOSvL2" location="760,294">
+        <extensions>
+            <entry key="config" type="string">! IOSvL2 Config generated on 2016-05-23 16:53
+! by autonetkit_0.22.4
+!
+version 15.2
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+service compress-config
+no service config
+enable password cisco
+ip classless
+ip subnet-zero
+no ip domain lookup
+!
+line vty 0 4
+transport input ssh telnet
+exec-timeout 720 0
+password cisco
+login
+!
+line con 0
+password cisco
+!
+hostname iosvl2-2
+!
+boot-start-marker
+boot-end-marker
+!
+!
+!
+no aaa new-model
+!
+vtp domain virl.lab
+vtp mode transparent
+!
+vlan 2
+  name ank_vlan2
+!
+!
+!
+!
+no cdp run
+!
+!
+!
+ip cef
+no ipv6 cef
+!
+!
+spanning-tree mode pvst
+spanning-tree extend system-id
+!
+vlan internal allocation policy ascending
+!
+!
+!
+!
+vrf definition Mgmt-intf
+!
+ address-family ipv4
+ exit-address-family
+ !
+ address-family ipv6
+ exit-address-family
+!
+!
+!
+!
+!
+interface Loopback0
+  description Loopback
+!
+interface GigabitEthernet0/0
+  description OOB management
+  ! Configured on launch
+  no switchport
+  vrf forwarding Mgmt-intf
+  no ip address
+  no shutdown
+!
+interface GigabitEthernet0/1
+  description to iosv-2
+  switchport access vlan 2
+  switchport mode access
+  no shutdown
+!
+interface GigabitEthernet0/2
+  description to iosv-4
+  switchport access vlan 2
+  switchport mode access
+  no shutdown
+!
+interface GigabitEthernet0/3
+  description to docker-apache-2
+  switchport access vlan 2
+  switchport mode access
+  no shutdown
+!
+interface GigabitEthernet1/0
+  description to docker-apache-4
+  switchport access vlan 2
+  switchport mode access
+  no shutdown
+!
+interface GigabitEthernet1/1
+  description to docker-apache-6
+  switchport access vlan 2
+  switchport mode access
+  no shutdown
+!
+interface GigabitEthernet1/2
+  description GigabitEthernet1/2
+  no shutdown
+!
+!
+ip forward-protocol nd
+!
+no ip http server
+no ip http secure-server
+!
+!
+!
+!
+!
+!
+control-plane
+!
+!
+!
+end
+        </entry>
+            <entry key="AutoNetkit.mgmt_ip" type="string"></entry>
+        </extensions>
+        <interface id="0" name="GigabitEthernet0/1"/>
+        <interface id="1" name="GigabitEthernet0/2"/>
+        <interface id="2" name="GigabitEthernet0/3"/>
+        <interface id="3" name="GigabitEthernet1/0"/>
+        <interface id="4" name="GigabitEthernet1/1"/>
+        <interface id="5" name="GigabitEthernet1/2"/>
+    </node>
+    <node name="docker-apache-1" type="SIMPLE" subtype="docker-apache" location="154,234">
+        <extensions>
+            <entry key="config" type="string">#cloud-config
+hostname: docker-apache-1
+manage_etc_hosts: true
+write_files:
+- path: /etc/rc.local
+  owner: root:root
+  permissions: '0755'
+  content: |-
+    #!/bin/sh
+    ifconfig eth1 up 10.0.0.9 netmask 255.255.255.248
+    route add -host 192.168.0.2 gw 10.0.0.10 dev eth1
+    route add -host 192.168.0.6 gw 10.0.0.10 dev eth1
+    route add -net 10.0.0.0/27 gw 10.0.0.10 dev eth1
+    route add -net 10.0.128.0/28 gw 10.0.0.10 dev eth1
+    route add -net 192.168.0.4/31 gw 10.0.0.10 dev eth1
+    route add -host 192.168.0.2 gw 10.0.0.11 dev eth1
+    route add -host 192.168.0.6 gw 10.0.0.11 dev eth1
+    route add -net 10.0.0.0/27 gw 10.0.0.11 dev eth1
+    route add -net 10.0.128.0/28 gw 10.0.0.11 dev eth1
+    route add -net 192.168.0.4/31 gw 10.0.0.11 dev eth1
+    exit 0
+</entry>
+        </extensions>
+        <interface id="0" name="eth1" ipv4="10.0.0.9" netPrefixLenV4="29"/>
+    </node>
+    <node name="docker-apache-2" type="SIMPLE" subtype="docker-apache" location="850,234">
+        <extensions>
+            <entry key="config" type="string">#cloud-config
+hostname: docker-apache-2
+manage_etc_hosts: true
+write_files:
+- path: /etc/rc.local
+  owner: root:root
+  permissions: '0755'
+  content: |-
+    #!/bin/sh
+    ifconfig eth1 up 10.0.0.1 netmask 255.255.255.248
+    route add -host 192.168.0.2 gw 10.0.0.2 dev eth1
+    route add -host 192.168.0.6 gw 10.0.0.2 dev eth1
+    route add -net 10.0.0.0/27 gw 10.0.0.2 dev eth1
+    route add -net 10.0.128.0/28 gw 10.0.0.2 dev eth1
+    route add -net 192.168.0.4/31 gw 10.0.0.2 dev eth1
+    route add -host 192.168.0.2 gw 10.0.0.4 dev eth1
+    route add -host 192.168.0.6 gw 10.0.0.4 dev eth1
+    route add -net 10.0.0.0/27 gw 10.0.0.4 dev eth1
+    route add -net 10.0.128.0/28 gw 10.0.0.4 dev eth1
+    route add -net 192.168.0.4/31 gw 10.0.0.4 dev eth1
+    exit 0
+</entry>
+        </extensions>
+        <interface id="0" name="eth1" ipv4="10.0.0.1" netPrefixLenV4="29"/>
+    </node>
+    <node name="docker-apache-3" type="SIMPLE" subtype="docker-apache" location="154,355">
+        <extensions>
+            <entry key="config" type="string">#cloud-config
+hostname: docker-apache-3
+manage_etc_hosts: true
+write_files:
+- path: /etc/rc.local
+  owner: root:root
+  permissions: '0755'
+  content: |-
+    #!/bin/sh
+    ifconfig eth1 up 10.0.0.12 netmask 255.255.255.248
+    route add -host 192.168.0.2 gw 10.0.0.10 dev eth1
+    route add -host 192.168.0.6 gw 10.0.0.10 dev eth1
+    route add -net 10.0.0.0/27 gw 10.0.0.10 dev eth1
+    route add -net 10.0.128.0/28 gw 10.0.0.10 dev eth1
+    route add -net 192.168.0.4/31 gw 10.0.0.10 dev eth1
+    route add -host 192.168.0.2 gw 10.0.0.11 dev eth1
+    route add -host 192.168.0.6 gw 10.0.0.11 dev eth1
+    route add -net 10.0.0.0/27 gw 10.0.0.11 dev eth1
+    route add -net 10.0.128.0/28 gw 10.0.0.11 dev eth1
+    route add -net 192.168.0.4/31 gw 10.0.0.11 dev eth1
+    exit 0
+</entry>
+        </extensions>
+        <interface id="0" name="eth1" ipv4="10.0.0.12" netPrefixLenV4="29"/>
+    </node>
+    <node name="docker-apache-4" type="SIMPLE" subtype="docker-apache" location="850,355">
+        <extensions>
+            <entry key="config" type="string">#cloud-config
+hostname: docker-apache-4
+manage_etc_hosts: true
+write_files:
+- path: /etc/rc.local
+  owner: root:root
+  permissions: '0755'
+  content: |-
+    #!/bin/sh
+    ifconfig eth1 up 10.0.0.3 netmask 255.255.255.248
+    route add -host 192.168.0.2 gw 10.0.0.2 dev eth1
+    route add -host 192.168.0.6 gw 10.0.0.2 dev eth1
+    route add -net 10.0.0.0/27 gw 10.0.0.2 dev eth1
+    route add -net 10.0.128.0/28 gw 10.0.0.2 dev eth1
+    route add -net 192.168.0.4/31 gw 10.0.0.2 dev eth1
+    route add -host 192.168.0.2 gw 10.0.0.4 dev eth1
+    route add -host 192.168.0.6 gw 10.0.0.4 dev eth1
+    route add -net 10.0.0.0/27 gw 10.0.0.4 dev eth1
+    route add -net 10.0.128.0/28 gw 10.0.0.4 dev eth1
+    route add -net 192.168.0.4/31 gw 10.0.0.4 dev eth1
+    exit 0
+</entry>
+        </extensions>
+        <interface id="0" name="eth1" ipv4="10.0.0.3" netPrefixLenV4="29"/>
+    </node>
+    <node name="lxc-1" type="SIMPLE" subtype="lxc" location="420,117">
+        <extensions>
+            <entry key="config" type="string">#cloud-config
+bootcmd:
+- ln -s -t /etc/rc.d /etc/rc.local
+hostname: lxc-1
+manage_etc_hosts: true
+runcmd:
+- systemctl start rc-local
+- sed -i '/^\s*PasswordAuthentication\s\+no/d' /etc/ssh/sshd_config
+- echo "UseDNS no" &gt;&gt; /etc/ssh/sshd_config
+- service ssh restart
+- service sshd restart
+users:
+- default
+- gecos: User configured by VIRL Configuration Engine 0.22.7
+  lock-passwd: false
+  name: cisco
+  plain-text-passwd: cisco
+  shell: /bin/bash
+  ssh-authorized-keys:
+  - VIRL-USER-SSH-PUBLIC-KEY
+  sudo: ALL=(ALL) ALL
+write_files:
+- path: /etc/systemd/system/dhclient@.service
+  content: |
+    [Unit]
+    Description=Run dhclient on %i interface
+    After=network.target
+    [Service]
+    Type=oneshot
+    ExecStart=/sbin/dhclient %i -pf /var/run/dhclient.%i.pid -lf /var/lib/dhclient/dhclient.%i.lease
+    RemainAfterExit=yes
+  owner: root:root
+  permissions: '0644'
+- path: /etc/rc.local
+  owner: root:root
+  permissions: '0755'
+  content: |-
+    #!/bin/sh
+    ifconfig eth1 up 10.0.128.1 netmask 255.255.255.252
+    ifconfig eth2 up 10.0.128.13 netmask 255.255.255.252
+    route add -host 192.168.0.2 gw 10.0.128.2 dev eth1
+    route add -host 192.168.0.6 gw 10.0.128.2 dev eth1
+    route add -net 10.0.0.0/27 gw 10.0.128.2 dev eth1
+    route add -net 10.0.128.0/28 gw 10.0.128.2 dev eth1
+    route add -net 192.168.0.4/31 gw 10.0.128.2 dev eth1
+    route add -host 192.168.0.2 gw 10.0.128.14 dev eth2
+    route add -host 192.168.0.6 gw 10.0.128.14 dev eth2
+    route add -net 10.0.0.0/27 gw 10.0.128.14 dev eth2
+    route add -net 10.0.128.0/28 gw 10.0.128.14 dev eth2
+    route add -net 192.168.0.4/31 gw 10.0.128.14 dev eth2
+    exit 0
+</entry>
+        </extensions>
+        <interface id="0" name="eth1" ipv4="10.0.128.1" netPrefixLenV4="30"/>
+        <interface id="1" name="eth2" ipv4="10.0.128.13" netPrefixLenV4="30"/>
+    </node>
+    <node name="docker-nagios-1" type="SIMPLE" subtype="docker-nagios" location="621,121">
+        <extensions>
+            <entry key="config" type="string">#cloud-config
+hostname: docker-nagios-1
+manage_etc_hosts: true
+write_files:
+- path: /etc/rc.local
+  owner: root:root
+  permissions: '0755'
+  content: |-
+    #!/bin/sh
+    ifconfig eth1 up 10.0.128.5 netmask 255.255.255.252
+    ifconfig eth2 up 10.0.128.9 netmask 255.255.255.252
+    route add -host 192.168.0.2 gw 10.0.128.6 dev eth1
+    route add -host 192.168.0.6 gw 10.0.128.6 dev eth1
+    route add -net 10.0.0.0/27 gw 10.0.128.6 dev eth1
+    route add -net 10.0.128.0/28 gw 10.0.128.6 dev eth1
+    route add -net 192.168.0.4/31 gw 10.0.128.6 dev eth1
+    route add -host 192.168.0.2 gw 10.0.128.10 dev eth2
+    route add -host 192.168.0.6 gw 10.0.128.10 dev eth2
+    route add -net 10.0.0.0/27 gw 10.0.128.10 dev eth2
+    route add -net 10.0.128.0/28 gw 10.0.128.10 dev eth2
+    route add -net 192.168.0.4/31 gw 10.0.128.10 dev eth2
+    exit 0
+</entry>
+        </extensions>
+        <interface id="0" name="eth1" ipv4="10.0.128.5" netPrefixLenV4="30"/>
+        <interface id="1" name="eth2" ipv4="10.0.128.9" netPrefixLenV4="30"/>
+        <interface id="2" name="eth3"/>
+    </node>
+    <node name="flat-1" type="ASSET" subtype="FLAT" location="620,36">
+        <interface id="0" name="link0"/>
+    </node>
+    <connection dst="/virl:topology/virl:node[3]/virl:interface[1]" src="/virl:topology/virl:node[1]/virl:interface[1]"/>
+    <connection dst="/virl:topology/virl:node[2]/virl:interface[1]" src="/virl:topology/virl:node[1]/virl:interface[2]"/>
+    <connection dst="/virl:topology/virl:node[4]/virl:interface[1]" src="/virl:topology/virl:node[3]/virl:interface[2]"/>
+    <connection dst="/virl:topology/virl:node[4]/virl:interface[2]" src="/virl:topology/virl:node[2]/virl:interface[2]"/>
+    <connection dst="/virl:topology/virl:node[5]/virl:interface[1]" src="/virl:topology/virl:node[1]/virl:interface[3]"/>
+    <connection dst="/virl:topology/virl:node[5]/virl:interface[2]" src="/virl:topology/virl:node[3]/virl:interface[3]"/>
+    <connection dst="/virl:topology/virl:node[6]/virl:interface[1]" src="/virl:topology/virl:node[2]/virl:interface[3]"/>
+    <connection dst="/virl:topology/virl:node[6]/virl:interface[2]" src="/virl:topology/virl:node[4]/virl:interface[3]"/>
+    <connection dst="/virl:topology/virl:node[5]/virl:interface[3]" src="/virl:topology/virl:node[7]/virl:interface[1]"/>
+    <connection dst="/virl:topology/virl:node[6]/virl:interface[3]" src="/virl:topology/virl:node[8]/virl:interface[1]"/>
+    <connection dst="/virl:topology/virl:node[5]/virl:interface[4]" src="/virl:topology/virl:node[9]/virl:interface[1]"/>
+    <connection dst="/virl:topology/virl:node[6]/virl:interface[4]" src="/virl:topology/virl:node[10]/virl:interface[1]"/>
+    <connection dst="/virl:topology/virl:node[1]/virl:interface[4]" src="/virl:topology/virl:node[11]/virl:interface[1]"/>
+    <connection dst="/virl:topology/virl:node[2]/virl:interface[4]" src="/virl:topology/virl:node[11]/virl:interface[2]"/>
+    <connection dst="/virl:topology/virl:node[12]/virl:interface[1]" src="/virl:topology/virl:node[1]/virl:interface[5]"/>
+    <connection dst="/virl:topology/virl:node[2]/virl:interface[5]" src="/virl:topology/virl:node[12]/virl:interface[2]"/>
+    <connection dst="/virl:topology/virl:node[13]/virl:interface[1]" src="/virl:topology/virl:node[12]/virl:interface[3]"/>
+</topology>
